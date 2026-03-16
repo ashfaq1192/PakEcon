@@ -1,0 +1,44 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import ElectricityBillCalculator from '../../components/tools/ElectricityBillCalculator';
+
+const title = 'Pakistan Electricity Bill Calculator 2026 — All DISCOs (NEPRA)';
+const description =
+  'Calculate your electricity bill for all 9 DISCOs (LESCO, HESCO, MEPCO, PESCO, QESCO, IESCO, GEPCO, SEPCO, K-Electric) using NEPRA notified tariffs for FY 2025-26.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/electricity-bill-calculator',
+    inLanguage: 'en-PK',
+    publisher: {
+      '@type': 'Organization',
+      name: 'PakEcon.ai',
+      url: 'https://pakecon.ai',
+    },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Select your DISCO, consumer type, and enter your monthly units to estimate your electricity bill
+      using NEPRA notified tariff schedule for FY 2025-26.
+    </p>
+
+    <ElectricityBillCalculator client:load />
+
+    <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+      <strong>Disclaimer:</strong> This calculator provides an estimate based on NEPRA notified
+      tariff slabs effective FY 2025-26. Actual bills may include additional charges such as
+      income tax on electricity bills, TV licence fee, meter rent, and surcharges not reflected
+      here. Tariff rates are subject to change; verify with your DISCO for billing disputes.
+      PakEcon.ai is an independent information service and is not affiliated with NEPRA or any DISCO.
+    </div>
+  </div>
+</MainLayout>

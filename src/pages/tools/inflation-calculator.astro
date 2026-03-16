@@ -1,0 +1,39 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import InflationCalculator from '../../components/tools/InflationCalculator';
+
+const title = 'Pakistan Inflation Impact Calculator — Purchasing Power 2015–2026';
+const description =
+  'Calculate how inflation has eroded purchasing power in Pakistan from 2015 to 2026 using PBS Consumer Price Index data. Includes year-on-year inflation bar chart.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/inflation-calculator',
+    inLanguage: 'en-PK',
+    publisher: { '@type': 'Organization', name: 'PakEcon.ai', url: 'https://pakecon.ai' },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Enter an amount to see how much it would be worth in today's rupees after accounting for inflation.
+      Data from Pakistan Bureau of Statistics (PBS) Consumer Price Index.
+    </p>
+
+    <InflationCalculator client:load />
+
+    <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+      <strong>Disclaimer:</strong> CPI figures are sourced from PBS and represent national urban averages.
+      Individual purchasing power may differ based on consumption basket, region, and income group.
+      2026 figure is an estimate based on latest available monthly data.
+      Source: <a href="https://www.pbs.gov.pk" target="_blank" rel="noopener noreferrer" class="underline">Pakistan Bureau of Statistics</a>.
+    </div>
+  </div>
+</MainLayout>

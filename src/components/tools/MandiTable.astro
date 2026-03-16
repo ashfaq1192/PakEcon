@@ -1,0 +1,20 @@
+---
+import MandiTable from './MandiTable';
+
+interface Props {
+  prices?: any[];
+  loading?: boolean;
+}
+
+const { prices = [], loading = false } = Astro.props;
+---
+
+<div class="max-w-6xl mx-auto p-6">
+  <div class="mb-4">
+    <h2 class="text-3xl font-bold text-gray-900 mb-2">Daily Mandi Intelligence</h2>
+    <p class="text-gray-600">
+      Real-time commodity prices across major Pakistani markets
+    </p>
+  </div>
+  <MandiTable prices={prices} loading={loading} client:load />
+</div>

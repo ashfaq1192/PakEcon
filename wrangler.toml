@@ -1,0 +1,35 @@
+name = "pakecon-ai"
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pakecon_db"
+database_id = "<generated-on-create>"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "<kv-namespace-id>"
+
+# Cloudflare sessions KV (required by @astrojs/cloudflare v13)
+[[kv_namespaces]]
+binding = "SESSION"
+id = "<session-kv-namespace-id>"
+
+[vars]
+ENVIRONMENT = "production"
+HUMAN_REVIEW_MODE = "false"
+TWITTER_ENABLED = "false"
+TELEGRAM_ENABLED = "true"
+# Secrets managed via: wrangler secret put <KEY>
+# Required secrets: GITHUB_TOKEN, GITHUB_OWNER, GITHUB_REPO,
+#   GROQ_API_KEY, OPENAI_API_KEY (fallback),
+#   TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID,
+#   GOOGLE_INDEXING_SA_KEY, NEWSLETTER_SECRET, AGENT_SECRET
+
+# T088: Cloudflare Email Workers for newsletter confirmation emails
+# Configure sending domain pakecon.ai in Cloudflare Email DNS settings first
+[[send_email]]
+name = "SEND_EMAIL"
+
+[triggers]
+crons = ["0 */6 * * *"]  # Every 6 hours

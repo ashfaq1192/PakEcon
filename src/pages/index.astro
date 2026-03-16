@@ -1,0 +1,226 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import TaxOptimizer from '../components/tools/TaxOptimizer.astro';
+import MandiTable from '../components/tools/MandiTable.astro';
+
+// Sample commodity data - will be replaced with D1 data
+const samplePrices = [
+  { commodity: 'Wheat', city: 'Lahore', price: 5200, unit: '40kg', date: '2026-03-15', change: 1.2 },
+  { commodity: 'Rice (Basmati)', city: 'Lahore', price: 8500, unit: '40kg', date: '2026-03-15', change: -0.5 },
+  { commodity: 'Sugar', city: 'Karachi', price: 180, unit: 'kg', date: '2026-03-15', change: 0 },
+  { commodity: 'Flour', city: 'Islamabad', price: 140, unit: 'kg', date: '2026-03-15', change: 2.1 },
+  { commodity: 'Tomato', city: 'Peshawar', price: 220, unit: 'kg', date: '2026-03-15', change: -3.5 },
+  { commodity: 'Onion', city: 'Multan', price: 160, unit: 'kg', date: '2026-03-15', change: 1.8 },
+  { commodity: 'Potato', city: 'Quetta', price: 120, unit: 'kg', date: '2026-03-15', change: 0.5 },
+  { commodity: 'Gold (24k)', city: 'National', price: 235000, unit: 'tola', date: '2026-03-15', change: 0.8 },
+];
+---
+
+<MainLayout title="PakEcon.ai - Pakistani Finance & Utility Hub">
+  <section class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">
+        Pakistani Finance & Utility Hub
+      </h1>
+      <p class="text-xl md:text-2xl text-green-100 mb-8 max-w-3xl mx-auto">
+        Real-time economic data, tax calculation tools, and financial insights for the digital age
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#tax-calculator" class="bg-white text-green-700 font-semibold py-3 px-8 rounded-lg hover:bg-green-50 transition">
+          Calculate Your Tax
+        </a>
+        <a href="#market-data" class="bg-green-800 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-900 transition">
+          View Market Data
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Features -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
+        Everything You Need in One Place
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="text-center p-6">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">📊</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Real-Time Data</h3>
+          <p class="text-gray-600">
+            Live exchange rates, commodity prices, and market indicators updated every 6 hours
+          </p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">🧮</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Tax Calculator</h3>
+          <p class="text-gray-600">
+            Calculate your income tax based on FBR 2026 slabs with Digital Nation Act credits
+          </p>
+        </div>
+        <div class="text-center p-6">
+          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">📰</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Market Insights</h3>
+          <p class="text-gray-600">
+            AI-generated analysis of Pakistani economic trends and policy impacts
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tax Calculator -->
+  <section id="tax-calculator" class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <TaxOptimizer />
+    </div>
+  </section>
+
+  <!-- Market Data -->
+  <section id="market-data" class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <MandiTable prices={samplePrices} loading={false} />
+    </div>
+  </section>
+
+  <!-- Latest Insights -->
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
+        Latest Market Insights
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+          <div class="h-40 bg-gradient-to-br from-green-500 to-emerald-600"></div>
+          <div class="p-6">
+            <span class="text-xs font-semibold text-green-600 uppercase tracking-wider">Exchange Rate</span>
+            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">
+              PKR Shows Resilience Against USD
+            </h3>
+            <p class="text-gray-600 text-sm mb-4">
+              Analysis of recent exchange rate trends and central bank policy implications...
+            </p>
+            <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">Read More →</a>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+          <div class="h-40 bg-gradient-to-br from-blue-500 to-indigo-600"></div>
+          <div class="p-6">
+            <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Inflation</span>
+            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">
+              CPI Trends: March 2026 Analysis
+            </h3>
+            <p class="text-gray-600 text-sm mb-4">
+              Comprehensive breakdown of consumer price index changes across sectors...
+            </p>
+            <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">Read More →</a>
+          </div>
+        </article>
+
+        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+          <div class="h-40 bg-gradient-to-br from-purple-500 to-pink-600"></div>
+          <div class="p-6">
+            <span class="text-xs font-semibold text-purple-600 uppercase tracking-wider">Tax Policy</span>
+            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">
+              Digital Nation Act: What You Need to Know
+            </h3>
+            <p class="text-gray-600 text-sm mb-4">
+              Understanding new tax credits for freelancers and IT professionals...
+            </p>
+            <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">Read More →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- T091: Featured Tools -->
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900 text-center mb-4">Financial Tools</h2>
+      <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
+        Free online calculators for Pakistan's economy — electricity bills, Zakat, loans, currency conversion, and more.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {[
+          { href: '/tools/electricity-bill-calculator', icon: '⚡', title: 'Electricity Bill', desc: 'All 9 DISCOs, NEPRA tariffs 2026' },
+          { href: '/tools/zakat-calculator', icon: '☪️', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab' },
+          { href: '/tools/currency-converter', icon: '💱', title: 'Currency Converter', desc: 'Live SBP interbank rates, 10 currencies' },
+          { href: '/tools/loan-emi-calculator', icon: '🏦', title: 'Loan / EMI', desc: 'Conventional & Islamic/Murabaha financing' },
+          { href: '/tools/salary-slip-generator', icon: '📄', title: 'Salary Slip PDF', desc: 'Auto income tax, PDF download' },
+          { href: '/tools/gold-investment-calculator', icon: '🥇', title: 'Gold Investment', desc: 'Live 24K prices, scenario analysis' },
+          { href: '/tools/inflation-calculator', icon: '📈', title: 'Inflation Calculator', desc: 'Purchasing power 2015–2026 (PBS CPI)' },
+          { href: '/tools/property-stamp-duty-calculator', icon: '🏠', title: 'Property Transfer', desc: 'Stamp duty by province, filer rates' },
+          { href: '/tools/remittance-calculator', icon: '💸', title: 'Remittance', desc: 'PKR received for GBP/EUR/USD/AED+' },
+          { href: '/tools/eobi-calculator', icon: '👴', title: 'EOBI & PF', desc: 'Retirement corpus estimate' },
+        ].map(tool => (
+          <a
+            href={tool.href}
+            class="bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:border-green-400 hover:shadow-md transition-all group"
+          >
+            <div class="text-2xl mb-2">{tool.icon}</div>
+            <h3 class="text-sm font-semibold text-gray-900 group-hover:text-green-700">{tool.title}</h3>
+            <p class="text-xs text-gray-500 mt-0.5">{tool.desc}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 bg-gradient-to-r from-green-600 to-emerald-700 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">
+        Weekly Economic Digest — Free
+      </h2>
+      <p class="text-xl text-green-100 mb-8">
+        AI-powered Pakistan economy summary every Monday morning
+      </p>
+      <form id="hero-newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+        <input
+          type="email"
+          id="hero-newsletter-email"
+          placeholder="Enter your email"
+          required
+          class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-green-300"
+        />
+        <button
+          type="submit"
+          class="bg-green-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-900 transition"
+        >
+          Subscribe Free
+        </button>
+      </form>
+      <p id="hero-newsletter-msg" class="mt-3 text-green-200 text-sm hidden"></p>
+    </div>
+  </section>
+
+  <script>
+    const heroForm = document.getElementById('hero-newsletter-form') as HTMLFormElement | null;
+    const heroMsg = document.getElementById('hero-newsletter-msg');
+    heroForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const emailInput = document.getElementById('hero-newsletter-email') as HTMLInputElement;
+      const email = emailInput?.value?.trim();
+      if (!email) return;
+      try {
+        const res = await fetch('/api/newsletter/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json() as { message?: string; error?: string };
+        if (heroMsg) { heroMsg.textContent = data.message || data.error || 'Done!'; heroMsg.classList.remove('hidden'); }
+        if (res.ok) emailInput.value = '';
+      } catch {
+        if (heroMsg) { heroMsg.textContent = 'Failed — please try again.'; heroMsg.classList.remove('hidden'); }
+      }
+    });
+  </script>
+</MainLayout>

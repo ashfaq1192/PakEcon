@@ -1,0 +1,32 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import RemittanceCalculator from '../../components/tools/RemittanceCalculator';
+
+const title = 'Pakistan Remittance Calculator — Send Money to Pakistan (Live Rates)';
+const description =
+  'Calculate how much PKR your family receives when you send GBP, EUR, USD, AED, SAR, CAD, AUD, or RON using live SBP interbank exchange rates.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/remittance-calculator',
+    inLanguage: 'en-PK',
+    publisher: { '@type': 'Organization', name: 'PakEcon.ai', url: 'https://pakecon.ai' },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Calculate how much Pakistani Rupees your family will receive based on live SBP interbank rates.
+      Supports all major remittance corridors including Romanian Leu for the Pakistani diaspora in Romania and Europe.
+    </p>
+
+    <RemittanceCalculator client:load />
+  </div>
+</MainLayout>

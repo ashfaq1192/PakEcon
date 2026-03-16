@@ -1,0 +1,38 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import GoldInvestmentCalculator from '../../components/tools/GoldInvestmentCalculator';
+
+const title = 'Gold Investment Calculator Pakistan 2026 — Live 24K Gold Prices';
+const description =
+  'Calculate the current value of your gold holdings in Pakistan using live 24K gold prices (tolas and grams). Includes price scenario analysis: −20% to +50%.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/gold-investment-calculator',
+    inLanguage: 'en-PK',
+    publisher: { '@type': 'Organization', name: 'PakEcon.ai', url: 'https://pakecon.ai' },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Enter your gold quantity to see its current PKR value and how different price scenarios
+      would affect your portfolio. Data sourced from PMEX/Business Recorder via PakEcon.ai.
+    </p>
+
+    <GoldInvestmentCalculator client:load />
+
+    <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+      <strong>Disclaimer:</strong> Gold prices are updated periodically and may not reflect real-time
+      market rates. This calculator is for informational purposes only and does not constitute
+      investment advice. Consult a qualified financial advisor before making investment decisions.
+    </div>
+  </div>
+</MainLayout>

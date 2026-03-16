@@ -1,0 +1,108 @@
+---
+<div class="max-w-md mx-auto p-6">
+  <div class="mb-4">
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Age Calculator</h3>
+    <p class="text-gray-600 text-sm">Calculate your exact age in years, months, and days</p>
+  </div>
+
+  <div id="age-calculator" class="bg-white rounded-lg shadow-lg p-6">
+    <div class="space-y-4">
+      <div>
+        <label for="birth-date" class="block text-sm font-medium text-gray-700 mb-1">
+          Date of Birth
+        </label>
+        <input
+          type="date"
+          id="birth-date"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+        />
+      </div>
+
+      <div>
+        <label for="target-date" class="block text-sm font-medium text-gray-700 mb-1">
+          Calculate Age As Of (optional, defaults to today)
+        </label>
+        <input
+          type="date"
+          id="target-date"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+        />
+      </div>
+
+      <button
+        id="calculate-age"
+        class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
+      >
+        Calculate Age
+      </button>
+
+      <div id="age-result" class="hidden">
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+          <p class="text-sm text-gray-600 mb-1">Your age is:</p>
+          <p id="age-display" class="text-3xl font-bold text-green-700"></p>
+          <div id="age-details" class="mt-3 space-y-1 text-sm text-gray-600"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Set default date to today
+    document.getElementById('target-date').valueAsDate = new Date();
+
+    document.getElementById('calculate-age').addEventListener('click', () => {
+      const birthDateStr = document.getElementById('birth-date').value;
+      const targetDateStr = document.getElementById('target-date').value;
+
+      if (!birthDateStr) {
+        alert('Please enter your date of birth');
+        return;
+      }
+
+      const birthDate = new Date(birthDateStr);
+      const targetDate = targetDateStr ? new Date(targetDateStr) : new Date();
+
+      if (birthDate > targetDate) {
+        alert('Date of birth cannot be in the future');
+        return;
+      }
+
+      // Calculate exact age
+      let years = targetDate.getFullYear() - birthDate.getFullYear();
+      let months = targetDate.getMonth() - birthDate.getMonth();
+      let days = targetDate.getDate() - birthDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(targetDate.getFullYear(), targetDate.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      // Calculate total days
+      const totalDays = Math.floor((targetDate - birthDate) / (1000 * 60 * 60 * 24));
+
+      // Calculate next birthday
+      const nextBirthday = new Date(targetDate.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+      if (nextBirthday < targetDate) {
+        nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+      }
+      const daysUntilBirthday = Math.ceil((nextBirthday - targetDate) / (1000 * 60 * 60 * 24));
+
+      // Display results
+      document.getElementById('age-result').classList.remove('hidden');
+      document.getElementById('age-display').textContent =
+        `${years} year${years !== 1 ? 's' : ''}, ${months} month${months !== 1 ? 's' : ''}, ${days} day${days !== 1 ? 's' : ''}`;
+
+      document.getElementById('age-details').innerHTML = `
+        <div>📅 Total days lived: <strong>${totalDays.toLocaleString()}</strong></div>
+        <div>🎂 Next birthday in: <strong>${daysUntilBirthday} day${daysUntilBirthday !== 1 ? 's' : ''}</strong></div>
+        <div>🎉 Birth weekday: <strong>${birthDate.toLocaleDateString('en-US', { weekday: 'long' })}</strong></div>
+      `;
+    });
+  </script>
+</div>

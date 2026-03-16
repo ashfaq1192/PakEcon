@@ -1,0 +1,42 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import CurrencyConverter from '../../components/tools/CurrencyConverter';
+
+const title = 'Live PKR Currency Converter — SBP Interbank Rates 2026';
+const description =
+  'Convert Pakistani Rupee (PKR) to USD, EUR, GBP, AED, SAR, CAD, AUD, CNY, JPY, RON using live SBP interbank rates. Includes 30-day trend chart.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/currency-converter',
+    inLanguage: 'en-PK',
+    publisher: {
+      '@type': 'Organization',
+      name: 'PakEcon.ai',
+      url: 'https://pakecon.ai',
+    },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Live currency conversion using State Bank of Pakistan (SBP) interbank exchange rates.
+      Includes 30-day PKR trend chart for each currency pair.
+    </p>
+
+    <CurrencyConverter client:load />
+
+    <div class="mt-6 p-3 bg-gray-50 border border-gray-200 rounded text-xs text-gray-600">
+      Rates shown are SBP interbank rates. Actual remittance and exchange counter rates vary by
+      provider and may differ significantly. RON (Romanian Leu) is included for the Pakistani
+      diaspora in Romania.
+    </div>
+  </div>
+</MainLayout>
