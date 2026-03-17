@@ -1,0 +1,118 @@
+name: Agent Swarm Trigger
+
+on:
+  schedule:
+    # Run every 6 hours (UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'Force run even if recently executed'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  trigger-agents:
+    name: Trigger Agent Swarm
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Trigger Agent Swarm
+        id: trigger
+        run: |
+          echo "Triggering agent swarm..."
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -X POST ${{ secrets.AGENT_URL }} \
+            -H "Authorization: Bearer ${{ secrets.AGENT_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{"source":"github"}')
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response: $BODY"
+
+          if [ "$HTTP_CODE" -eq 200 ]; then
+            echo "success=true" >> $GITHUB_OUTPUT
+            echo "response=$BODY" >> $GITHUB_OUTPUT
+
+            # Extract workflow details
+            WORKFLOW_ID=$(echo "$BODY" | jq -r '.workflowId // empty')
+            PUBLISHED_COUNT=$(echo "$BODY" | jq -r '.publishedCount // 0')
+            INSIGHT_COUNT=$(echo "$BODY" | jq -r '.insightCount // 0')
+
+            echo "Workflow ID: $WORKFLOW_ID"
+            echo "Published Count: $PUBLISHED_COUNT"
+            echo "Insight Count: $INSIGHT_COUNT"
+          else
+            echo "success=false" >> $GITHUB_OUTPUT
+            echo "error=$BODY" >> $GITHUB_OUTPUT
+            echo "::error::Agent trigger failed with status $HTTP_CODE: $BODY"
+            exit 1
+          fi
+
+      - name: Create summary
+        if: steps.trigger.outputs.success == 'true'
+        run: |
+          echo "## Agent Swarm Execution Summary 📊" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow ID:** \`${{ steps.trigger.outputs.workflow_id }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Published Count:** ${{ steps.trigger.outputs.published_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Insight Count:** ${{ steps.trigger.outputs.insight_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger Time:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+
+      - name: Handle failure
+        if: failure()
+        run: |
+          echo "## Agent Swarm Failed ❌" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Error:**" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.trigger.outputs.error }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Please check the Cloudflare logs for more details."
+
+      - name: Wait for deployment (if content was published)
+        if: steps.trigger.outputs.success == 'true' && steps.trigger.outputs.published_count != '0'
+        run: |
+          echo "Waiting for Cloudflare Pages deployment..."
+          sleep 30
+
+      - name: Verify deployment
+        if: steps.trigger.outputs.success == 'true'
+        run: |
+          echo "Checking site availability..."
+          curl -f -I ${{ secrets.SITE_URL }} || exit 1
+          echo "Site is accessible!"
+
+  health-check:
+    name: Health Check
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check site availability
+        run: |
+          echo "Checking site health..."
+          if curl -f -I ${{ secrets.SITE_URL }}; then
+            echo "Site is healthy!"
+          else
+            echo "::warning::Site health check failed"
+            exit 0  # Don't fail the workflow
+          fi

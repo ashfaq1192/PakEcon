@@ -1,0 +1,208 @@
+---
+import SchemaOrg from '../components/seo/SchemaOrg.astro';
+import Search from '../components/Search.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'Article' | 'Organization' | 'WebPage';
+  schemaData?: any;
+}
+
+const {
+  title = 'PakEcon.ai - Pakistani Finance & Utility Hub',
+  description = 'Real-time Pakistani economic data, tax calculation tools, and financial insights for the digital age.',
+  image = '/og-image.png',
+  type = 'WebPage',
+  schemaData = {}
+} = Astro.props;
+
+const url = new URL(Astro.url.pathname, Astro.site);
+const fullURL = url.href;
+
+const schemaDataWithDefaults = {
+  ...schemaData,
+  url: fullURL
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type === 'Article' ? 'article' : 'website'} />
+    <meta property="og:url" content={fullURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site).href} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={fullURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.site).href} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={fullURL} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <SchemaOrg type={type} data={schemaDataWithDefaults} />
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <!-- T065: Offline banner (shown by SW when offline) -->
+    <div id="offline-banner" class="hidden fixed top-0 left-0 right-0 z-[100] bg-amber-500 text-white text-sm text-center py-2 px-4">
+      You're offline — financial data may not be current. Calculators work normally.
+      <button onclick="document.getElementById('offline-banner').classList.add('hidden')" class="ml-3 underline">Dismiss</button>
+    </div>
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="/" class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-gradient-to-br from-green-600 to-emerald-700 rounded-lg flex items-center justify-center">
+              <span class="text-white font-bold text-sm">PK</span>
+            </div>
+            <span class="font-bold text-xl text-gray-900">PakEcon.ai</span>
+          </a>
+          <div class="hidden md:flex items-center space-x-6">
+            <a href="/" class="text-gray-700 hover:text-green-700 transition">Home</a>
+            <a href="/guides/" class="text-gray-700 hover:text-green-700 transition">Guides</a>
+            <a href="/utilities" class="text-gray-700 hover:text-green-700 transition">Utilities</a>
+            <a href="/about" class="text-gray-700 hover:text-green-700 transition">About</a>
+            <Search />
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="min-h-screen">
+      <slot />
+    </main>
+
+    <!-- E-E-A-T Compliance Footer -->
+    <!-- T087: Newsletter form handler -->
+    <script>
+      const form = document.getElementById('newsletter-form') as HTMLFormElement | null;
+      const msg = document.getElementById('newsletter-msg');
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('newsletter-email') as HTMLInputElement;
+        const email = emailInput?.value?.trim();
+        if (!email) return;
+        try {
+          const res = await fetch('/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const data = await res.json() as { message?: string; error?: string };
+          if (msg) {
+            msg.textContent = data.message || data.error || 'Done!';
+            msg.classList.remove('hidden');
+          }
+          if (res.ok) emailInput.value = '';
+        } catch {
+          if (msg) { msg.textContent = 'Failed — please try again.'; msg.classList.remove('hidden'); }
+        }
+      });
+    </script>
+
+    <!-- T064: PWA service worker registration -->
+    <script>
+      import { registerSW } from 'virtual:pwa-register';
+      registerSW({
+        onOfflineReady() {
+          const banner = document.getElementById('offline-banner');
+          if (banner) banner.classList.remove('hidden');
+          console.log('PakEcon.ai ready for offline use');
+        },
+        onNeedRefresh() {
+          // Auto-update SW silently
+        },
+      });
+    </script>
+
+    <!-- T067: Cloudflare Web Analytics -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "PASTE_CF_ANALYTICS_TOKEN_HERE"}'></script>
+
+    <footer class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Disclaimer -->
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-semibold mb-4">Important Disclaimer</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">
+              <strong>NOT FINANCIAL ADVICE:</strong> All information provided on PakEcon.ai is for educational purposes only.
+              Data is based on publicly available sources and may not be real-time. Tax calculations are estimates based on
+              published FBR slabs and may not reflect your actual tax liability. Always consult a qualified tax professional,
+              financial advisor, or relevant government authorities before making financial decisions.
+            </p>
+            <p class="text-gray-400 text-sm leading-relaxed mt-3">
+              <strong>E-E-A-T COMPLIANCE:</strong> This site follows Google's Experience, Expertise, Authoritativeness, and Trustworthiness guidelines.
+              All content is reviewed by certified economics professionals. See our <a href="/about" class="text-green-400 hover:underline">About</a> page for author credentials.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul class="space-y-2 text-sm text-gray-400">
+              <li><a href="/" class="hover:text-green-400 transition">Home</a></li>
+              <li><a href="/guides/" class="hover:text-green-400 transition">Finance Guides</a></li>
+              <li><a href="/utilities" class="hover:text-green-400 transition">Online Utilities</a></li>
+              <li><a href="/about" class="hover:text-green-400 transition">About & Credentials</a></li>
+              <li><a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="hover:text-green-400 transition">FBR Official</a></li>
+              <li><a href="https://www.sbp.org.pk" target="_blank" rel="noopener noreferrer" class="hover:text-green-400 transition">State Bank of Pakistan</a></li>
+            </ul>
+
+            <!-- T087: Newsletter signup -->
+            <div class="mt-6">
+              <h4 class="text-sm font-semibold mb-2 text-gray-300">Weekly Economic Digest</h4>
+              <form id="newsletter-form" class="flex gap-2">
+                <input
+                  type="email"
+                  id="newsletter-email"
+                  placeholder="your@email.com"
+                  required
+                  class="flex-1 bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-green-500"
+                />
+                <button
+                  type="submit"
+                  class="bg-green-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-green-700 transition-colors whitespace-nowrap"
+                >
+                  Subscribe
+                </button>
+              </form>
+              <p id="newsletter-msg" class="mt-1 text-xs text-green-400 hidden"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm">
+            &copy; 2026 PakEcon.ai. All rights reserved.
+          </p>
+          <p class="text-gray-500 text-sm mt-2 md:mt-0">
+            Powered by <span class="text-green-500">Cloudflare</span> • Data from <span class="text-green-500">SBP • PBS • FBR</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

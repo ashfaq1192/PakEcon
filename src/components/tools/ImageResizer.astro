@@ -1,0 +1,284 @@
+---
+<div class="max-w-2xl mx-auto p-6">
+  <div class="mb-4">
+    <h3 class="text-2xl font-bold text-gray-900 mb-2">Image Resizer</h3>
+    <p class="text-gray-600 text-sm">Resize images directly in your browser - 100% client-side, no uploads</p>
+  </div>
+
+  <div id="image-resizer" class="bg-white rounded-lg shadow-lg p-6">
+    <div class="space-y-4">
+      <!-- File Input -->
+      <div>
+        <label for="image-input" class="block text-sm font-medium text-gray-700 mb-1">
+          Select Image
+        </label>
+        <input
+          type="file"
+          id="image-input"
+          accept="image/*"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+        />
+      </div>
+
+      <!-- Preview -->
+      <div id="preview-container" class="hidden">
+        <p class="text-sm font-medium text-gray-700 mb-2">Original Image:</p>
+        <div class="border border-gray-200 rounded-lg p-2 bg-gray-50">
+          <img id="preview-image" class="max-w-full h-auto mx-auto rounded" alt="Preview" />
+          <p id="original-info" class="text-xs text-gray-500 mt-2 text-center"></p>
+        </div>
+      </div>
+
+      <!-- Resize Options -->
+      <div id="options-container" class="hidden space-y-4">
+        <h4 class="font-semibold text-gray-900">Resize Options</h4>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="width-input" class="block text-sm font-medium text-gray-700 mb-1">
+              Width (px)
+            </label>
+            <input
+              type="number"
+              id="width-input"
+              min="1"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+
+          <div>
+            <label for="height-input" class="block text-sm font-medium text-gray-700 mb-1">
+              Height (px)
+            </label>
+            <input
+              type="number"
+              id="height-input"
+              min="1"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label class="flex items-center">
+            <input
+              type="checkbox"
+              id="maintain-aspect"
+              checked
+              class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+            />
+            <span class="ml-2 text-sm text-gray-700">Maintain aspect ratio</span>
+          </label>
+        </div>
+
+        <!-- Presets -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Quick Presets:</label>
+          <div class="flex flex-wrap gap-2">
+            <button data-preset="800" class="preset-btn px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition">800px</button>
+            <button data-preset="1200" class="preset-btn px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition">1200px</button>
+            <button data-preset="1920" class="preset-btn px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition">1920px</button>
+            <button data-preset="50%" class="preset-btn px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition">50%</button>
+            <button data-preset="75%" class="preset-btn px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded transition">75%</button>
+          </div>
+        </div>
+
+        <div>
+          <label for="quality-input" class="block text-sm font-medium text-gray-700 mb-1">
+            Quality (1-100)
+          </label>
+          <input
+            type="range"
+            id="quality-input"
+            min="1"
+            max="100"
+            value="92"
+            class="w-full"
+          />
+          <p class="text-sm text-gray-500 text-right"><span id="quality-value">92</span>%</p>
+        </div>
+
+        <div>
+          <label for="format-select" class="block text-sm font-medium text-gray-700 mb-1">
+            Output Format
+          </label>
+          <select
+            id="format-select"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+          >
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/png">PNG</option>
+            <option value="image/webp">WebP</option>
+          </select>
+        </div>
+
+        <button
+          id="resize-btn"
+          class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
+        >
+          Resize Image
+        </button>
+      </div>
+
+      <!-- Result -->
+      <div id="result-container" class="hidden space-y-4">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <p class="font-medium text-green-800">Resize Complete!</p>
+          <p id="result-info" class="text-sm text-green-700 mt-1"></p>
+        </div>
+
+        <div class="border border-gray-200 rounded-lg p-2 bg-gray-50">
+          <img id="result-image" class="max-w-full h-auto mx-auto rounded" alt="Resized" />
+        </div>
+
+        <a
+          id="download-link"
+          download
+          class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition"
+        >
+          Download Resized Image
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('image-input');
+    const previewContainer = document.getElementById('preview-container');
+    const previewImage = document.getElementById('preview-image');
+    const originalInfo = document.getElementById('original-info');
+    const optionsContainer = document.getElementById('options-container');
+    const widthInput = document.getElementById('width-input');
+    const heightInput = document.getElementById('height-input');
+    const maintainAspect = document.getElementById('maintain-aspect');
+    const qualityInput = document.getElementById('quality-input');
+    const qualityValue = document.getElementById('quality-value');
+    const formatSelect = document.getElementById('format-select');
+    const resizeBtn = document.getElementById('resize-btn');
+    const resultContainer = document.getElementById('result-container');
+    const resultImage = document.getElementById('result-image');
+    const resultInfo = document.getElementById('result-info');
+    const downloadLink = document.getElementById('download-link');
+
+    let originalImage: HTMLImageElement | null = null;
+    let aspectRatio = 1;
+
+    imageInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        originalImage = new Image();
+        originalImage.onload = () => {
+          previewImage.src = event.target?.result as string;
+          previewContainer.classList.remove('hidden');
+          optionsContainer.classList.remove('hidden');
+          resultContainer.classList.add('hidden');
+
+          // Set original dimensions
+          widthInput.value = originalImage.naturalWidth.toString();
+          heightInput.value = originalImage.naturalHeight.toString();
+          aspectRatio = originalImage.naturalWidth / originalImage.naturalHeight;
+
+          // Show file info
+          const sizeKB = (file.size / 1024).toFixed(2);
+          originalInfo.textContent = `${originalImage.naturalWidth} × ${originalImage.naturalHeight}px • ${sizeKB} KB`;
+        };
+        originalImage.src = event.target?.result as string;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Aspect ratio calculation
+    widthInput.addEventListener('input', () => {
+      if (maintainAspect.checked && originalImage) {
+        const width = parseInt(widthInput.value) || 0;
+        heightInput.value = Math.round(width / aspectRatio).toString();
+      }
+    });
+
+    heightInput.addEventListener('input', () => {
+      if (maintainAspect.checked && originalImage) {
+        const height = parseInt(heightInput.value) || 0;
+        widthInput.value = Math.round(height * aspectRatio).toString();
+      }
+    });
+
+    // Quality slider
+    qualityInput.addEventListener('input', () => {
+      qualityValue.textContent = qualityInput.value;
+    });
+
+    // Presets
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = btn.dataset.preset;
+        if (!originalImage) return;
+
+        if (preset?.endsWith('%')) {
+          const percentage = parseInt(preset) / 100;
+          widthInput.value = Math.round(originalImage.naturalWidth * percentage).toString();
+          heightInput.value = Math.round(originalImage.naturalHeight * percentage).toString();
+        } else {
+          const targetWidth = parseInt(preset || '0');
+          widthInput.value = targetWidth.toString();
+          if (maintainAspect.checked) {
+            heightInput.value = Math.round(targetWidth / aspectRatio).toString();
+          }
+        }
+      });
+    });
+
+    // Resize
+    resizeBtn.addEventListener('click', () => {
+      if (!originalImage) return;
+
+      const width = parseInt(widthInput.value) || 0;
+      const height = parseInt(heightInput.value) || 0;
+      const quality = parseInt(qualityInput.value) / 100;
+      const format = formatSelect.value;
+
+      if (width <= 0 || height <= 0) {
+        alert('Please enter valid dimensions');
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        // Use better quality scaling
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(originalImage, 0, 0, width, height);
+
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            resultImage.src = url;
+
+            // Calculate file size reduction
+            const originalSize = imageInput.files?.[0]?.size || 0;
+            const newSize = blob.size;
+            const reduction = originalSize > 0 ? ((originalSize - newSize) / originalSize * 100).toFixed(1) : 0;
+
+            resultInfo.textContent = `New size: ${width} × ${height}px • ${(newSize / 1024).toFixed(2)} KB`;
+            if (originalSize > 0) {
+              resultInfo.textContent += ` (${reduction}% reduction)`;
+            }
+
+            downloadLink.href = url;
+            const ext = format.split('/')[1];
+            const originalName = imageInput.files?.[0]?.name || 'image';
+            downloadLink.download = originalName.replace(/\.[^.]+$/, '') + `_resized.${ext}`;
+
+            resultContainer.classList.remove('hidden');
+          }
+        }, format, quality);
+      }
+    });
+  </script>
+</div>

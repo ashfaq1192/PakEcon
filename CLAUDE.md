@@ -208,3 +208,6 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Recent Changes
+- 002-platform-enhancement: Added @vite-pwa/astro, pagefind. LLM via Groq (llama-3.3-70b-versatile) raw fetch. GitHub Contents API raw fetch. All new Worker endpoints read D1 directly.

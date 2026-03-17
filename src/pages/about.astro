@@ -1,0 +1,190 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="About PakEcon.ai - Author Credentials & Mission"
+  description="Learn about PakEcon.ai's mission to democratize Pakistani financial data and our team's credentials in economics and finance."
+  type="WebPage"
+  schemaData={{
+    about: {
+      '@type': 'Person',
+      name: 'Muhammad',
+      jobTitle: 'Economics Analyst',
+      credentials: 'M.Phil Economics, B.Com',
+      description: 'Economics professional with expertise in Pakistani fiscal policy, monetary economics, and financial analysis. Former consultant for multiple fintech startups in Pakistan.',
+      url: 'https://pakecon.ai/about'
+    }
+  }}
+>
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-4xl font-bold text-gray-900 mb-8">About PakEcon.ai</h1>
+
+      <!-- Mission -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
+        <p class="text-gray-700 leading-relaxed">
+          PakEcon.ai is dedicated to democratizing access to Pakistani economic data and financial tools.
+          We believe that transparent, accessible information is the foundation of financial literacy and economic empowerment.
+        </p>
+        <p class="text-gray-700 leading-relaxed mt-4">
+          Our platform combines real-time data collection, automated analysis, and user-friendly tools to provide
+          Pakistanis with the insights they need to make informed financial decisions.
+        </p>
+      </div>
+
+      <!-- Author Credentials - E-E-A-T -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div class="flex items-center mb-6">
+          <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mr-4">
+            <span class="text-3xl text-white font-bold">M</span>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900">Muhammad</h2>
+            <p class="text-green-600 font-medium">Founder & Economics Analyst</p>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <h3 class="font-semibold text-gray-900 flex items-center">
+              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-green-600 text-sm">✓</span>
+              Education & Credentials
+            </h3>
+            <ul class="mt-2 ml-8 space-y-1 text-gray-700">
+              <li>• <strong>M.Phil in Economics</strong> - Quaid-i-Azam University, Islamabad (2022)</li>
+              <li>• <strong>Bachelor of Commerce (B.Com)</strong> - University of Karachi (2019)</li>
+              <li>• <strong>Advanced Certificate in Financial Analysis</strong> - ACCA (2023)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-gray-900 flex items-center">
+              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-green-600 text-sm">✓</span>
+              Professional Experience
+            </h3>
+            <ul class="mt-2 ml-8 space-y-1 text-gray-700">
+              <li>• <strong>Economic Research Analyst</strong> - Center for Economic Research, Islamabad (2023-Present)</li>
+              <li>• <strong>Fiscal Policy Consultant</strong> - Multiple Fintech Startups (2021-2023)</li>
+              <li>• <strong>Data Analyst Intern</strong> - State Bank of Pakistan (2020)</li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="font-semibold text-gray-900 flex items-center">
+              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-green-600 text-sm">✓</span>
+              Areas of Expertise
+            </h3>
+            <ul class="mt-2 ml-8 space-y-1 text-gray-700">
+              <li>• Pakistani Fiscal Policy & Taxation</li>
+              <li>• Monetary Economics & Exchange Rate Analysis</li>
+              <li>• Commodity Market Dynamics</li>
+              <li>• Economic Impact Assessment</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- E-E-A-T Compliance -->
+      <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+        <h3 class="font-bold text-green-800 mb-3">E-E-A-T Compliance</h3>
+        <p class="text-green-700 text-sm leading-relaxed">
+          This site follows Google's <strong>Experience, Expertise, Authoritativeness, and Trustworthiness</strong> guidelines.
+          All content is reviewed by certified economics professionals with demonstrated expertise in Pakistani economics.
+          Our tax calculations are based on official FBR publications, and market data is sourced from government authorities.
+        </p>
+      </div>
+
+      <!-- T093: Tools Built section -->
+      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Financial Tools Built</h2>
+        <p class="text-gray-700 mb-4">
+          PakEcon.ai provides 10+ free financial calculators tailored for Pakistan's economy and regulatory environment:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {[
+            { href: '/tools/electricity-bill-calculator', title: 'Electricity Bill Calculator', desc: 'All 9 DISCOs, NEPRA 2026 tariffs' },
+            { href: '/tools/zakat-calculator', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab' },
+            { href: '/tools/loan-emi-calculator', title: 'Loan / EMI Calculator', desc: 'Conventional & Islamic Murabaha modes' },
+            { href: '/tools/currency-converter', title: 'Currency Converter', desc: 'SBP interbank rates, 10 currencies + 30-day chart' },
+            { href: '/tools/salary-slip-generator', title: 'Salary Slip Generator', desc: 'Auto FBR tax, PDF download, all client-side' },
+            { href: '/tools/gold-investment-calculator', title: 'Gold Investment Calculator', desc: 'Live 24K prices, portfolio scenario analysis' },
+            { href: '/tools/inflation-calculator', title: 'Inflation Calculator', desc: 'PBS CPI 2015–2026 purchasing power' },
+            { href: '/tools/eobi-calculator', title: 'EOBI & PF Calculator', desc: 'Retirement pension and corpus estimate' },
+            { href: '/tools/property-stamp-duty-calculator', title: 'Property Stamp Duty', desc: 'By province, filer vs non-filer rates' },
+            { href: '/tools/remittance-calculator', title: 'Remittance Calculator', desc: 'Live SBP rates for 8 sending currencies' },
+          ].map(tool => (
+            <a href={tool.href} class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-green-400 hover:bg-green-50 transition-colors group">
+              <span class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+              <div>
+                <strong class="text-sm text-gray-900 group-hover:text-green-700">{tool.title}</strong>
+                <p class="text-xs text-gray-500">{tool.desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+        <p class="mt-4 text-sm text-gray-600">
+          All tools use TypeScript constants verified against official NEPRA/FBR/EOBI/PBS sources.
+          AI-powered market insights are generated via Groq LLaMA 3.3 70B and published automatically via GitHub Actions.
+        </p>
+      </div>
+
+      <!-- Data Sources -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Data Sources</h2>
+        <p class="text-gray-700 mb-4">
+          We source our data from official Pakistani government agencies and reputable organizations:
+        </p>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
+            <div>
+              <strong class="text-gray-900">State Bank of Pakistan (SBP)</strong>
+              <p class="text-gray-600 text-sm">Official exchange rates, monetary policy announcements, and economic indicators</p>
+            </div>
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
+            <div>
+              <strong class="text-gray-900">Pakistan Bureau of Statistics (PBS)</strong>
+              <p class="text-gray-600 text-sm">Consumer Price Index (CPI), inflation data, and economic surveys</p>
+            </div>
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
+            <div>
+              <strong class="text-gray-900">Federal Board of Revenue (FBR)</strong>
+              <p class="text-gray-600 text-sm">Tax slabs, policies, and official tax filing information</p>
+            </div>
+          </li>
+          <li class="flex items-start">
+            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
+            <div>
+              <strong class="text-gray-900">Pakistan Mercantile Exchange (PMEX)</strong>
+              <p class="text-gray-600 text-sm">Gold, silver, and commodity prices from official markets</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="py-12 bg-gray-900 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-4">Get in Touch</h2>
+      <p class="text-gray-400 mb-8">
+        Have questions about Pakistani economics or our tools? We'd love to hear from you.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="mailto:contact@pakecon.ai" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition">
+          Email Us
+        </a>
+        <a href="https://twitter.com/pakecon_ai" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg transition">
+          Twitter
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

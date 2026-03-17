@@ -1,0 +1,108 @@
+---
+interface Props {
+  type: 'Article' | 'Organization' | 'WebPage';
+  data: any;
+}
+
+const { type, data } = Astro.props;
+
+const schemas: Record<string, any> = {
+  Article: {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: data.title || '',
+    description: data.description || '',
+    author: {
+      '@type': 'Person',
+      name: 'Muhammad',
+      jobTitle: 'Economics Analyst',
+      credentials: 'M.Phil Economics, B.Com',
+      url: 'https://pakecon.ai/about'
+    },
+    datePublished: data.datePublished || data.date || new Date().toISOString(),
+    dateModified: data.dateModified || data.date || new Date().toISOString(),
+    publisher: {
+      '@type': 'Organization',
+      name: 'PakEcon.ai',
+      url: 'https://pakecon.ai',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://pakecon.ai/logo.png'
+      }
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': data.url || 'https://pakecon.ai'
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'Pakistan Economy'
+    },
+    inLanguage: 'en-US',
+    isAccessibleForFree: true,
+    keywords: data.tags?.join(', ') || 'Pakistan, economy, finance, tax'
+  },
+
+  Organization: {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'PakEcon.ai',
+    url: 'https://pakecon.ai',
+    description: 'Pakistani Finance & Utility hub with real-time economic data, tax calculation tools, and financial insights.',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://pakecon.ai/logo.png',
+      width: 512,
+      height: 512
+    },
+    founder: {
+      '@type': 'Person',
+      name: 'Muhammad',
+      credentials: 'M.Phil Economics, B.Com',
+      jobTitle: 'Economics Analyst',
+      url: 'https://pakecon.ai/about'
+    },
+    sameAs: [
+      'https://twitter.com/pakecon_ai',
+      'https://linkedin.com/company/pakecon-ai'
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      email: 'contact@pakecon.ai',
+      areaServed: 'PK',
+      availableLanguage: ['English', 'Urdu']
+    },
+    knowsAbout: [
+      'Pakistan Economy',
+      'Income Tax',
+      'Financial Planning',
+      'Commodity Prices',
+      'Exchange Rates'
+    ]
+  },
+
+  WebPage: {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: data.title || 'PakEcon.ai',
+    description: data.description || '',
+    url: data.url || 'https://pakecon.ai',
+    publisher: {
+      '@type': 'Organization',
+      name: 'PakEcon.ai',
+      url: 'https://pakecon.ai'
+    },
+    about: {
+      '@type': 'Thing',
+      name: 'Pakistan Economy and Finance'
+    },
+    inLanguage: 'en-US',
+    isAccessibleForFree: true
+  }
+};
+
+const schema = schemas[type] || schemas.WebPage;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

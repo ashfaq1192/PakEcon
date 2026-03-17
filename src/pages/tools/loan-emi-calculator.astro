@@ -1,0 +1,43 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import LoanEmiCalculator from '../../components/tools/LoanEmiCalculator';
+
+const title = 'Pakistan Loan EMI Calculator 2026 — Home, Car, Personal (Conventional & Islamic)';
+const description =
+  'Calculate monthly EMI or installment for home, car, personal, or business loans in Pakistan. Supports conventional interest-based and Islamic/Murabaha profit-based financing with amortization schedule and prepayment simulation.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/loan-emi-calculator',
+    inLanguage: 'en-PK',
+    publisher: {
+      '@type': 'Organization',
+      name: 'PakEcon.ai',
+      url: 'https://pakecon.ai',
+    },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Calculate your monthly installment for any type of loan or Islamic financing.
+      Includes a 12-month amortization schedule and lump-sum prepayment simulation.
+    </p>
+
+    <LoanEmiCalculator client:load />
+
+    <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+      <strong>Disclaimer (COMP-103):</strong> This calculator provides estimates for informational
+      purposes only. Actual loan terms, interest/profit rates, and processing fees vary by
+      institution. For Islamic financing, consult your bank's Shariah board for product-specific
+      terms. PakEcon.ai is not a licensed financial advisor and does not provide lending services.
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,40 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import PropertyStampDuty from '../../components/tools/PropertyStampDuty';
+
+const title = 'Pakistan Property Stamp Duty Calculator 2026 — By Province';
+const description =
+  'Calculate property transfer costs in Pakistan including stamp duty, Capital Value Tax (CVT), and registration fees for all provinces and ICT. Includes filer vs non-filer rates.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://pakecon.ai/tools/property-stamp-duty-calculator',
+    inLanguage: 'en-PK',
+    publisher: { '@type': 'Organization', name: 'PakEcon.ai', url: 'https://pakecon.ai' },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
+    <p class="text-gray-600 mb-6 text-sm">
+      Estimate stamp duty, CVT, and registration fees for property transfers across Pakistan.
+      Active tax filers pay lower CVT rates per FBR regulations.
+    </p>
+
+    <PropertyStampDuty client:load />
+
+    <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+      <strong>Disclaimer (COMP-104):</strong> Stamp duty and CVT rates are based on publicly
+      available provincial legislation as of {new Date().getFullYear()}. Actual transfer costs
+      may vary based on DC valuation tables (which may differ from market value), additional
+      surcharges, legal fees, and NOC charges. Filer status must be verified at the FBR Active
+      Taxpayer List (ATL). Consult a property lawyer or DC office for definitive figures.
+    </div>
+  </div>
+</MainLayout>
