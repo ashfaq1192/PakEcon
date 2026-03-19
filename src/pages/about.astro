@@ -25,7 +25,7 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center gap-4 mb-4">
         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-          <Icon name="information" size={24} class="text-white" />
+          <span class="text-2xl">🇵🇰</span>
         </div>
         <span class="text-sm font-medium text-green-100 uppercase tracking-wider">About Us</span>
       </div>
@@ -176,16 +176,16 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {[
-          { href: '/tools/electricity-bill-calculator', icon: 'bolt', title: 'Electricity Bill Calculator', desc: 'All 9 DISCOs, NEPRA 2026 tariffs', bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-600 dark:text-amber-400' },
-          { href: '/tools/zakat-calculator', icon: 'star', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab', bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' },
-          { href: '/tools/loan-emi-calculator', icon: 'bank', title: 'Loan / EMI Calculator', desc: 'Conventional & Islamic Murabaha modes', bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
-          { href: '/tools/currency-converter', icon: 'currency', title: 'Currency Converter', desc: 'SBP interbank rates, 10 currencies + 30-day chart', bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
-          { href: '/tools/salary-slip-generator', icon: 'document', title: 'Salary Slip Generator', desc: 'Auto FBR tax, PDF download, all client-side', bg: 'bg-cyan-100 dark:bg-cyan-900/30', text: 'text-cyan-600 dark:text-cyan-400' },
-          { href: '/tools/gold-price-calculator-pakistan', icon: 'gold', title: 'Gold Price Calculator Pakistan', desc: 'Live 24K prices, portfolio scenario analysis', bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-600 dark:text-yellow-400' },
-          { href: '/tools/pakistan-inflation-calculator', icon: 'chartBar', title: 'Pakistan Inflation Calculator', desc: 'PBS CPI 2015–2026 purchasing power', bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-600 dark:text-red-400' },
-          { href: '/tools/eobi-calculator', icon: 'user', title: 'EOBI & PF Calculator', desc: 'Retirement pension and corpus estimate', bg: 'bg-slate-100 dark:bg-slate-900/30', text: 'text-slate-600 dark:text-slate-400' },
-          { href: '/tools/property-stamp-duty-calculator', icon: 'house', title: 'Property Stamp Duty', desc: 'By province, filer vs non-filer rates', bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-600 dark:text-green-400' },
-          { href: '/tools/remittance-calculator', icon: 'send', title: 'Remittance Calculator', desc: 'Live SBP rates for 8 sending currencies', bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-600 dark:text-violet-400' },
+          { href: '/tools/electricity-bill-calculator', emoji: '⚡', title: 'Electricity Bill Calculator', desc: 'All 9 DISCOs, NEPRA 2026 tariffs', bg: 'bg-amber-100 dark:bg-amber-900/30' },
+          { href: '/tools/zakat-calculator', emoji: '🌙', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab', bg: 'bg-emerald-100 dark:bg-emerald-900/30' },
+          { href: '/tools/loan-emi-calculator', emoji: '🏦', title: 'Loan / EMI Calculator', desc: 'Conventional & Islamic Murabaha modes', bg: 'bg-purple-100 dark:bg-purple-900/30' },
+          { href: '/tools/currency-converter', emoji: '💱', title: 'Currency Converter', desc: 'SBP interbank rates, 10 currencies + 30-day chart', bg: 'bg-blue-100 dark:bg-blue-900/30' },
+          { href: '/tools/salary-slip-generator', emoji: '🧾', title: 'Salary Slip Generator', desc: 'Auto FBR tax, PDF download, all client-side', bg: 'bg-cyan-100 dark:bg-cyan-900/30' },
+          { href: '/tools/gold-price-calculator-pakistan', emoji: '🪙', title: 'Gold Price Calculator Pakistan', desc: 'Live 24K prices, portfolio scenario analysis', bg: 'bg-yellow-100 dark:bg-yellow-900/30' },
+          { href: '/tools/pakistan-inflation-calculator', emoji: '📈', title: 'Pakistan Inflation Calculator', desc: 'PBS CPI 2015–2026 purchasing power', bg: 'bg-red-100 dark:bg-red-900/30' },
+          { href: '/tools/eobi-calculator', emoji: '👴', title: 'EOBI & PF Calculator', desc: 'Retirement pension and corpus estimate', bg: 'bg-slate-100 dark:bg-slate-900/30' },
+          { href: '/tools/property-stamp-duty-calculator', emoji: '🏠', title: 'Property Stamp Duty', desc: 'By province, filer vs non-filer rates', bg: 'bg-green-100 dark:bg-green-900/30' },
+          { href: '/tools/remittance-calculator', emoji: '💸', title: 'Remittance Calculator', desc: 'Live SBP rates for 8 sending currencies', bg: 'bg-violet-100 dark:bg-violet-900/30' },
         ].map((tool, index) => (
           <ScrollReveal
             key={tool.href}
@@ -194,7 +194,7 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
           >
             <a href={tool.href} class="group flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-300">
               <div class={`w-14 h-14 ${tool.bg} rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
-                <Icon name={tool.icon as any} size={28} class={tool.text} />
+                <span class="text-2xl">{tool.emoji}</span>
               </div>
               <div>
                 <strong class="text-sm text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">{tool.title}</strong>
@@ -225,36 +225,32 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
         <ul class="space-y-6">
           {[
             {
-              monogram: 'SBP',
+              img: '/State_Bank_of_Pakistan_logo.svg',
               title: 'State Bank of Pakistan (SBP)',
               desc: 'Official exchange rates, monetary policy announcements, and economic indicators',
               url: 'https://www.sbp.org.pk',
               bg: 'bg-green-100 dark:bg-green-900/30',
-              text: 'text-green-700 dark:text-green-300',
             },
             {
-              monogram: 'PBS',
+              img: '/PBS.jpg',
               title: 'Pakistan Bureau of Statistics (PBS)',
               desc: 'Consumer Price Index (CPI), inflation data, and economic surveys',
               url: 'https://www.pbs.gov.pk',
               bg: 'bg-blue-100 dark:bg-blue-900/30',
-              text: 'text-blue-700 dark:text-blue-300',
             },
             {
-              monogram: 'FBR',
+              img: '/FBR.jpeg',
               title: 'Federal Board of Revenue (FBR)',
               desc: 'Tax slabs, policies, and official tax filing information',
               url: 'https://fbr.gov.pk',
               bg: 'bg-purple-100 dark:bg-purple-900/30',
-              text: 'text-purple-700 dark:text-purple-300',
             },
             {
-              monogram: 'PMEX',
+              img: '/PMEX.jpg',
               title: 'Pakistan Mercantile Exchange (PMEX)',
               desc: 'Gold, silver, and commodity prices from official markets',
               url: 'https://pmex.com.pk',
               bg: 'bg-yellow-100 dark:bg-yellow-900/30',
-              text: 'text-yellow-700 dark:text-yellow-700',
             },
           ].map((source, index) => (
             <ScrollReveal
@@ -263,8 +259,8 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
               delay={700 + index * 100}
             >
               <li class="flex items-start gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50">
-                <div class={`w-14 h-14 ${source.bg} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                  <span class={`${source.text} text-xs font-bold tracking-tight leading-none text-center`}>{source.monogram}</span>
+                <div class={`w-14 h-14 ${source.bg} rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden p-1`}>
+                  <img src={source.img} alt={source.title} class="w-full h-full object-contain" />
                 </div>
                 <div class="flex-1">
                   <strong class="text-base text-gray-900 dark:text-white mb-1">{source.title}</strong>
@@ -293,14 +289,10 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
       <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
         Have questions about Pakistani economics or our tools? We'd love to hear from you.
       </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="flex justify-center">
         <a href="mailto:ashfaqahmed1192@gmail.com" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
           <Icon name="envelope" size={20} />
           Email Us
-        </a>
-        <a href="https://twitter.com/hisaabkar" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-          <Icon name="globe" size={20} />
-          Twitter
         </a>
       </div>
     </div>
