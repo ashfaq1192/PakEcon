@@ -1,7 +1,8 @@
 /**
  * State Bank of Pakistan (SBP) Scraper
  *
- * Fetches PKR exchange rates by parsing SBP HTML exchange rate page.
+ * Fetches PKR exchange rates via open.er-api.com (free, no key required).
+ * SBP's website is a JS SPA — not scrapeable from Cloudflare Workers.
  * Falls back to D1 cached data on error.
  */
 
@@ -12,42 +13,32 @@ interface ExchangeRate {
   source: string;
 }
 
-const SBP_RATES_URL = 'https://www.sbp.org.pk/rates/exr_detail.asp';
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CNY', 'CAD', 'AUD', 'JPY', 'RON'];
-
-function parseRatesFromHtml(html: string, today: string): ExchangeRate[] {
-  const rates: ExchangeRate[] = [];
-  for (const currency of CURRENCIES) {
-    // Match currency code in table row, then capture selling/buying rate
-    const regex = new RegExp(
-      `${currency}[^<]*</td>[^<]*<td[^>]*>[^<]*</td>[^<]*<td[^>]*>([\\d,\\.]+)`,
-      'i'
-    );
-    const match = html.match(regex);
-    if (match) {
-      const rate = parseFloat(match[1].replace(/,/g, ''));
-      if (!isNaN(rate) && rate > 0) {
-        rates.push({ currency, rate, date: today, source: 'sbp' });
-      }
-    }
-  }
-  return rates;
-}
+// open.er-api.com: free, no API key, updated daily, has PKR
+const ER_API_URL = 'https://open.er-api.com/v6/latest/USD';
+const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CNY', 'CAD', 'AUD', 'JPY'];
 
 export async function scrapeExchangeRates(db: D1Database): Promise<ExchangeRate[]> {
   const today = new Date().toISOString().split('T')[0];
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(SBP_RATES_URL, {
-      signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
-    });
+    const res = await fetch(ER_API_URL, { signal: controller.signal });
     clearTimeout(timeoutId);
-    if (!res.ok) throw new Error(`SBP HTTP ${res.status}`);
-    const html = await res.text();
-    const rates = parseRatesFromHtml(html, today);
-    if (rates.length === 0) throw new Error('No rates parsed from SBP HTML');
+    if (!res.ok) throw new Error(`ExchangeRate API HTTP ${res.status}`);
+
+    const json = await res.json() as { rates: Record<string, number>; result: string };
+    if (json.result !== 'success') throw new Error('ExchangeRate API returned error');
+
+    const usdPkr = json.rates['PKR'];
+    if (!usdPkr) throw new Error('PKR rate not found in response');
+
+    const rates: ExchangeRate[] = CURRENCIES.map(currency => {
+      // Convert: if currency = USD, rate = usdPkr. Otherwise: PKR/X = usdPkr / usdX
+      const rate = currency === 'USD'
+        ? usdPkr
+        : usdPkr / (json.rates[currency] || 1);
+      return { currency, rate: parseFloat(rate.toFixed(4)), date: today, source: 'er-api' };
+    });
 
     for (const rate of rates) {
       await db.prepare(
@@ -56,6 +47,7 @@ export async function scrapeExchangeRates(db: D1Database): Promise<ExchangeRate[
          ON CONFLICT(currency, date) DO UPDATE SET rate = excluded.rate, source = excluded.source`
       ).bind(rate.currency, rate.rate, rate.date, rate.source).run();
     }
+    console.log(`[SBP Scraper] Fetched ${rates.length} rates via ExchangeRate API`);
     return rates;
   } catch (err) {
     console.error('[SBP Scraper] Falling back to D1 cache:', err);
