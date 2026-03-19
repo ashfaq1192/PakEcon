@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 import AstroPWA from '@vite-pwa/astro';
 
 export default defineConfig({
-  output: 'server',
+  output: 'static',
   adapter: cloudflare({
     imageService: 'passthrough',
     platformProxy: {
@@ -20,8 +20,8 @@ export default defineConfig({
     AstroPWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'PakEcon.ai',
-        short_name: 'PakEcon',
+        name: 'HisaabKar.pk',
+        short_name: 'HisaabKar',
         description: 'Pakistan Finance Tools & Economic Analysis',
         theme_color: '#16a34a',
         background_color: '#ffffff',
@@ -37,7 +37,7 @@ export default defineConfig({
         globPatterns: ['**/*.{css,js,html,svg,png}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/pakecon\.ai\/api\//,
+            urlPattern: /^https:\/\/hisaabkar\.pk\/api\//,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'api-cache',
@@ -48,7 +48,7 @@ export default defineConfig({
       },
     }),
   ],
-  site: 'https://pakecon.ai',
+  site: 'https://hisaabkar.pk',
   vite: {
     define: {
       __DEV__: JSON.stringify(process.env.NODE_ENV === 'development'),

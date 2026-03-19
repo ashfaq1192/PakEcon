@@ -88,16 +88,16 @@ async function maybeRunWeeklyDigest(env: Env): Promise<void> {
          WHERE confirmed = 1 AND unsubscribed_at IS NULL`
       ).all<{ email: string }>();
 
-      const digestUrl = `https://pakecon.ai/insights/${insight.slug}`;
+      const digestUrl = `https://hisaabkar.pk/insights/${insight.slug}`;
       let sentCount = 0;
 
       for (const sub of subscribers.results || []) {
         try {
           await (env as any).SEND_EMAIL.send({
-            from: 'digest@pakecon.ai',
+            from: 'digest@hisaabkar.pk',
             to: sub.email,
             subject: insight.title,
-            text: `${insight.summary}\n\nRead full digest: ${digestUrl}\n\nUnsubscribe: https://pakecon.ai/api/newsletter/unsubscribe?email=${encodeURIComponent(sub.email)}&token=TOKEN`,
+            text: `${insight.summary}\n\nRead full digest: ${digestUrl}\n\nUnsubscribe: https://hisaabkar.pk/api/newsletter/unsubscribe?email=${encodeURIComponent(sub.email)}&token=TOKEN`,
             html: `<p>${insight.summary}</p><p><a href="${digestUrl}" style="background:#16a34a;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;">Read Full Digest</a></p>`,
           });
           sentCount++;
@@ -121,6 +121,37 @@ async function maybeRunWeeklyDigest(env: Env): Promise<void> {
   console.log('[Cron] Weekly digest complete', { slug: insight.slug });
 }
 
+async function runMonthlyRates(env: Env): Promise<void> {
+  console.log('[Cron] Monthly rates check: SBP Policy Rate + KIBOR + PBS CPI + CDNS');
+  const { scrapePolicyRates } = await import('../../src/lib/scrapers/sbp');
+  const { scrapeCPI } = await import('../../src/lib/scrapers/pbs');
+  const { scrapeCDNSRates } = await import('../../src/lib/scrapers/cdns');
+  const workflowId = crypto.randomUUID();
+
+  const results: string[] = [];
+
+  try {
+    const pr = await scrapePolicyRates(env.DB);
+    results.push(`policy_rates:${pr.length}`);
+  } catch (err) { results.push(`policy_rates:error:${err}`); }
+
+  try {
+    const cpi = await scrapeCPI(env.DB);
+    results.push(`cpi:${cpi?.yoy_change ?? 'n/a'}%`);
+  } catch (err) { results.push(`cpi:error:${err}`); }
+
+  try {
+    const cdns = await scrapeCDNSRates(env.DB);
+    results.push(`cdns:${cdns.length}`);
+  } catch (err) { results.push(`cdns:error:${err}`); }
+
+  await env.DB.prepare(
+    `INSERT INTO agent_logs (workflow_id, stage, status, message) VALUES (?, 'monthly_rates', 'completed', ?)`
+  ).bind(workflowId, results.join(' | ')).run().catch(() => {});
+
+  console.log('[Cron] Monthly rates done:', results.join(' | '));
+}
+
 export async function onScheduled(
   event: { cron: string; scheduledTime: number },
   env: Env,
@@ -128,8 +159,15 @@ export async function onScheduled(
 ): Promise<void> {
   console.log('[Cron] Scheduled event fired', { cron: event.cron });
 
-  // Fire-and-forget via waitUntil — allows Worker to finish quickly
-  // while the workflow continues running in the background.
+  // Monthly cron: "0 4 1 * *" — runs policy rate + CPI + CDNS refresh
+  if (event.cron === '0 4 1 * *') {
+    ctx.waitUntil(
+      runMonthlyRates(env).catch(err => console.error('[Cron] Monthly rates error:', err))
+    );
+    return;
+  }
+
+  // Every-6h cron: full workflow (FX, gold, commodities, insights, publish)
   ctx.waitUntil(
     executeWorkflow(env.DB, env.KV, env)
       .then(async result => {
@@ -137,7 +175,6 @@ export async function onScheduled(
           success: result.success,
           published: result.state.publishedCount,
         });
-        // Run weekly digest after main workflow completes (Monday mornings only)
         await maybeRunWeeklyDigest(env).catch(err =>
           console.error('[Cron] Weekly digest error:', err)
         );

@@ -9,6 +9,43 @@ import type { ScrapedData, MarketInsight, AgentLog, Env } from './types';
 
 const SIGNIFICANT_CHANGE_THRESHOLD = 0.01; // 1%
 
+// ─── Tool links for SEO internal linking ──────────────────────────────────────
+
+const TOOL_LINKS: Record<string, string> = {
+  currency:    '[Currency Converter](https://hisaabkar.pk/tools/currency-converter/)',
+  remittance:  '[Remittance Calculator](https://hisaabkar.pk/tools/remittance-calculator/)',
+  gold:        '[Gold Price Calculator](https://hisaabkar.pk/tools/gold-price-calculator-pakistan/)',
+  zakat:       '[Zakat Calculator](https://hisaabkar.pk/tools/zakat-calculator/)',
+  inflation:   '[Pakistan Inflation Calculator](https://hisaabkar.pk/tools/pakistan-inflation-calculator/)',
+  tax:         '[Income Tax Calculator](https://hisaabkar.pk/tools/salary-slip-generator/)',
+  loan:        '[Loan EMI Calculator](https://hisaabkar.pk/tools/loan-emi-calculator/)',
+  electricity: '[Electricity Bill Calculator](https://hisaabkar.pk/tools/electricity-bill-calculator/)',
+};
+
+// Map indicator types to the 2-3 most relevant tools
+const INDICATOR_TOOLS: Record<string, string[]> = {
+  exchange_rate: ['currency', 'remittance'],
+  gold:          ['gold', 'zakat'],
+  silver:        ['gold', 'zakat'],
+  petrol:        ['inflation', 'electricity'],
+  electricity:   ['electricity', 'inflation'],
+  cpi:           ['inflation', 'tax'],
+  default:       ['tax', 'loan', 'inflation'],
+};
+
+function getToolLinksForIndicators(indicators: string[]): string {
+  const keys = indicators.map(i => i.toLowerCase());
+  let toolKeys: string[] = [];
+  for (const [indicator, tools] of Object.entries(INDICATOR_TOOLS)) {
+    if (keys.some(k => k.includes(indicator))) {
+      toolKeys = tools;
+      break;
+    }
+  }
+  if (toolKeys.length === 0) toolKeys = INDICATOR_TOOLS.default;
+  return toolKeys.map(k => TOOL_LINKS[k]).filter(Boolean).join(', ');
+}
+
 // ─── T050: System prompt ──────────────────────────────────────────────────────
 
 const ANALYST_SYSTEM_PROMPT = `You are a professional economic analyst with an M.Phil in Economics. You write data-driven analysis about Pakistan's economy for a general-educated Pakistani audience. Your analysis is professional, cites the specific numbers provided, references 2026 Pakistan context (IMF program, Digital Nation Act, CPEC developments), and is between 280-400 words. Never use placeholder text. Never make up data not provided to you.
@@ -19,7 +56,9 @@ Structure your response with these H2 sections:
 ## Expert Analysis
 ## What Should You Do
 
-End with a key statistics bullet list (3-5 bullets with actual numbers from the data provided).`;
+End with a key statistics bullet list (3-5 bullets with actual numbers from the data provided).
+
+IMPORTANT — Internal tool links: You MUST naturally embed the 2-3 tool links listed under "Relevant Tools" in the data prompt into your analysis where contextually relevant. Prefer the "What Should You Do" section. Use the exact Markdown link syntax provided. Do not invent other URLs.`;
 
 // ─── T049: Groq API call ──────────────────────────────────────────────────────
 
@@ -89,6 +128,7 @@ function validateContent(content: string, scrapedNumbers: number[]): boolean {
 
 function buildDataPrompt(insight: { title: string; indicators: string[]; data: Array<{ key: string; value: number; unit: string }> }): string {
   const rows = insight.data.map(d => `- ${d.key}: ${d.value} ${d.unit}`).join('\n');
+  const toolLinks = getToolLinksForIndicators(insight.indicators);
   return `Write an economic analysis for the following market event:
 
 Title: ${insight.title}
@@ -96,7 +136,10 @@ Key Indicators:
 ${rows}
 
 Source: Official Pakistani government data (SBP, PBS, OGRA, Business Recorder/PMEX)
-Date: ${new Date().toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+Date: ${new Date().toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}
+
+Relevant Tools (embed 2-3 naturally in your analysis):
+${toolLinks}`;
 }
 
 // ─── LLM call with retry ──────────────────────────────────────────────────────

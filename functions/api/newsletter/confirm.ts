@@ -29,12 +29,12 @@ export async function onRequestGet(context: PagesContext): Promise<Response> {
   const email = decodeURIComponent(url.searchParams.get('email') || '').toLowerCase();
 
   if (!token || !email) {
-    return Response.redirect('https://pakecon.ai/?error=invalid_token', 302);
+    return Response.redirect('https://hisaabkar.pk/?error=invalid_token', 302);
   }
 
   const expected = await hmacToken(email, env.NEWSLETTER_SECRET);
   if (token !== expected) {
-    return Response.redirect('https://pakecon.ai/?error=invalid_token', 302);
+    return Response.redirect('https://hisaabkar.pk/?error=invalid_token', 302);
   }
 
   // Check current status
@@ -43,16 +43,16 @@ export async function onRequestGet(context: PagesContext): Promise<Response> {
   ).bind(email).first<{ confirmed: number }>();
 
   if (!row) {
-    return Response.redirect('https://pakecon.ai/?error=invalid_token', 302);
+    return Response.redirect('https://hisaabkar.pk/?error=invalid_token', 302);
   }
 
   if (row.confirmed) {
-    return Response.redirect('https://pakecon.ai/?subscribed=already', 302);
+    return Response.redirect('https://hisaabkar.pk/?subscribed=already', 302);
   }
 
   await env.DB.prepare(
     'UPDATE newsletter_subscribers SET confirmed = 1 WHERE email = ?'
   ).bind(email).run();
 
-  return Response.redirect('https://pakecon.ai/?subscribed=true', 302);
+  return Response.redirect('https://hisaabkar.pk/?subscribed=true', 302);
 }

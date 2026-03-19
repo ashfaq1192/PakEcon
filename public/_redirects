@@ -1,0 +1,8 @@
+# SEO redirects — old slugs → new geo-keyword slugs (301 permanent)
+/tools/gold-investment-calculator       /tools/gold-price-calculator-pakistan   301
+/tools/gold-investment-calculator/      /tools/gold-price-calculator-pakistan/  301
+/tools/inflation-calculator             /tools/pakistan-inflation-calculator    301
+/tools/inflation-calculator/            /tools/pakistan-inflation-calculator/   301
+
+# Blog — redirect old /insights/ path to /blog/
+/insights/*     /blog/:splat    301

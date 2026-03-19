@@ -15,6 +15,17 @@ interface ApiResponse {
   updatedAt: string | null;
 }
 
+const SAMPLE_DATA: CommodityPrice[] = [
+  { commodity: 'Wheat', city: 'Lahore', price: 5200, unit: '40kg', date: '2026-03-15', source: 'Sample', change: 1.2 },
+  { commodity: 'Rice (Basmati)', city: 'Lahore', price: 8500, unit: '40kg', date: '2026-03-15', source: 'Sample', change: -0.5 },
+  { commodity: 'Sugar', city: 'Karachi', price: 180, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 0 },
+  { commodity: 'Flour', city: 'Islamabad', price: 140, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 2.1 },
+  { commodity: 'Tomato', city: 'Peshawar', price: 220, unit: 'kg', date: '2026-03-15', source: 'Sample', change: -3.5 },
+  { commodity: 'Onion', city: 'Multan', price: 160, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 1.8 },
+  { commodity: 'Potato', city: 'Quetta', price: 120, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 0.5 },
+  { commodity: 'Gold (24k)', city: 'National', price: 320900, unit: 'tola', date: '2026-03-15', source: 'Sample', change: 0.8 },
+];
+
 export default function MandiTable() {
   const [prices, setPrices] = useState<CommodityPrice[]>([]);
   const [updatedAt, setUpdatedAt] = useState<string | null>(null);
@@ -35,7 +46,8 @@ export default function MandiTable() {
         setUpdatedAt(data.updatedAt);
       })
       .catch(() => {
-        setError('Unable to load current prices — showing cached data');
+        setPrices(SAMPLE_DATA);
+        setError('Live data unavailable — showing sample prices for illustration');
       })
       .finally(() => setLoading(false));
   }, []);

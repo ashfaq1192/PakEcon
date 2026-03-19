@@ -6,9 +6,10 @@
  */
 
 import type { ScrapedData, AgentLog, HistoricalData, Env } from './types';
-import { scrapeExchangeRates } from '../scrapers/sbp';
-import { scrapePBS } from '../scrapers/pbs';
+import { scrapeExchangeRates, scrapePolicyRates } from '../scrapers/sbp';
+import { scrapePBS, scrapeCPI } from '../scrapers/pbs';
 import { scrapeOGRA, scrapeGoldPrices } from '../scrapers/commodities';
+import { scrapeCDNSRates } from '../scrapers/cdns';
 
 export async function scraperAgent(
   state: { agentLog: AgentLog[]; env: Env; workflowId: string },
@@ -60,6 +61,34 @@ export async function scraperAgent(
     agentLog.push({ agent: 'scraper', action: 'Gold scraper failed', timestamp: new Date().toISOString(), error: String(err) });
   }
 
+  // ── SBP Policy Rate & KIBOR (monthly check) ───────────────────────────────────
+  try {
+    const policyRates = await scrapePolicyRates(db);
+    agentLog.push({ agent: 'scraper', action: `fetched ${policyRates.length} SBP policy/KIBOR rates`, timestamp: new Date().toISOString() });
+  } catch (err) {
+    agentLog.push({ agent: 'scraper', action: 'SBP policy rate failed', timestamp: new Date().toISOString(), error: String(err) });
+  }
+
+  // ── PBS CPI (monthly) ─────────────────────────────────────────────────────────
+  let cpiRecord: { index: number; change: number; date: string } = { index: 0, change: 0, date: new Date().toISOString().split('T')[0] };
+  try {
+    const cpi = await scrapeCPI(db);
+    if (cpi) {
+      cpiRecord = { index: cpi.index, change: cpi.yoy_change, date: cpi.month + '-01' };
+      agentLog.push({ agent: 'scraper', action: `CPI: ${cpi.yoy_change}% YoY (${cpi.month})`, timestamp: new Date().toISOString() });
+    }
+  } catch (err) {
+    agentLog.push({ agent: 'scraper', action: 'PBS CPI failed', timestamp: new Date().toISOString(), error: String(err) });
+  }
+
+  // ── CDNS National Savings rates (monthly) ────────────────────────────────────
+  try {
+    const cdnsRates = await scrapeCDNSRates(db);
+    agentLog.push({ agent: 'scraper', action: `fetched ${cdnsRates.length} CDNS NS rates`, timestamp: new Date().toISOString() });
+  } catch (err) {
+    agentLog.push({ agent: 'scraper', action: 'CDNS rates failed', timestamp: new Date().toISOString(), error: String(err) });
+  }
+
   // Separate gold vs silver vs petrol for CommodityData structure
   const gold = goldPrices.filter(p => p.commodity.includes('gold'));
   const silver = goldPrices.filter(p => p.commodity.includes('silver'));
@@ -68,7 +97,7 @@ export async function scraperAgent(
 
   const scrapedData: ScrapedData = {
     exchangeRates: exchangeRates.map(r => ({ ...r, source: 'sbp' } as typeof r & { source: string })) as typeof exchangeRates,
-    cpi: { index: 0, change: 0, date: new Date().toISOString().split('T')[0] }, // PBS CPI fetched separately
+    cpi: cpiRecord,
     taxUpdates: [],
     commodities: { gold, silver, petrol, diesel: [], agricultural },
     timestamp: new Date().toISOString(),

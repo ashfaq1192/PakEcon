@@ -62,7 +62,7 @@ async function getFileSha(
 ): Promise<string | null> {
   const res = await fetch(
     `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
-    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'PakEcon.ai' } }
+    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'HisaabKar.pk' } }
   );
   if (res.status === 404) return null;
   if (!res.ok) throw new Error(`GitHub getFileSha failed: ${res.status}`);
@@ -84,13 +84,13 @@ async function createGitHubCommit(
 
   if (humanReviewMode) {
     // Create branch + PR instead of direct commit
-    const branch = `drafts/insights-${new Date().toISOString().split('T')[0]}`;
+    const branch = `drafts/blog-${new Date().toISOString().split('T')[0]}`;
     const fileName = filePath.split('/').pop() ?? 'insight.mdx';
 
     // Get main branch SHA
     const refRes = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/git/ref/heads/main`,
-      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'PakEcon.ai' } }
+      { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'HisaabKar.pk' } }
     );
     if (!refRes.ok) throw new Error(`Failed to get main ref: ${refRes.status}`);
     const refData = await refRes.json() as { object: { sha: string } };
@@ -100,7 +100,7 @@ async function createGitHubCommit(
       `https://api.github.com/repos/${owner}/${repo}/git/refs`,
       {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'PakEcon.ai' },
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'HisaabKar.pk' },
         body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: refData.object.sha }),
       }
     );
@@ -110,8 +110,8 @@ async function createGitHubCommit(
       `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
       {
         method: 'PUT',
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'PakEcon.ai' },
-        body: JSON.stringify({ message, content: base64Content, branch, author: { name: 'PakEcon Agent', email: 'agent@pakecon.ai' } }),
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'HisaabKar.pk' },
+        body: JSON.stringify({ message, content: base64Content, branch, author: { name: 'HisaabKar Agent', email: 'agent@hisaabkar.pk' } }),
       }
     );
 
@@ -120,7 +120,7 @@ async function createGitHubCommit(
       `https://api.github.com/repos/${owner}/${repo}/pulls`,
       {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'PakEcon.ai' },
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'HisaabKar.pk' },
         body: JSON.stringify({ title: message, body: `Auto-generated insight draft.\n\nReview before merging to publish.`, head: branch, base: 'main' }),
       }
     );
@@ -141,7 +141,7 @@ async function createGitHubCommit(
     message,
     content: base64Content,
     branch: 'main',
-    author: { name: 'PakEcon Agent', email: 'agent@pakecon.ai' },
+    author: { name: 'HisaabKar Agent', email: 'agent@hisaabkar.pk' },
   };
   if (sha) body.sha = sha;
 
@@ -149,7 +149,7 @@ async function createGitHubCommit(
     `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
     {
       method: 'PUT',
-      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'PakEcon.ai' },
+      headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'HisaabKar.pk' },
       body: JSON.stringify(body),
     }
   );
@@ -164,7 +164,7 @@ async function createGitHubCommit(
         `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
         {
           method: 'PUT',
-          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'PakEcon.ai' },
+          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'HisaabKar.pk' },
           body: JSON.stringify(body),
         }
       );
@@ -176,7 +176,7 @@ async function createGitHubCommit(
       `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`,
       {
         method: 'PUT',
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'PakEcon.ai' },
+        headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'Content-Type': 'application/json', 'User-Agent': 'HisaabKar.pk' },
         body: JSON.stringify(body),
       }
     );
@@ -188,15 +188,77 @@ async function createGitHubCommit(
   return filePath;
 }
 
-// ─── Google Indexing API ──────────────────────────────────────────────────────
+// ─── Google Indexing API — JWT signing via Web Crypto API ────────────────────
+
+function pemToArrayBuffer(pem: string): ArrayBuffer {
+  const base64 = pem
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\\n/g, '')
+    .replace(/\n/g, '')
+    .trim();
+  const binary = atob(base64);
+  const buf = new ArrayBuffer(binary.length);
+  const bytes = new Uint8Array(buf);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return buf;
+}
+
+function b64url(obj: object): string {
+  return btoa(JSON.stringify(obj))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function getGoogleAccessToken(privateKeyPem: string, serviceAccount: string): Promise<string> {
+  const keyBuffer = pemToArrayBuffer(privateKeyPem);
+  const cryptoKey = await crypto.subtle.importKey(
+    'pkcs8',
+    keyBuffer,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+
+  const now = Math.floor(Date.now() / 1000);
+  const header = b64url({ alg: 'RS256', typ: 'JWT' });
+  const payload = b64url({
+    iss: serviceAccount,
+    sub: serviceAccount,
+    scope: 'https://www.googleapis.com/auth/indexing',
+    aud: 'https://oauth2.googleapis.com/token',
+    iat: now,
+    exp: now + 3600,
+  });
+
+  const signingInput = `${header}.${payload}`;
+  const signature = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    cryptoKey,
+    new TextEncoder().encode(signingInput)
+  );
+  const sigB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+  const jwt = `${signingInput}.${sigB64}`;
+
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`,
+  });
+  if (!tokenRes.ok) throw new Error(`Google token exchange failed: ${tokenRes.status}`);
+  const data = await tokenRes.json() as { access_token: string };
+  return data.access_token;
+}
 
 async function notifyGoogleIndexing(slug: string, env: Env): Promise<void> {
-  if (!env.GOOGLE_INDEXING_SA_KEY) return;
-  const url = `https://pakecon.ai/insights/${slug}`;
+  if (!env.GOOGLE_PRIVATE_KEY || !env.GOOGLE_SERVICE_ACCOUNT) return;
+  const url = `https://hisaabkar.pk/blog/${slug}`;
   try {
+    const accessToken = await getGoogleAccessToken(env.GOOGLE_PRIVATE_KEY, env.GOOGLE_SERVICE_ACCOUNT);
     const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${env.GOOGLE_INDEXING_SA_KEY}`, 'Content-Type': 'application/json' },
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ url, type: 'URL_UPDATED' }),
     });
     if (!res.ok) console.warn(`[Publisher] Google Indexing API non-200: ${res.status}`);
@@ -253,7 +315,7 @@ export async function publisherAgent(state: {
     try {
       const slug = insight.slug || generateSlug(insight.title);
       const filename = `${slug}.mdx`;
-      const filePath = `src/content/insights/${filename}`;
+      const filePath = `src/content/blog/${filename}`;
       const mdxContent = generateMDX({ ...insight, slug });
 
       await createGitHubCommit(

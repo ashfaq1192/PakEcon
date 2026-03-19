@@ -1,103 +1,124 @@
 ---
+export const prerender = true;
 import MainLayout from '../../layouts/MainLayout.astro';
+import Icon from '../../components/ui/Icon.astro';
+import ScrollReveal from '../../components/ui/ScrollReveal.astro';
 ---
 
-<MainLayout title="Finance Guides - PakEcon.ai" description="Comprehensive guides on Pakistani taxation, investment, and financial planning.">
-  <section class="py-12 bg-gray-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">Finance Guides</h1>
-      <p class="text-xl text-gray-600 mb-8">
-        Learn about Pakistani taxation, investment, and financial planning
+<MainLayout title="Finance Guides - HisaabKar.pk" description="Comprehensive guides on Pakistani taxation, investment, and financial planning">
+  <!-- Hero Section -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <Icon name="documentText" size={16} class="text-green-200" />
+        <span class="text-sm font-medium text-green-100 uppercase tracking-wider">Finance Guides</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">
+        Learn About Pakistani<br />
+        <span class="text-green-200">Economy & Finance</span>
+      </h1>
+      <p class="text-xl text-green-100 max-w-2xl mx-auto">
+        Comprehensive guides on taxation, investment, and financial planning for Pakistanis
       </p>
-
-      <div class="space-y-6">
-        <!-- Guide Cards -->
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="p-6">
-            <span class="text-xs font-semibold text-green-600 uppercase tracking-wider">Taxation</span>
-            <h2 class="text-xl font-bold text-gray-900 mt-2 mb-2">
-              Complete Guide to FBR 2026 Tax Slabs
-            </h2>
-            <p class="text-gray-600 mb-4">
-              Understanding the new income tax brackets, exemptions, and filing requirements for 2026
-            </p>
-            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Read Guide →</a>
-          </div>
-        </article>
-
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="p-6">
-            <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Policy</span>
-            <h2 class="text-xl font-bold text-gray-900 mt-2 mb-2">
-              Digital Nation Act: Benefits for Freelancers
-            </h2>
-            <p class="text-gray-600 mb-4">
-              How the 2026 Digital Nation Act provides tax credits and incentives for IT professionals
-            </p>
-            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Read Guide →</a>
-          </div>
-        </article>
-
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="p-6">
-            <span class="text-xs font-semibold text-purple-600 uppercase tracking-wider">Investment</span>
-            <h2 class="text-xl font-bold text-gray-900 mt-2 mb-2">
-              Investing in Pakistan: A Beginner's Guide
-            </h2>
-            <p class="text-gray-600 mb-4">
-              Understanding the Pakistani stock market, mutual funds, and government bonds
-            </p>
-            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Read Guide →</a>
-          </div>
-        </article>
-
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="p-6">
-            <span class="text-xs font-semibold text-orange-600 uppercase tracking-wider">Inflation</span>
-            <h2 class="text-xl font-bold text-gray-900 mt-2 mb-2">
-              Understanding Pakistan's CPI and Its Impact
-            </h2>
-            <p class="text-gray-600 mb-4">
-              How the Consumer Price Index is calculated and what it means for your finances
-            </p>
-            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Read Guide →</a>
-          </div>
-        </article>
-
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="p-6">
-            <span class="text-xs font-semibold text-red-600 uppercase tracking-wider">Remittance</span>
-            <h2 class="text-xl font-bold text-gray-900 mt-2 mb-2">
-              Remittances: A Guide for the Pakistani Diaspora
-            </h2>
-            <p class="text-gray-600 mb-4">
-              Best practices for sending money to Pakistan and understanding exchange rates
-            </p>
-            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Read Guide →</a>
-          </div>
-        </article>
-
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="p-6">
-            <span class="text-xs font-semibold text-teal-600 uppercase tracking-wider">Banking</span>
-            <h2 class="text-xl font-bold text-gray-900 mt-2 mb-2">
-              RAAST: Pakistan's Digital Payment System Explained
-            </h2>
-            <p class="text-gray-600 mb-4">
-              How to use RAAST for instant bank-to-bank transfers and bill payments
-            </p>
-            <a href="#" class="text-green-600 hover:text-green-700 font-medium">Read Guide →</a>
-          </div>
-        </article>
-      </div>
-
-      <!-- More Coming Soon -->
-      <div class="mt-12 text-center p-8 bg-gray-100 rounded-lg">
-        <h3 class="text-xl font-semibold text-gray-900 mb-2">More Guides Coming Soon</h3>
-        <p class="text-gray-600">
-          We're constantly adding new guides. Subscribe to our newsletter for updates.
-        </p>
-      </div>
     </div>
-  </section>
+  </ScrollReveal>
+
+  <!-- Guides Grid -->
+  <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[
+          {
+            icon: 'percent',
+            title: 'Complete Guide to FBR 2026 Tax Slabs',
+            desc: 'Understanding new income tax brackets, exemptions, and filing requirements for 2026',
+            category: 'Taxation',
+            badgeBg: 'bg-green-100 dark:bg-green-900/30',
+            badgeText: 'text-green-600 dark:text-green-400',
+          },
+          {
+            icon: 'lightbulb',
+            title: 'Digital Nation Act: Benefits for Freelancers',
+            desc: 'How the 2026 Digital Nation Act provides tax credits and incentives for IT professionals',
+            category: 'Policy',
+            badgeBg: 'bg-blue-100 dark:bg-blue-900/30',
+            badgeText: 'text-blue-600 dark:text-blue-400',
+          },
+          {
+            icon: 'chartBar',
+            title: "Investing in Pakistan: A Beginner's Guide",
+            desc: 'Understanding the Pakistani stock market, mutual funds, and government bonds',
+            category: 'Investment',
+            badgeBg: 'bg-purple-100 dark:bg-purple-900/30',
+            badgeText: 'text-purple-600 dark:text-purple-400',
+          },
+          {
+            icon: 'chartArea',
+            title: "Understanding Pakistan's CPI and Its Impact",
+            desc: 'How the Consumer Price Index is calculated and what it means for your finances',
+            category: 'Inflation',
+            badgeBg: 'bg-orange-100 dark:bg-orange-900/30',
+            badgeText: 'text-orange-600 dark:text-orange-400',
+          },
+          {
+            icon: 'send',
+            title: 'Remittances: A Guide for the Pakistani Diaspora',
+            desc: 'Best practices for sending money to Pakistan and understanding exchange rates',
+            category: 'Remittance',
+            badgeBg: 'bg-red-100 dark:bg-red-900/30',
+            badgeText: 'text-red-600 dark:text-red-400',
+          },
+          {
+            icon: 'creditCard',
+            title: "RAAST: Pakistan's Digital Payment System Explained",
+            desc: 'How to use RAAST for instant bank-to-bank transfers and bill payments',
+            category: 'Banking',
+            badgeBg: 'bg-teal-100 dark:bg-teal-900/30',
+            badgeText: 'text-teal-600 dark:text-teal-400',
+          },
+        ].map((guide, index) => (
+          <ScrollReveal
+            key={guide.category}
+            animation="fade-in-up"
+            delay={200 + index * 100}
+          >
+            <div class="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 relative">
+              <div class="absolute top-3 right-3 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs font-semibold px-2 py-0.5 rounded-full">
+                Coming Soon
+              </div>
+              <div class="p-6 md:p-8">
+                <div class="flex items-start justify-between mb-4">
+                  <div class={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${guide.badgeBg}`}>
+                    <Icon name={guide.icon as any} size={20} class={guide.badgeText} />
+                    <span class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{guide.category}</span>
+                  </div>
+                </div>
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                  {guide.title}
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400 mb-4">
+                  {guide.desc}
+                </p>
+                <div class="inline-flex items-center gap-2 text-gray-400 font-medium text-sm">
+                  <Icon name="clock" size={16} />
+                  Guide in progress
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+        ))}
+      </div>
+
+      <!-- Coming Soon -->
+      <ScrollReveal animation="fade-in-up" delay={800} class="mt-12 text-center">
+        <div class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-12 border border-gray-300 dark:border-gray-600">
+          <Icon name="clock" size={48} class="text-gray-400 dark:text-gray-500 mb-4" />
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">More Guides Coming Soon</h3>
+          <p class="text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
+            We're constantly adding new guides. Subscribe to our newsletter for updates.
+          </p>
+        </div>
+      </ScrollReveal>
+    </div>
+  </ScrollReveal>
 </MainLayout>

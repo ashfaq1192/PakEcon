@@ -1,7 +1,12 @@
 ---
+export const prerender = true;
 import MainLayout from '../layouts/MainLayout.astro';
 import TaxOptimizer from '../components/tools/TaxOptimizer.astro';
 import MandiTable from '../components/tools/MandiTable.astro';
+import Icon from '../components/ui/Icon.astro';
+import ScrollReveal from '../components/ui/ScrollReveal.astro';
+import QuickTools from '../components/QuickTools.astro';
+import { PkrUsdTrendChart } from '../components/charts/PkrUsdTrendChart';
 
 // Sample commodity data - will be replaced with D1 data
 const samplePrices = [
@@ -12,174 +17,306 @@ const samplePrices = [
   { commodity: 'Tomato', city: 'Peshawar', price: 220, unit: 'kg', date: '2026-03-15', change: -3.5 },
   { commodity: 'Onion', city: 'Multan', price: 160, unit: 'kg', date: '2026-03-15', change: 1.8 },
   { commodity: 'Potato', city: 'Quetta', price: 120, unit: 'kg', date: '2026-03-15', change: 0.5 },
-  { commodity: 'Gold (24k)', city: 'National', price: 235000, unit: 'tola', date: '2026-03-15', change: 0.8 },
+  { commodity: 'Gold (24k)', city: 'National', price: 513000, unit: 'tola', date: '2026-03-17', change: 0.8 },
 ];
 ---
 
-<MainLayout title="PakEcon.ai - Pakistani Finance & Utility Hub">
-  <section class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">
-        Pakistani Finance & Utility Hub
-      </h1>
-      <p class="text-xl md:text-2xl text-green-100 mb-8 max-w-3xl mx-auto">
-        Real-time economic data, tax calculation tools, and financial insights for the digital age
-      </p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="#tax-calculator" class="bg-white text-green-700 font-semibold py-3 px-8 rounded-lg hover:bg-green-50 transition">
-          Calculate Your Tax
-        </a>
-        <a href="#market-data" class="bg-green-800 text-white font-semibold py-3 px-8 rounded-lg hover:bg-green-900 transition">
-          View Market Data
-        </a>
+<MainLayout title="HisaabKar.pk - Pakistani Finance & Utility Hub">
+  <!-- Hero Section with modern left-aligned design and graphic -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 text-white py-20 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="text-left">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            Pakistani Finance &<br />
+            <span class="text-green-200">Utility Hub</span>
+          </h1>
+          <p class="text-lg md:text-xl text-green-100 mb-8 max-w-xl leading-relaxed">
+            Real-time economic data, tax calculation tools, and financial insights for the digital age. All free, all accessible.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="#tax-calculator" class="inline-flex items-center justify-center gap-2 bg-white text-green-700 font-semibold py-3 px-6 rounded-lg hover:bg-green-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
+              <Icon name="calculator" size={20} />
+              Calculate Your Tax
+            </a>
+            <a href="#market-data" class="inline-flex items-center justify-center gap-2 bg-green-800/50 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-900/50 transition-all duration-200 border border-green-500/30">
+              <Icon name="chartBar" size={20} />
+              View Market Data
+            </a>
+          </div>
+        </div>
+        <div class="hidden lg:flex items-center justify-center">
+          <div class="relative">
+            <!-- Decorative circles -->
+            <div class="absolute inset-0 bg-green-400/20 rounded-full blur-3xl"></div>
+            <div class="relative bg-gradient-to-br from-green-500/20 to-emerald-600/20 backdrop-blur-sm rounded-2xl p-8 border border-green-400/20">
+              <!-- USD/PKR — primary indicator -->
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 bg-green-400 rounded-xl flex items-center justify-center">
+                  <Icon name="trendUp" size={24} class="text-white" />
+                </div>
+                <div>
+                  <p class="text-sm text-green-200">USD/PKR (Interbank)</p>
+                  <div class="flex items-center gap-2">
+                    <p class="text-3xl font-bold">279.31</p>
+                    <span class="text-green-300 text-sm font-semibold">▼ -0.4%</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Big 3: Gold, Petrol, Inflation -->
+              <div class="space-y-3">
+                <div class="flex items-center justify-between bg-green-900/30 rounded-lg p-3">
+                  <span class="text-sm">🥇 Gold (24k / Tola)</span>
+                  <div class="text-right">
+                    <span class="font-semibold block">PKR 5,13,000</span>
+                    <span class="text-green-300 text-xs">▲ +0.8%</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between bg-green-900/30 rounded-lg p-3">
+                  <span class="text-sm">⛽ Petrol (92 RON)</span>
+                  <div class="text-right">
+                    <span class="font-semibold block">PKR 321.17</span>
+                    <span class="text-gray-400 text-xs">— Stable</span>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between bg-green-900/30 rounded-lg p-3">
+                  <span class="text-sm">📊 CPI Inflation (Feb)</span>
+                  <span class="font-semibold text-green-300">7.0% YoY</span>
+                </div>
+              </div>
+              <p class="text-xs text-green-400/60 mt-3 text-right">Source: SBP • OGRA • PBS</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
+  </ScrollReveal>
+
+  <!-- QuickTools Bar — visible immediately after hero, no scroll required -->
+  <QuickTools />
+
+  <!-- PKR/USD Chart Section -->
+  <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <PkrUsdTrendChart client:load />
+    </div>
+  </ScrollReveal>
 
   <!-- Key Features -->
-  <section class="py-12 bg-white">
+  <ScrollReveal animation="fade-in-up" delay={200} class="py-12 bg-white dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-4">
         Everything You Need in One Place
       </h2>
+      <p class="text-gray-600 dark:text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+        Professional-grade financial tools designed for Pakistan's economy
+      </p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="text-center p-6">
-          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-3xl">📊</span>
+        <div class="group text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border border-green-100 dark:border-green-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-16 h-16 bg-green-600 dark:bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:rotate-6 transition-transform duration-300">
+            <Icon name="chartLine" size={32} class="text-white" />
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Real-Time Data</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Real-Time Data</h3>
+          <p class="text-gray-600 dark:text-gray-400">
             Live exchange rates, commodity prices, and market indicators updated every 6 hours
           </p>
         </div>
-        <div class="text-center p-6">
-          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-3xl">🧮</span>
+        <div class="group text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-100 dark:border-blue-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-16 h-16 bg-blue-600 dark:bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:rotate-6 transition-transform duration-300">
+            <Icon name="calculator" size={32} class="text-white" />
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Tax Calculator</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Tax Calculator</h3>
+          <p class="text-gray-600 dark:text-gray-400">
             Calculate your income tax based on FBR 2026 slabs with Digital Nation Act credits
           </p>
         </div>
-        <div class="text-center p-6">
-          <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span class="text-3xl">📰</span>
+        <div class="group text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-100 dark:border-purple-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+          <div class="w-16 h-16 bg-purple-600 dark:bg-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:rotate-6 transition-transform duration-300">
+            <Icon name="documentText" size={32} class="text-white" />
           </div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Market Insights</h3>
-          <p class="text-gray-600">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Market Insights</h3>
+          <p class="text-gray-600 dark:text-gray-400">
             AI-generated analysis of Pakistani economic trends and policy impacts
           </p>
         </div>
       </div>
     </div>
-  </section>
+  </ScrollReveal>
 
   <!-- Tax Calculator -->
-  <section id="tax-calculator" class="py-12 bg-gray-50">
+  <ScrollReveal animation="fade-in-up" delay={300} id="tax-calculator" class="py-12 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          FBR Income Tax Calculator 2026
+        </h2>
+        <p class="text-center text-green-600 dark:text-green-400 font-medium mb-3 text-lg" dir="rtl" lang="ur">
+          اپنا ٹیکس یہاں کیلکولیٹ کریں
+        </p>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-4">
+          Calculate your income tax liability based on the latest FBR slabs, including Digital Nation Act credits for freelancers
+        </p>
+        <!-- Trust badges -->
+        <div class="flex flex-wrap justify-center gap-3 mb-6">
+          <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-400 text-xs font-medium px-3 py-1.5 rounded-full hover:bg-green-100 dark:hover:bg-green-900/40 transition">
+            🏛️ Data: FBR Finance Act 2025-26
+          </a>
+          <a href="https://www.sbp.org.pk" target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-400 text-xs font-medium px-3 py-1.5 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/40 transition">
+            🏦 Rates: SBP Interbank
+          </a>
+          <span class="inline-flex items-center gap-1.5 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-400 text-xs font-medium px-3 py-1.5 rounded-full">
+            ✅ Verified: M.Phil Economics, ACCA
+          </span>
+        </div>
+      </div>
       <TaxOptimizer />
     </div>
-  </section>
+  </ScrollReveal>
 
   <!-- Market Data -->
-  <section id="market-data" class="py-12 bg-white">
+  <ScrollReveal animation="fade-in-up" delay={400} id="market-data" class="py-12 bg-white dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          Daily Mandi Intelligence
+        </h2>
+        <p class="text-center text-green-600 dark:text-green-400 font-medium mb-3 text-lg" dir="rtl" lang="ur">
+          آج کے منڈی ریٹ
+        </p>
+        <p class="text-gray-600 dark:text-gray-400">
+          Real-time commodity prices across major Pakistani markets
+        </p>
+      </div>
       <MandiTable prices={samplePrices} loading={false} />
     </div>
-  </section>
+  </ScrollReveal>
 
   <!-- Latest Insights -->
-  <section class="py-12 bg-gray-50">
+  <ScrollReveal animation="fade-in-up" delay={500} class="py-12 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-4">
         Latest Market Insights
       </h2>
+      <p class="text-gray-600 dark:text-gray-400 text-center mb-10 max-w-2xl mx-auto">
+        AI-powered analysis of Pakistan's economy, updated weekly
+      </p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="h-40 bg-gradient-to-br from-green-500 to-emerald-600"></div>
+        <article class="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
+            <Icon name="currencyDollar" size={48} class="text-white/80" />
+          </div>
           <div class="p-6">
-            <span class="text-xs font-semibold text-green-600 uppercase tracking-wider">Exchange Rate</span>
-            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">
+            <span class="inline-block text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider mb-2 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">Exchange Rate</span>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-2 mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
               PKR Shows Resilience Against USD
             </h3>
-            <p class="text-gray-600 text-sm mb-4">
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
               Analysis of recent exchange rate trends and central bank policy implications...
             </p>
-            <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">Read More →</a>
+            <a href="/blog/" class="inline-flex items-center gap-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm font-medium group-hover:gap-2 transition-all">
+              Read More
+              <Icon name="arrowRight" size={16} />
+            </a>
           </div>
         </article>
 
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="h-40 bg-gradient-to-br from-blue-500 to-indigo-600"></div>
+        <article class="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+            <Icon name="chartArea" size={48} class="text-white/80" />
+          </div>
           <div class="p-6">
-            <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Inflation</span>
-            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">
+            <span class="inline-block text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2 bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded">Inflation</span>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-2 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               CPI Trends: March 2026 Analysis
             </h3>
-            <p class="text-gray-600 text-sm mb-4">
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
               Comprehensive breakdown of consumer price index changes across sectors...
             </p>
-            <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">Read More →</a>
+            <a href="#" class="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium group-hover:gap-2 transition-all">
+              Read More
+              <Icon name="arrowRight" size={16} />
+            </a>
           </div>
         </article>
 
-        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
-          <div class="h-40 bg-gradient-to-br from-purple-500 to-pink-600"></div>
+        <article class="group bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+            <Icon name="percent" size={48} class="text-white/80" />
+          </div>
           <div class="p-6">
-            <span class="text-xs font-semibold text-purple-600 uppercase tracking-wider">Tax Policy</span>
-            <h3 class="text-lg font-bold text-gray-900 mt-2 mb-2">
+            <span class="inline-block text-xs font-semibold text-purple-600 dark:text-purple-400 uppercase tracking-wider mb-2 bg-purple-100 dark:bg-purple-900/30 px-2 py-1 rounded">Tax Policy</span>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mt-2 mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
               Digital Nation Act: What You Need to Know
             </h3>
-            <p class="text-gray-600 text-sm mb-4">
+            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">
               Understanding new tax credits for freelancers and IT professionals...
             </p>
-            <a href="#" class="text-green-600 hover:text-green-700 text-sm font-medium">Read More →</a>
+            <a href="#" class="inline-flex items-center gap-1 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-sm font-medium group-hover:gap-2 transition-all">
+              Read More
+              <Icon name="arrowRight" size={16} />
+            </a>
           </div>
         </article>
       </div>
     </div>
-  </section>
+  </ScrollReveal>
 
-  <!-- T091: Featured Tools -->
-  <section class="py-12 bg-gray-50">
+  <!-- Featured Tools -->
+  <ScrollReveal animation="fade-in-up" delay={600} class="py-12 bg-white dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-bold text-gray-900 text-center mb-4">Financial Tools</h2>
-      <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center mb-4">Financial Tools</h2>
+      <p class="text-gray-600 dark:text-gray-400 text-center mb-10 max-w-2xl mx-auto">
         Free online calculators for Pakistan's economy — electricity bills, Zakat, loans, currency conversion, and more.
       </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { href: '/tools/electricity-bill-calculator', icon: '⚡', title: 'Electricity Bill', desc: 'All 9 DISCOs, NEPRA tariffs 2026' },
-          { href: '/tools/zakat-calculator', icon: '☪️', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab' },
-          { href: '/tools/currency-converter', icon: '💱', title: 'Currency Converter', desc: 'Live SBP interbank rates, 10 currencies' },
-          { href: '/tools/loan-emi-calculator', icon: '🏦', title: 'Loan / EMI', desc: 'Conventional & Islamic/Murabaha financing' },
-          { href: '/tools/salary-slip-generator', icon: '📄', title: 'Salary Slip PDF', desc: 'Auto income tax, PDF download' },
-          { href: '/tools/gold-investment-calculator', icon: '🥇', title: 'Gold Investment', desc: 'Live 24K prices, scenario analysis' },
-          { href: '/tools/inflation-calculator', icon: '📈', title: 'Inflation Calculator', desc: 'Purchasing power 2015–2026 (PBS CPI)' },
-          { href: '/tools/property-stamp-duty-calculator', icon: '🏠', title: 'Property Transfer', desc: 'Stamp duty by province, filer rates' },
-          { href: '/tools/remittance-calculator', icon: '💸', title: 'Remittance', desc: 'PKR received for GBP/EUR/USD/AED+' },
-          { href: '/tools/eobi-calculator', icon: '👴', title: 'EOBI & PF', desc: 'Retirement corpus estimate' },
-        ].map(tool => (
-          <a
-            href={tool.href}
-            class="bg-white rounded-lg p-4 shadow-sm border border-gray-200 hover:border-green-400 hover:shadow-md transition-all group"
+          { href: '/tools/electricity-bill-calculator', icon: 'bolt', title: 'Electricity Bill', desc: 'All 9 DISCOs, NEPRA tariffs 2026', color: 'from-amber-500 to-orange-600' },
+          { href: '/tools/zakat-calculator', icon: 'star', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab', color: 'from-emerald-500 to-teal-600' },
+          { href: '/tools/currency-converter', icon: 'currency', title: 'Currency Converter', desc: 'Live SBP interbank rates, 10 currencies', color: 'from-blue-500 to-indigo-600' },
+          { href: '/tools/loan-emi-calculator', icon: 'bank', title: 'Loan / EMI', desc: 'Conventional & Islamic/Murabaha financing', color: 'from-purple-500 to-pink-600' },
+          { href: '/tools/salary-slip-generator', icon: 'document', title: 'Salary Slip PDF', desc: 'Auto income tax, PDF download', color: 'from-cyan-500 to-blue-600' },
+          { href: '/tools/gold-price-calculator-pakistan', icon: 'gold', title: 'Gold Investment', desc: 'Live 24K prices, scenario analysis', color: 'from-yellow-500 to-amber-600' },
+          { href: '/tools/pakistan-inflation-calculator', icon: 'chartBar', title: 'Inflation Calculator', desc: 'Purchasing power 2015–2026 (PBS CPI)', color: 'from-red-500 to-rose-600' },
+          { href: '/tools/property-stamp-duty-calculator', icon: 'house', title: 'Property Transfer', desc: 'Stamp duty by province, filer rates', color: 'from-green-600 to-emerald-700' },
+          { href: '/tools/remittance-calculator', icon: 'send', title: 'Remittance', desc: 'PKR received for GBP/EUR/USD/AED+', color: 'from-violet-500 to-purple-600' },
+          { href: '/tools/eobi-calculator', icon: 'user', title: 'EOBI & PF', desc: 'Retirement corpus estimate', color: 'from-slate-500 to-gray-600' },
+          { href: '/tools/national-savings-calculator', icon: 'document', title: 'National Savings', desc: 'Behbood, RIC, DSC profit calculator', color: 'from-teal-500 to-cyan-600' },
+          { href: '/tools/document-converter', icon: 'document', title: 'Doc Converter', desc: 'Word/Excel → PDF, Image → PDF (free, private)', color: 'from-violet-500 to-indigo-600' },
+        ].map((tool, index) => (
+          <ScrollReveal
+            key={tool.href}
+            animation="fade-in-up"
+            delay={700 + index * 50}
           >
-            <div class="text-2xl mb-2">{tool.icon}</div>
-            <h3 class="text-sm font-semibold text-gray-900 group-hover:text-green-700">{tool.title}</h3>
-            <p class="text-xs text-gray-500 mt-0.5">{tool.desc}</p>
-          </a>
+            <a
+              href={tool.href}
+              class="group block bg-white dark:bg-gray-700 rounded-xl p-4 shadow-sm border border-gray-200 dark:border-gray-600 hover:border-green-400 dark:hover:border-green-500 hover:shadow-lg dark:hover:shadow-green-500/10 transition-all duration-300"
+            >
+              <div class={`w-12 h-12 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center mb-3 transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                <Icon name={tool.icon as any} size={24} class="text-white" />
+              </div>
+              <h3 class="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">{tool.title}</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{tool.desc}</p>
+            </a>
+          </ScrollReveal>
         ))}
       </div>
     </div>
-  </section>
+  </ScrollReveal>
 
   <!-- CTA Section -->
-  <section class="py-16 bg-gradient-to-r from-green-600 to-emerald-700 text-white">
+  <ScrollReveal animation="fade-in-up" delay={800} class="py-16 bg-gradient-to-r from-green-600 to-emerald-700 text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl font-bold mb-4">
+      <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <Icon name="envelope" size={16} class="text-green-200" />
+        <span class="text-sm font-medium text-green-100">Weekly Newsletter</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
         Weekly Economic Digest — Free
       </h2>
-      <p class="text-xl text-green-100 mb-8">
+      <p class="text-xl text-green-100 mb-8 max-w-xl mx-auto">
         AI-powered Pakistan economy summary every Monday morning
       </p>
       <form id="hero-newsletter-form" class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
@@ -188,18 +325,19 @@ const samplePrices = [
           id="hero-newsletter-email"
           placeholder="Enter your email"
           required
-          class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-green-300"
+          class="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:ring-2 focus:ring-green-300 focus:outline-none"
         />
         <button
           type="submit"
-          class="bg-green-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-900 transition"
+          class="inline-flex items-center justify-center gap-2 bg-green-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-900 transition-colors"
         >
           Subscribe Free
+          <Icon name="send" size={16} />
         </button>
       </form>
       <p id="hero-newsletter-msg" class="mt-3 text-green-200 text-sm hidden"></p>
     </div>
-  </section>
+  </ScrollReveal>
 
   <script>
     const heroForm = document.getElementById('hero-newsletter-form') as HTMLFormElement | null;
@@ -216,10 +354,26 @@ const samplePrices = [
           body: JSON.stringify({ email }),
         });
         const data = await res.json() as { message?: string; error?: string };
-        if (heroMsg) { heroMsg.textContent = data.message || data.error || 'Done!'; heroMsg.classList.remove('hidden'); }
-        if (res.ok) emailInput.value = '';
+        if (heroMsg) {
+          heroMsg.textContent = data.message || data.error || 'Done!';
+          heroMsg.classList.remove('hidden');
+        }
+        if (res.ok) {
+          emailInput.value = '';
+          if (typeof showToast !== 'undefined') {
+            showToast({ message: 'Successfully subscribed!', type: 'success' });
+          }
+        } else if (typeof showToast !== 'undefined') {
+          showToast({ message: data.error || 'Subscription failed', type: 'error' });
+        }
       } catch {
-        if (heroMsg) { heroMsg.textContent = 'Failed — please try again.'; heroMsg.classList.remove('hidden'); }
+        if (heroMsg) {
+          heroMsg.textContent = 'Failed — please try again.';
+          heroMsg.classList.remove('hidden');
+        }
+        if (typeof showToast !== 'undefined') {
+          showToast({ message: 'Network error occurred', type: 'error' });
+        }
       }
     });
   </script>

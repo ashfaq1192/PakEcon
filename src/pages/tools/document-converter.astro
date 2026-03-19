@@ -1,0 +1,90 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import DocumentConverter from '../../components/tools/DocumentConverter.astro';
+
+const title = 'Free Document Converter — Word to PDF, Excel to PDF, PDF to Text';
+const description =
+  'Convert Word (DOCX) to PDF, Excel (XLSX) to PDF, Images to PDF, and extract text from PDFs. 100% free, private — files never leave your device.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://hisaabkar.pk/tools/document-converter',
+    inLanguage: 'en-PK',
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+      <p class="text-green-600 dark:text-green-400 font-medium text-lg mb-3" dir="rtl" lang="ur">
+        دستاویزات کو مفت کنورٹ کریں — فائل آپ کے ڈیوائس سے باہر نہیں جاتی
+      </p>
+      <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+        Convert your documents directly in the browser. No upload, no server, no account needed.
+        Works offline too.
+      </p>
+
+      <!-- Feature pills -->
+      <div class="flex flex-wrap gap-2 mt-4">
+        {['✅ 100% Private', '🔒 No Upload', '⚡ Instant', '📱 Works on Mobile', '🌙 Offline Ready'].map(f => (
+          <span class="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-400 text-xs font-medium px-3 py-1.5 rounded-full">
+            {f}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <DocumentConverter />
+
+    <!-- What's supported -->
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {[
+        {
+          icon: '📝', title: 'Word → PDF',
+          items: ['DOCX & DOC formats', 'Full formatting preserved', 'Tables, headings, fonts', 'Perfect for CVs & reports'],
+          note: 'Powered by CloudConvert — same quality as Adobe Acrobat.',
+        },
+        {
+          icon: '📊', title: 'Excel → PDF',
+          items: ['XLSX & XLS formats', 'All sheets converted', 'Charts & cell formatting', 'Numbers & formulas as values'],
+          note: 'Each sheet becomes a page in the PDF.',
+        },
+        {
+          icon: '📑', title: 'PowerPoint → PDF',
+          items: ['PPTX & PPT formats', 'Slides preserved as pages', 'Images & shapes included', 'Fonts embedded'],
+          note: 'Great for sharing presentations without PowerPoint.',
+        },
+        {
+          icon: '📕', title: 'PDF → Word',
+          items: ['Full text extraction', 'Tables converted to Word tables', 'Editable DOCX output', 'Works on most PDFs'],
+          note: 'Scanned/image-based PDFs may have reduced accuracy.',
+        },
+        {
+          icon: '📕', title: 'PDF → Excel',
+          items: ['Tables extracted to XLSX', 'Multiple tables → multiple sheets', 'Numbers & text preserved', 'Editable spreadsheet output'],
+          note: 'Works best on PDFs with clearly defined tables.',
+        },
+        {
+          icon: '🖼️', title: 'Image → PDF',
+          items: ['JPG / PNG → PDF', '100% private — no server', 'A4 page, image centred', 'Instant, works offline'],
+          note: 'This conversion runs entirely in your browser — file never uploaded.',
+        },
+      ].map(card => (
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600">
+          <h3 class="font-bold text-gray-900 dark:text-white mb-2">{card.icon} {card.title}</h3>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 mb-2">
+            {card.items.map(item => <li>• {item}</li>)}
+          </ul>
+          <p class="text-xs text-amber-600 dark:text-amber-400">{card.note}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</MainLayout>

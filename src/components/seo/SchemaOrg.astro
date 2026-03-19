@@ -17,22 +17,22 @@ const schemas: Record<string, any> = {
       name: 'Muhammad',
       jobTitle: 'Economics Analyst',
       credentials: 'M.Phil Economics, B.Com',
-      url: 'https://pakecon.ai/about'
+      url: 'https://hisaabkar.pk/about'
     },
     datePublished: data.datePublished || data.date || new Date().toISOString(),
     dateModified: data.dateModified || data.date || new Date().toISOString(),
     publisher: {
       '@type': 'Organization',
-      name: 'PakEcon.ai',
-      url: 'https://pakecon.ai',
+      name: 'HisaabKar.pk',
+      url: 'https://hisaabkar.pk',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://pakecon.ai/logo.png'
+        url: 'https://hisaabkar.pk/logo.png'
       }
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': data.url || 'https://pakecon.ai'
+      '@id': data.url || 'https://hisaabkar.pk'
     },
     about: {
       '@type': 'Thing',
@@ -46,12 +46,12 @@ const schemas: Record<string, any> = {
   Organization: {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'PakEcon.ai',
-    url: 'https://pakecon.ai',
+    name: 'HisaabKar.pk',
+    url: 'https://hisaabkar.pk',
     description: 'Pakistani Finance & Utility hub with real-time economic data, tax calculation tools, and financial insights.',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://pakecon.ai/logo.png',
+      url: 'https://hisaabkar.pk/logo.png',
       width: 512,
       height: 512
     },
@@ -60,16 +60,16 @@ const schemas: Record<string, any> = {
       name: 'Muhammad',
       credentials: 'M.Phil Economics, B.Com',
       jobTitle: 'Economics Analyst',
-      url: 'https://pakecon.ai/about'
+      url: 'https://hisaabkar.pk/about'
     },
     sameAs: [
-      'https://twitter.com/pakecon_ai',
-      'https://linkedin.com/company/pakecon-ai'
+      'https://twitter.com/hisaabkar',
+      'https://linkedin.com/company/hisaabkar'
     ],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
-      email: 'contact@pakecon.ai',
+      email: 'contact@hisaabkar.pk',
       areaServed: 'PK',
       availableLanguage: ['English', 'Urdu']
     },
@@ -85,13 +85,13 @@ const schemas: Record<string, any> = {
   WebPage: {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: data.title || 'PakEcon.ai',
+    name: data.title || 'HisaabKar.pk',
     description: data.description || '',
-    url: data.url || 'https://pakecon.ai',
+    url: data.url || 'https://hisaabkar.pk',
     publisher: {
       '@type': 'Organization',
-      name: 'PakEcon.ai',
-      url: 'https://pakecon.ai'
+      name: 'HisaabKar.pk',
+      url: 'https://hisaabkar.pk'
     },
     about: {
       '@type': 'Thing',

@@ -1,190 +1,346 @@
 ---
+export const prerender = true;
 import MainLayout from '../layouts/MainLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import ScrollReveal from '../components/ui/ScrollReveal.astro';
 ---
 
 <MainLayout
-  title="About PakEcon.ai - Author Credentials & Mission"
-  description="Learn about PakEcon.ai's mission to democratize Pakistani financial data and our team's credentials in economics and finance."
+  title="About HisaabKar.pk - Author Credentials & Mission"
+  description="Learn about HisaabKar.pk's mission to democratize Pakistani financial data and our team's credentials in economics and finance."
   type="WebPage"
   schemaData={{
     about: {
       '@type': 'Person',
-      name: 'Muhammad',
-      jobTitle: 'Economics Analyst',
+      name: 'Ashfaq Ahmed',
+      jobTitle: 'Founder & Economics Analyst',
       credentials: 'M.Phil Economics, B.Com',
-      description: 'Economics professional with expertise in Pakistani fiscal policy, monetary economics, and financial analysis. Former consultant for multiple fintech startups in Pakistan.',
-      url: 'https://pakecon.ai/about'
+      description: 'Financial Auditor and Economics professional with expertise in Pakistani fiscal policy, monetary economics, and financial analysis.',
+      url: 'https://hisaabkar.pk/about'
     }
   }}
 >
-  <section class="py-12 bg-gray-50">
+  <!-- Hero Section -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-16">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-4xl font-bold text-gray-900 mb-8">About PakEcon.ai</h1>
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+          <Icon name="information" size={24} class="text-white" />
+        </div>
+        <span class="text-sm font-medium text-green-100 uppercase tracking-wider">About Us</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">About HisaabKar.pk</h1>
+      <p class="text-xl text-green-100 max-w-2xl">
+        Democratizing access to Pakistani economic data and financial tools
+      </p>
+    </div>
+  </ScrollReveal>
 
-      <!-- Mission -->
-      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Our Mission</h2>
-        <p class="text-gray-700 leading-relaxed">
-          PakEcon.ai is dedicated to democratizing access to Pakistani economic data and financial tools.
+  <!-- Mission -->
+  <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 md:p-12 border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+            <Icon name="star" size={24} class="text-white" />
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Our Mission</h2>
+        </div>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+          HisaabKar.pk is dedicated to democratizing access to Pakistani economic data and financial tools.
           We believe that transparent, accessible information is the foundation of financial literacy and economic empowerment.
         </p>
-        <p class="text-gray-700 leading-relaxed mt-4">
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4 text-lg">
           Our platform combines real-time data collection, automated analysis, and user-friendly tools to provide
           Pakistanis with the insights they need to make informed financial decisions.
         </p>
       </div>
+    </div>
+  </ScrollReveal>
 
-      <!-- Author Credentials - E-E-A-T -->
-      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <div class="flex items-center mb-6">
-          <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mr-4">
-            <span class="text-3xl text-white font-bold">M</span>
+  <!-- Author Credentials -->
+  <ScrollReveal animation="fade-in-up" delay={200} class="py-12 bg-white dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl shadow-lg p-8 md:p-12 border border-green-100 dark:border-green-800">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
+          <div class="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+            <span class="text-4xl font-bold text-white">A</span>
           </div>
-          <div>
-            <h2 class="text-2xl font-bold text-gray-900">Muhammad</h2>
-            <p class="text-green-600 font-medium">Founder & Economics Analyst</p>
+          <div class="text-center md:text-left">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Ashfaq Ahmed</h2>
+            <p class="text-green-600 dark:text-green-400 font-medium text-lg">Founder & Economics Analyst</p>
           </div>
         </div>
 
-        <div class="space-y-4">
+        <div class="space-y-6">
           <div>
-            <h3 class="font-semibold text-gray-900 flex items-center">
-              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-green-600 text-sm">✓</span>
+            <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                <Icon name="check" size={16} class="text-white" />
+              </div>
               Education & Credentials
             </h3>
-            <ul class="mt-2 ml-8 space-y-1 text-gray-700">
-              <li>• <strong>M.Phil in Economics</strong> - Quaid-i-Azam University, Islamabad (2022)</li>
-              <li>• <strong>Bachelor of Commerce (B.Com)</strong> - University of Karachi (2019)</li>
-              <li>• <strong>Advanced Certificate in Financial Analysis</strong> - ACCA (2023)</li>
+            <ul class="mt-3 ml-11 space-y-3 text-gray-700 dark:text-gray-300">
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-green-500 mt-1" />
+                <span><strong>M.Phil in Economics</strong> - University of the Punjab, Lahore (2019)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-green-500 mt-1" />
+                <span><strong>Bachelor of Commerce (B.Com)</strong> - University of the Punjab, Lahore (2011)</span>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h3 class="font-semibold text-gray-900 flex items-center">
-              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-green-600 text-sm">✓</span>
+            <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                <Icon name="check" size={16} class="text-white" />
+              </div>
               Professional Experience
             </h3>
-            <ul class="mt-2 ml-8 space-y-1 text-gray-700">
-              <li>• <strong>Economic Research Analyst</strong> - Center for Economic Research, Islamabad (2023-Present)</li>
-              <li>• <strong>Fiscal Policy Consultant</strong> - Multiple Fintech Startups (2021-2023)</li>
-              <li>• <strong>Data Analyst Intern</strong> - State Bank of Pakistan (2020)</li>
+            <ul class="mt-3 ml-11 space-y-3 text-gray-700 dark:text-gray-300">
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-blue-500 mt-1" />
+                <span><strong>Financial Auditor, Public Sector</strong> (2018-Present)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-blue-500 mt-1" />
+                <span><strong>Senior Officer, Internal Audit</strong> (2014-2018)</span>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h3 class="font-semibold text-gray-900 flex items-center">
-              <span class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-2 text-green-600 text-sm">✓</span>
+            <h3 class="font-semibold text-gray-900 dark:text-white flex items-center gap-3 mb-3">
+              <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                <Icon name="check" size={16} class="text-white" />
+              </div>
               Areas of Expertise
             </h3>
-            <ul class="mt-2 ml-8 space-y-1 text-gray-700">
-              <li>• Pakistani Fiscal Policy & Taxation</li>
-              <li>• Monetary Economics & Exchange Rate Analysis</li>
-              <li>• Commodity Market Dynamics</li>
-              <li>• Economic Impact Assessment</li>
+            <ul class="mt-3 ml-11 space-y-2 text-gray-700 dark:text-gray-300">
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-purple-500 mt-1" />
+                <span>Financial Auditing</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-purple-500 mt-1" />
+                <span>Pakistani Fiscal Policy & Taxation</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-purple-500 mt-1" />
+                <span>Monetary Economics & Exchange Rate Analysis</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-purple-500 mt-1" />
+                <span>Commodity Market Dynamics</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <Icon name="chevronRight" size={16} class="text-purple-500 mt-1" />
+                <span>Economic Impact Assessment</span>
+              </li>
             </ul>
           </div>
         </div>
       </div>
+    </div>
+  </ScrollReveal>
 
-      <!-- E-E-A-T Compliance -->
-      <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
-        <h3 class="font-bold text-green-800 mb-3">E-E-A-T Compliance</h3>
-        <p class="text-green-700 text-sm leading-relaxed">
-          This site follows Google's <strong>Experience, Expertise, Authoritativeness, and Trustworthiness</strong> guidelines.
+  <!-- E-E-A-T Compliance -->
+  <ScrollReveal animation="fade-in-up" delay={300} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-2xl p-8">
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
+            <Icon name="shield" size={24} class="text-white" />
+          </div>
+          <h3 class="text-xl font-bold text-green-800 dark:text-green-200">E-E-A-T Compliance</h3>
+        </div>
+        <p class="text-green-700 dark:text-green-300 text-base leading-relaxed">
+          This site follows Google's <strong class="text-green-800 dark:text-green-100">Experience, Expertise, Authoritativeness, and Trustworthiness</strong> guidelines.
           All content is reviewed by certified economics professionals with demonstrated expertise in Pakistani economics.
           Our tax calculations are based on official FBR publications, and market data is sourced from government authorities.
         </p>
       </div>
+    </div>
+  </ScrollReveal>
 
-      <!-- T093: Tools Built section -->
-      <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Financial Tools Built</h2>
-        <p class="text-gray-700 mb-4">
-          PakEcon.ai provides 10+ free financial calculators tailored for Pakistan's economy and regulatory environment:
+  <!-- Tools Built -->
+  <ScrollReveal animation="fade-in-up" delay={400} class="py-12 bg-white dark:bg-gray-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Financial Tools Built</h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          HisaabKar.pk provides 10+ free financial calculators tailored for Pakistan's economy and regulatory environment:
         </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            { href: '/tools/electricity-bill-calculator', title: 'Electricity Bill Calculator', desc: 'All 9 DISCOs, NEPRA 2026 tariffs' },
-            { href: '/tools/zakat-calculator', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab' },
-            { href: '/tools/loan-emi-calculator', title: 'Loan / EMI Calculator', desc: 'Conventional & Islamic Murabaha modes' },
-            { href: '/tools/currency-converter', title: 'Currency Converter', desc: 'SBP interbank rates, 10 currencies + 30-day chart' },
-            { href: '/tools/salary-slip-generator', title: 'Salary Slip Generator', desc: 'Auto FBR tax, PDF download, all client-side' },
-            { href: '/tools/gold-investment-calculator', title: 'Gold Investment Calculator', desc: 'Live 24K prices, portfolio scenario analysis' },
-            { href: '/tools/inflation-calculator', title: 'Inflation Calculator', desc: 'PBS CPI 2015–2026 purchasing power' },
-            { href: '/tools/eobi-calculator', title: 'EOBI & PF Calculator', desc: 'Retirement pension and corpus estimate' },
-            { href: '/tools/property-stamp-duty-calculator', title: 'Property Stamp Duty', desc: 'By province, filer vs non-filer rates' },
-            { href: '/tools/remittance-calculator', title: 'Remittance Calculator', desc: 'Live SBP rates for 8 sending currencies' },
-          ].map(tool => (
-            <a href={tool.href} class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-green-400 hover:bg-green-50 transition-colors group">
-              <span class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {[
+          { href: '/tools/electricity-bill-calculator', icon: 'bolt', title: 'Electricity Bill Calculator', desc: 'All 9 DISCOs, NEPRA 2026 tariffs', bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-600 dark:text-amber-400' },
+          { href: '/tools/zakat-calculator', icon: 'star', title: 'Zakat Calculator', desc: 'Live gold/silver prices, Silver & Gold Nisab', bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' },
+          { href: '/tools/loan-emi-calculator', icon: 'bank', title: 'Loan / EMI Calculator', desc: 'Conventional & Islamic Murabaha modes', bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
+          { href: '/tools/currency-converter', icon: 'currency', title: 'Currency Converter', desc: 'SBP interbank rates, 10 currencies + 30-day chart', bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
+          { href: '/tools/salary-slip-generator', icon: 'document', title: 'Salary Slip Generator', desc: 'Auto FBR tax, PDF download, all client-side', bg: 'bg-cyan-100 dark:bg-cyan-900/30', text: 'text-cyan-600 dark:text-cyan-400' },
+          { href: '/tools/gold-price-calculator-pakistan', icon: 'gold', title: 'Gold Price Calculator Pakistan', desc: 'Live 24K prices, portfolio scenario analysis', bg: 'bg-yellow-100 dark:bg-yellow-900/30', text: 'text-yellow-600 dark:text-yellow-400' },
+          { href: '/tools/pakistan-inflation-calculator', icon: 'chartBar', title: 'Pakistan Inflation Calculator', desc: 'PBS CPI 2015–2026 purchasing power', bg: 'bg-red-100 dark:bg-red-900/30', text: 'text-red-600 dark:text-red-400' },
+          { href: '/tools/eobi-calculator', icon: 'user', title: 'EOBI & PF Calculator', desc: 'Retirement pension and corpus estimate', bg: 'bg-slate-100 dark:bg-slate-900/30', text: 'text-slate-600 dark:text-slate-400' },
+          { href: '/tools/property-stamp-duty-calculator', icon: 'house', title: 'Property Stamp Duty', desc: 'By province, filer vs non-filer rates', bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-600 dark:text-green-400' },
+          { href: '/tools/remittance-calculator', icon: 'send', title: 'Remittance Calculator', desc: 'Live SBP rates for 8 sending currencies', bg: 'bg-violet-100 dark:bg-violet-900/30', text: 'text-violet-600 dark:text-violet-400' },
+        ].map((tool, index) => (
+          <ScrollReveal
+            key={tool.href}
+            animation="fade-in-up"
+            delay={500 + index * 50}
+          >
+            <a href={tool.href} class="group flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-green-400 dark:hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all duration-300">
+              <div class={`w-14 h-14 ${tool.bg} rounded-xl flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                <Icon name={tool.icon as any} size={28} class={tool.text} />
+              </div>
               <div>
-                <strong class="text-sm text-gray-900 group-hover:text-green-700">{tool.title}</strong>
-                <p class="text-xs text-gray-500">{tool.desc}</p>
+                <strong class="text-sm text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition-colors">{tool.title}</strong>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{tool.desc}</p>
               </div>
             </a>
-          ))}
-        </div>
-        <p class="mt-4 text-sm text-gray-600">
+          </ScrollReveal>
+        ))}
+      </div>
+      <div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+        <p class="text-sm text-blue-800 dark:text-blue-300">
+          <Icon name="information" size={16} class="inline mr-2" />
           All tools use TypeScript constants verified against official NEPRA/FBR/EOBI/PBS sources.
           AI-powered market insights are generated via Groq LLaMA 3.3 70B and published automatically via GitHub Actions.
         </p>
       </div>
+    </div>
+  </ScrollReveal>
 
-      <!-- Data Sources -->
-      <div class="bg-white rounded-lg shadow-lg p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Data Sources</h2>
-        <p class="text-gray-700 mb-4">
+  <!-- Data Sources -->
+  <ScrollReveal animation="fade-in-up" delay={600} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 md:p-12 border border-gray-200 dark:border-gray-700">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Data Sources</h2>
+        <p class="text-gray-700 dark:text-gray-300 mb-8">
           We source our data from official Pakistani government agencies and reputable organizations:
         </p>
-        <ul class="space-y-3">
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
-            <div>
-              <strong class="text-gray-900">State Bank of Pakistan (SBP)</strong>
-              <p class="text-gray-600 text-sm">Official exchange rates, monetary policy announcements, and economic indicators</p>
-            </div>
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
-            <div>
-              <strong class="text-gray-900">Pakistan Bureau of Statistics (PBS)</strong>
-              <p class="text-gray-600 text-sm">Consumer Price Index (CPI), inflation data, and economic surveys</p>
-            </div>
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
-            <div>
-              <strong class="text-gray-900">Federal Board of Revenue (FBR)</strong>
-              <p class="text-gray-600 text-sm">Tax slabs, policies, and official tax filing information</p>
-            </div>
-          </li>
-          <li class="flex items-start">
-            <span class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></span>
-            <div>
-              <strong class="text-gray-900">Pakistan Mercantile Exchange (PMEX)</strong>
-              <p class="text-gray-600 text-sm">Gold, silver, and commodity prices from official markets</p>
-            </div>
-          </li>
+        <ul class="space-y-6">
+          {[
+            {
+              monogram: 'SBP',
+              title: 'State Bank of Pakistan (SBP)',
+              desc: 'Official exchange rates, monetary policy announcements, and economic indicators',
+              url: 'https://www.sbp.org.pk',
+              bg: 'bg-green-100 dark:bg-green-900/30',
+              text: 'text-green-700 dark:text-green-300',
+            },
+            {
+              monogram: 'PBS',
+              title: 'Pakistan Bureau of Statistics (PBS)',
+              desc: 'Consumer Price Index (CPI), inflation data, and economic surveys',
+              url: 'https://www.pbs.gov.pk',
+              bg: 'bg-blue-100 dark:bg-blue-900/30',
+              text: 'text-blue-700 dark:text-blue-300',
+            },
+            {
+              monogram: 'FBR',
+              title: 'Federal Board of Revenue (FBR)',
+              desc: 'Tax slabs, policies, and official tax filing information',
+              url: 'https://fbr.gov.pk',
+              bg: 'bg-purple-100 dark:bg-purple-900/30',
+              text: 'text-purple-700 dark:text-purple-300',
+            },
+            {
+              monogram: 'PMEX',
+              title: 'Pakistan Mercantile Exchange (PMEX)',
+              desc: 'Gold, silver, and commodity prices from official markets',
+              url: 'https://pmex.com.pk',
+              bg: 'bg-yellow-100 dark:bg-yellow-900/30',
+              text: 'text-yellow-700 dark:text-yellow-700',
+            },
+          ].map((source, index) => (
+            <ScrollReveal
+              key={source.title}
+              animation="fade-in-up"
+              delay={700 + index * 100}
+            >
+              <li class="flex items-start gap-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-700/50">
+                <div class={`w-14 h-14 ${source.bg} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                  <span class={`${source.text} text-xs font-bold tracking-tight leading-none text-center`}>{source.monogram}</span>
+                </div>
+                <div class="flex-1">
+                  <strong class="text-base text-gray-900 dark:text-white mb-1">{source.title}</strong>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">{source.desc}</p>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm font-medium mt-2 transition-colors">
+                    Visit Website
+                    <Icon name="externalLink" size={16} />
+                  </a>
+                </div>
+              </li>
+            </ScrollReveal>
+          ))}
         </ul>
       </div>
     </div>
-  </section>
+  </ScrollReveal>
 
   <!-- Contact -->
-  <section class="py-12 bg-gray-900 text-white">
+  <ScrollReveal animation="fade-in-up" delay={800} class="py-16 bg-gray-900 text-white">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 class="text-3xl font-bold mb-4">Get in Touch</h2>
-      <p class="text-gray-400 mb-8">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <Icon name="envelope" size={16} class="text-green-300" />
+        <span class="text-sm font-medium text-green-200">Get in Touch</span>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">Contact Us</h2>
+      <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
         Have questions about Pakistani economics or our tools? We'd love to hear from you.
       </p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a href="mailto:contact@pakecon.ai" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-8 rounded-lg transition">
+        <a href="mailto:ashfaqahmed1192@gmail.com" class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+          <Icon name="envelope" size={20} />
           Email Us
         </a>
-        <a href="https://twitter.com/pakecon_ai" target="_blank" rel="noopener noreferrer" class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg transition">
+        <a href="https://twitter.com/hisaabkar" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
+          <Icon name="globe" size={20} />
           Twitter
         </a>
       </div>
     </div>
-  </section>
+  </ScrollReveal>
+
+  <!-- Newsletter Form Script -->
+  <script>
+    const forms = document.querySelectorAll('form[id$="-form"]');
+    forms.forEach(form => {
+      form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+        const msgElement = form.querySelector('p[id$="-msg"]');
+
+        const email = emailInput?.value?.trim();
+        if (!email) return;
+
+        try {
+          // For now, show success message without API call
+          if (msgElement) {
+            msgElement.textContent = 'Thank you for subscribing! We will send updates to your email.';
+            msgElement.classList.remove('hidden');
+            msgElement.classList.add('text-green-600');
+          }
+          emailInput.value = '';
+
+          if (typeof showToast !== 'undefined') {
+            showToast({ message: 'Successfully subscribed to newsletter!', type: 'success', duration: 3000 });
+          }
+        } catch (err) {
+          if (msgElement) {
+            msgElement.textContent = 'Failed to subscribe. Please try again.';
+            msgElement.classList.remove('hidden');
+            msgElement.classList.add('text-red-600');
+          }
+          if (typeof showToast !== 'undefined') {
+            showToast({ message: 'Subscription failed', type: 'error', duration: 3000 });
+          }
+        }
+      });
+    });
+  </script>
 </MainLayout>

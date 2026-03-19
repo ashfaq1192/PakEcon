@@ -1,19 +1,20 @@
-name = "pakecon-ai"
+name = "hisaabkar"
 compatibility_date = "2024-09-23"
+pages_build_output_dir = "dist/client"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "pakecon_db"
-database_id = "<generated-on-create>"
+database_id = "ae3be8c7-7ee5-4670-a6e0-b3dba698bb5a"
 
 [[kv_namespaces]]
 binding = "KV"
-id = "<kv-namespace-id>"
+id = "7787cef3b0c24599bf5fc7644e3d9cbd"
 
 # Cloudflare sessions KV (required by @astrojs/cloudflare v13)
 [[kv_namespaces]]
 binding = "SESSION"
-id = "<session-kv-namespace-id>"
+id = "e86f60168e13496089c99899fd0af600"
 
 [vars]
 ENVIRONMENT = "production"
@@ -26,10 +27,7 @@ TELEGRAM_ENABLED = "true"
 #   TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID,
 #   GOOGLE_INDEXING_SA_KEY, NEWSLETTER_SECRET, AGENT_SECRET
 
-# T088: Cloudflare Email Workers for newsletter confirmation emails
-# Configure sending domain pakecon.ai in Cloudflare Email DNS settings first
-[[send_email]]
-name = "SEND_EMAIL"
-
-[triggers]
-crons = ["0 */6 * * *"]  # Every 6 hours
+# Cron triggers: configure in Cloudflare Pages dashboard
+# Pages → hisaabkar → Settings → Functions → Cron Triggers
+# Add: "0 */6 * * *"  (every 6h — rates & commodities)
+# Add: "0 4 1 * *"    (1st of month — policy rate, CPI, CDNS)

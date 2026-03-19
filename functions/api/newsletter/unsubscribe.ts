@@ -29,12 +29,12 @@ export async function onRequestGet(context: PagesContext): Promise<Response> {
   const email = decodeURIComponent(url.searchParams.get('email') || '').toLowerCase();
 
   if (!token || !email) {
-    return Response.redirect('https://pakecon.ai/?error=invalid_token', 302);
+    return Response.redirect('https://hisaabkar.pk/?error=invalid_token', 302);
   }
 
   const expected = await hmacToken(email, env.NEWSLETTER_SECRET);
   if (token !== expected) {
-    return Response.redirect('https://pakecon.ai/?error=invalid_token', 302);
+    return Response.redirect('https://hisaabkar.pk/?error=invalid_token', 302);
   }
 
   await env.DB.prepare(
@@ -43,5 +43,5 @@ export async function onRequestGet(context: PagesContext): Promise<Response> {
      WHERE email = ?`
   ).bind(email).run();
 
-  return Response.redirect('https://pakecon.ai/?unsubscribed=true', 302);
+  return Response.redirect('https://hisaabkar.pk/?unsubscribed=true', 302);
 }

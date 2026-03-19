@@ -70,17 +70,17 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
   ).bind(email, token).run();
 
   // Send confirmation email (non-blocking if SEND_EMAIL not configured)
-  const confirmUrl = `https://pakecon.ai/api/newsletter/confirm?token=${token}&email=${encodeURIComponent(email)}`;
-  const unsubUrl = `https://pakecon.ai/api/newsletter/unsubscribe?token=${token}&email=${encodeURIComponent(email)}`;
+  const confirmUrl = `https://hisaabkar.pk/api/newsletter/confirm?token=${token}&email=${encodeURIComponent(email)}`;
+  const unsubUrl = `https://hisaabkar.pk/api/newsletter/unsubscribe?token=${token}&email=${encodeURIComponent(email)}`;
 
   if (env.SEND_EMAIL) {
     try {
       await env.SEND_EMAIL.send({
-        from: 'noreply@pakecon.ai',
+        from: 'noreply@hisaabkar.pk',
         to: email,
-        subject: 'Confirm your PakEcon.ai newsletter subscription',
-        text: `Please confirm your subscription to PakEcon.ai Weekly Economic Digest:\n\n${confirmUrl}\n\nIf you did not subscribe, you can ignore this email or unsubscribe: ${unsubUrl}`,
-        html: `<p>Please confirm your subscription to <strong>PakEcon.ai Weekly Economic Digest</strong>:</p>
+        subject: 'Confirm your HisaabKar.pk newsletter subscription',
+        text: `Please confirm your subscription to HisaabKar.pk Weekly Economic Digest:\n\n${confirmUrl}\n\nIf you did not subscribe, you can ignore this email or unsubscribe: ${unsubUrl}`,
+        html: `<p>Please confirm your subscription to <strong>HisaabKar.pk Weekly Economic Digest</strong>:</p>
                <p><a href="${confirmUrl}" style="background:#16a34a;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;">Confirm Subscription</a></p>
                <p style="font-size:12px;color:#666;">If you did not subscribe, <a href="${unsubUrl}">unsubscribe here</a>.</p>`,
       });

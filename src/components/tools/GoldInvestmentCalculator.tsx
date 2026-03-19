@@ -14,6 +14,15 @@ interface GoldPriceResponse {
   stale?: boolean;
 }
 
+// Fallback prices used when API is unavailable
+const FALLBACK_PRICES: GoldPriceResponse = {
+  goldPerGram: 27500,
+  goldPerTola: 320900,
+  silverPerGram: 310,
+  updatedAt: new Date().toISOString(),
+  stale: true,
+};
+
 const SCENARIOS = [
   { label: '−20%', multiplier: 0.80 },
   { label: '−10%', multiplier: 0.90 },
@@ -35,7 +44,7 @@ export default function GoldInvestmentCalculator() {
     fetch('/api/gold-price')
       .then(r => r.json() as Promise<GoldPriceResponse>)
       .then(data => { setPrices(data); setLoading(false); })
-      .catch(() => { setError(true); setLoading(false); });
+      .catch(() => { setPrices(FALLBACK_PRICES); setError(true); setLoading(false); });
   }, []);
 
   function calculate() {
@@ -54,15 +63,15 @@ export default function GoldInvestmentCalculator() {
     <div className="max-w-2xl mx-auto">
       {loading && <p className="text-sm text-gray-500 mb-4">Loading live gold prices…</p>}
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700 mb-4">
-          Unable to load gold prices. Please try again later.
+        <div className="p-3 bg-amber-50 border border-amber-200 rounded text-sm text-amber-700 mb-4">
+          Live prices unavailable — showing approximate reference rates. Values may differ from current market.
         </div>
       )}
       {prices && !loading && (
         <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-sm text-yellow-800">
           Live: 24K Gold — {fmt(prices.goldPerTola)}/tola · {fmt(prices.goldPerGram)}/gram
           {prices.stale && ' (cached)'}
-          <span className="ml-2 text-xs text-gray-500">Source: PMEX/Business Recorder via PakEcon.ai</span>
+          <span className="ml-2 text-xs text-gray-500">Source: PMEX/Business Recorder via HisaabKar.pk</span>
         </div>
       )}
 
@@ -136,7 +145,7 @@ export default function GoldInvestmentCalculator() {
             </tbody>
           </table>
           <p className="mt-2 text-xs text-gray-500">
-            Source: PMEX/Business Recorder via PakEcon.ai. Prices as of {prices ? new Date(prices.updatedAt).toLocaleDateString('en-PK') : '—'}.
+            Source: PMEX/Business Recorder via HisaabKar.pk. Prices as of {prices ? new Date(prices.updatedAt).toLocaleDateString('en-PK') : '—'}.
           </p>
         </div>
       )}

@@ -123,7 +123,8 @@ export interface Env {
   OPENAI_API_KEY: string;
   TELEGRAM_BOT_TOKEN: string;
   TELEGRAM_CHANNEL_ID: string;
-  GOOGLE_INDEXING_SA_KEY?: string;
+  GOOGLE_PRIVATE_KEY?: string;
+  GOOGLE_SERVICE_ACCOUNT?: string;
   NEWSLETTER_SECRET: string;
   HUMAN_REVIEW_MODE: string;
   TWITTER_ENABLED: string;

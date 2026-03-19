@@ -1,0 +1,90 @@
+---
+// Scroll-triggered reveal animation component
+// Wraps content to animate it when it comes into viewport
+
+interface Props {
+  animation?: 'fade-in' | 'fade-in-up' | 'fade-in-down' | 'slide-in-right' | 'slide-in-left' | 'scale-in';
+  delay?: number;
+  threshold?: number;
+  class?: string;
+  as?: 'div' | 'section' | 'article';
+}
+
+const {
+  animation = 'fade-in-up',
+  delay = 0,
+  threshold = 0.1,
+  class: className = '',
+  as: tag = 'div',
+} = Astro.props;
+---
+
+<div
+  data-scroll-reveal
+  data-animation={animation}
+  data-delay={delay}
+  data-threshold={threshold}
+  class={`scroll-reveal ${className}`}
+>
+  <slot />
+</div>
+
+<script>
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const element = entry.target as HTMLElement;
+        const animation = element.dataset.animation || 'fade-in-up';
+        const delay = parseInt(element.dataset.delay || '0', 10);
+
+        element.style.animationDelay = `${delay}ms`;
+        element.classList.add(`animate-${animation}`);
+        element.style.opacity = '1';
+
+        observer.unobserve(element);
+      }
+    });
+  }, observerOptions);
+
+  // Add initial styles to prevent flash
+  document.querySelectorAll('[data-scroll-reveal]').forEach((element) => {
+    (element as HTMLElement).style.opacity = '0';
+    observer.observe(element);
+  });
+</script>
+
+<style>
+  [data-scroll-reveal] {
+    will-change: opacity, transform;
+  }
+
+  /* Smooth transitions when animation completes */
+  .animate-fade-in {
+    animation-fill-mode: forwards;
+  }
+
+  .animate-fade-in-up {
+    animation-fill-mode: forwards;
+  }
+
+  .animate-fade-in-down {
+    animation-fill-mode: forwards;
+  }
+
+  .animate-slide-in-right {
+    animation-fill-mode: forwards;
+  }
+
+  .animate-slide-in-left {
+    animation-fill-mode: forwards;
+  }
+
+  .animate-scale-in {
+    animation-fill-mode: forwards;
+  }
+</style>

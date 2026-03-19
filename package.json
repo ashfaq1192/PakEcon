@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npx pagefind --site dist",
+    "build": "astro build && npx pagefind --site dist && node -e \"try{require('fs').unlinkSync('.wrangler/deploy/config.json');}catch(e){}\"",
+    "deploy": "npm run build && npx wrangler pages deploy dist/client --project-name hisaabkar",
     "preview": "astro preview",
     "astro": "astro",
     "setup": "./scripts/setup-local.sh"
@@ -15,9 +16,13 @@
     "@astrojs/sitemap": "^3.7.1",
     "@astrojs/tailwind": "^6.0.2",
     "astro": "^6.0.5",
+    "mammoth": "^1.12.0",
     "pdf-lib": "^1.17.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-is": "^19.2.4",
+    "recharts": "^3.8.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260316.1",

@@ -43,7 +43,44 @@ CREATE TABLE IF NOT EXISTS market_insights (
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
+-- SBP Policy Rate & KIBOR (updated monthly)
+CREATE TABLE IF NOT EXISTS policy_rates (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  key TEXT NOT NULL,    -- 'policy_rate' | 'kibor_overnight' | 'kibor_1w' | 'kibor_1m' | 'kibor_3m' | 'kibor_6m'
+  rate REAL NOT NULL,
+  date TEXT NOT NULL,
+  source TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(key, date)
+);
+
+-- PBS CPI data (updated monthly)
+CREATE TABLE IF NOT EXISTS cpi_data (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  month TEXT NOT NULL,         -- 'YYYY-MM'
+  index_value REAL NOT NULL,
+  yoy_change REAL NOT NULL,
+  mom_change REAL DEFAULT 0,
+  source TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(month)
+);
+
+-- CDNS National Savings rates (updated monthly)
+CREATE TABLE IF NOT EXISTS cdns_rates (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  certificate TEXT NOT NULL,   -- 'bsc' | 'ric' | 'dsc' | 'ssc' | 'sfwa'
+  rate_pa REAL NOT NULL,       -- annual rate as decimal (e.g. 0.096)
+  effective_date TEXT NOT NULL,
+  source TEXT NOT NULL,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(certificate, effective_date)
+);
+
 -- Indexes for query performance
 CREATE INDEX IF NOT EXISTS idx_exchange_rates_date ON exchange_rates(date DESC);
 CREATE INDEX IF NOT EXISTS idx_commodity_date ON commodity_prices(date DESC);
 CREATE INDEX IF NOT EXISTS idx_market_insights_published ON market_insights(published, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_policy_rates_key_date ON policy_rates(key, date DESC);
+CREATE INDEX IF NOT EXISTS idx_cpi_data_month ON cpi_data(month DESC);
+CREATE INDEX IF NOT EXISTS idx_cdns_rates_date ON cdns_rates(effective_date DESC);

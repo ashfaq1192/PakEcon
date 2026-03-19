@@ -67,7 +67,7 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
     const timeoutId = setTimeout(() => controller.abort(), 15000);
     const res = await fetch(OGRA_URL, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PakEcon.ai/1.0)', Accept: 'text/html' },
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
     });
     clearTimeout(timeoutId);
     if (!res.ok) throw new Error(`OGRA HTTP ${res.status}`);
@@ -145,7 +145,7 @@ export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]
     const timeoutId = setTimeout(() => controller.abort(), 10000);
     const res = await fetch(BRECORDER_GOLD_URL, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PakEcon.ai/1.0)', Accept: 'text/html' },
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
     });
     clearTimeout(timeoutId);
     if (!res.ok) throw new Error(`BRecorder HTTP ${res.status}`);
@@ -160,7 +160,7 @@ export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]
       const timeoutId = setTimeout(() => controller.abort(), 10000);
       const res = await fetch(GOLDPRICEZ_URL, {
         signal: controller.signal,
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; PakEcon.ai/1.0)', Accept: 'text/html' },
+        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
       });
       clearTimeout(timeoutId);
       if (!res.ok) throw new Error(`goldpricez HTTP ${res.status}`);

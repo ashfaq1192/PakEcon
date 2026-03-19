@@ -198,7 +198,7 @@ export async function generateWeeklyDigest(env: Env): Promise<MarketInsight> {
     generated_by: 'groq:llama-3.3-70b-versatile',
     date: now.toISOString().split('T')[0],
     slug,
-    source: 'https://pakecon.ai',
+    source: 'https://hisaabkar.pk',
     published: false,
   };
 }

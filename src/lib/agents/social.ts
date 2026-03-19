@@ -27,8 +27,8 @@ export async function postToTelegram(insight: MarketInsight, env: Env): Promise<
   const message =
     `📊 *${escapeMarkdown(insight.title)}*\n\n` +
     `${escapeMarkdown(insight.summary)}\n\n` +
-    `🔗 [Read full analysis](https://pakecon.ai/insights/${slug})\n\n` +
-    `_Source: ${escapeMarkdown(insight.citations[0]?.source || 'PakEcon.ai')}_`;
+    `🔗 [Read full analysis](https://hisaabkar.pk/blog/${slug})\n\n` +
+    `_Source: ${escapeMarkdown(insight.citations[0]?.source || 'HisaabKar.pk')}_`;
 
   try {
     const res = await fetch(

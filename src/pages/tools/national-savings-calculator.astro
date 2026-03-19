@@ -1,0 +1,79 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import NationalSavingsCalculator from '../../components/tools/NationalSavingsCalculator';
+
+const title = 'National Savings Calculator Pakistan 2026 — Behbood, RIC, DSC Profit';
+const description =
+  'Calculate monthly and annual profit for National Savings certificates (Behbood, Regular Income, Defense, Special). Includes withholding tax for filers and non-filers.';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://hisaabkar.pk/tools/national-savings-calculator',
+    inLanguage: 'en-PK',
+    publisher: {
+      '@type': 'Organization',
+      name: 'HisaabKar.pk',
+      url: 'https://hisaabkar.pk',
+    },
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+      <p class="text-green-600 dark:text-green-400 font-medium text-lg mb-3" dir="rtl" lang="ur">
+        قومی بچت پر منافع حساب کریں
+      </p>
+      <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+        Calculate your exact monthly profit from Behbood, Regular Income, Defense Savings, and Special
+        Savings Certificates — with withholding tax deducted for both filers and non-filers.
+        Rates verified against CDNS (<a href="https://www.savings.gov.pk" target="_blank" rel="noopener noreferrer" class="text-green-600 underline">savings.gov.pk</a>).
+      </p>
+    </div>
+
+    <NationalSavingsCalculator client:load />
+
+    <!-- Data source trust badge -->
+    <div class="mt-8 flex flex-wrap gap-3 items-center">
+      <span class="text-xs text-gray-500 font-semibold uppercase tracking-wide">Data Sources:</span>
+      <a href="https://www.savings.gov.pk" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1.5 bg-green-50 border border-green-200 text-green-700 text-xs font-medium px-3 py-1.5 rounded-full hover:bg-green-100 transition">
+        🏛️ CDNS savings.gov.pk
+      </a>
+      <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium px-3 py-1.5 rounded-full hover:bg-blue-100 transition">
+        📋 FBR WHT Rates
+      </a>
+    </div>
+
+    <!-- SEO content -->
+    <div class="mt-10 prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">
+        National Savings Certificates in Pakistan — What You Need to Know
+      </h2>
+      <p>
+        National Savings Pakistan (Central Directorate of National Savings — CDNS) offers
+        government-backed, risk-free investment certificates to Pakistani citizens. These are
+        one of the most popular savings instruments for the Pakistani middle class and retirees
+        because the profit is guaranteed by the Government of Pakistan.
+      </p>
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Filer vs Non-Filer WHT</h3>
+      <p>
+        Under FBR 2025-26 rules, Withholding Tax (WHT) on National Savings profit is:
+      </p>
+      <ul class="list-disc pl-5 space-y-1 text-sm">
+        <li><strong>Active Filer (ATL registered):</strong> 15% deducted at source</li>
+        <li><strong>Non-Filer:</strong> 30% deducted at source</li>
+      </ul>
+      <p class="text-sm">
+        Registering as a filer at <a href="https://iris.fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="text-green-600 underline">iris.fbr.gov.pk</a> is free and can save you thousands of rupees every year on your savings profit.
+      </p>
+    </div>
+  </div>
+</MainLayout>

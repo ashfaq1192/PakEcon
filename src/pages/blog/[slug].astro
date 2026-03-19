@@ -5,8 +5,8 @@ import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 
 export async function getStaticPaths() {
-  const insights = await getCollection('insights');
-  return insights.map((entry) => ({
+  const posts = await getCollection('blog');
+  return posts.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
@@ -34,12 +34,12 @@ const schemaArticle = JSON.stringify({
   },
   publisher: {
     '@type': 'Organization',
-    name: 'PakEcon.ai',
-    url: 'https://pakecon.ai',
+    name: 'HisaabKar.pk',
+    url: 'https://hisaabkar.pk',
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': `https://pakecon.ai/insights/${entry.slug}`,
+    '@id': `https://hisaabkar.pk/blog/${entry.slug}`,
   },
 });
 ---

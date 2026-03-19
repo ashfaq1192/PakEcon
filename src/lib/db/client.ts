@@ -1,7 +1,7 @@
 /**
  * D1 Database Client Wrapper
  *
- * Provides type-safe database operations for PakEcon.ai
+ * Provides type-safe database operations for HisaabKar.pk
  * Handles exchange rates, commodity prices, tax slabs, and market insights
  */
 

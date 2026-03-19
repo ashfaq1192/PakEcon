@@ -1,0 +1,329 @@
+---
+// Document Converter — CloudConvert API (server-side, full quality)
+// Images → PDF handled client-side via pdf-lib (no API needed)
+// Files never stored — CloudConvert deletes after 24h
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 max-w-2xl mx-auto">
+
+  <!-- Conversion mode selector -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
+    {[
+      { id: 'docx-pdf',  label: 'Word → PDF',   emoji: '📝→📕', accept: '.docx,.doc',           desc: 'DOCX / DOC' },
+      { id: 'xlsx-pdf',  label: 'Excel → PDF',  emoji: '📊→📕', accept: '.xlsx,.xls',           desc: 'XLSX / XLS' },
+      { id: 'pptx-pdf',  label: 'PPT → PDF',    emoji: '📑→📕', accept: '.pptx,.ppt',           desc: 'PPTX / PPT' },
+      { id: 'pdf-docx',  label: 'PDF → Word',   emoji: '📕→📝', accept: '.pdf',                 desc: 'PDF to DOCX' },
+      { id: 'pdf-xlsx',  label: 'PDF → Excel',  emoji: '📕→📊', accept: '.pdf',                 desc: 'PDF to XLSX' },
+      { id: 'img-pdf',   label: 'Image → PDF',  emoji: '🖼️→📕', accept: '.jpg,.jpeg,.png',      desc: 'JPG / PNG (offline)' },
+    ].map(m => (
+      <button
+        class="conv-btn flex flex-col items-center gap-1 p-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 hover:border-green-400 dark:hover:border-green-500 transition-all text-center text-xs font-semibold text-gray-700 dark:text-gray-300"
+        data-mode={m.id}
+        data-accept={m.accept}
+      >
+        <span class="text-xl">{m.emoji}</span>
+        <span class="leading-tight">{m.label}</span>
+        <span class="text-gray-400 font-normal">{m.desc}</span>
+      </button>
+    ))}
+  </div>
+
+  <!-- Drop zone -->
+  <div
+    id="dropzone"
+    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center cursor-pointer hover:border-green-400 dark:hover:border-green-500 transition-colors"
+  >
+    <div id="dz-icon" class="text-5xl mb-3">📂</div>
+    <p id="dz-label" class="text-gray-500 dark:text-gray-400 font-medium">
+      Select a conversion type above, then drop your file here
+    </p>
+    <p class="text-xs text-gray-400 mt-1">Max 20 MB · Deleted from server within 24h</p>
+    <input type="file" id="file-input" class="hidden" />
+    <button
+      id="browse-btn"
+      class="mt-4 inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-6 rounded-lg transition text-sm disabled:opacity-50"
+    >
+      📂 Choose File
+    </button>
+  </div>
+
+  <!-- Progress bar -->
+  <div id="progress-wrap" class="hidden mt-4">
+    <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-1">
+      <span id="progress-label">Uploading…</span>
+      <span id="progress-pct"></span>
+    </div>
+    <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+      <div id="progress-bar" class="bg-green-500 h-2 rounded-full transition-all duration-300" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Status message -->
+  <div id="status-msg" class="hidden mt-4 p-3 rounded-lg text-sm font-medium"></div>
+
+  <!-- Download button -->
+  <a
+    id="download-btn"
+    class="hidden mt-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition text-base"
+    download
+    target="_blank"
+  >
+    ⬇️ Download Converted File
+  </a>
+
+  <!-- Convert another -->
+  <button id="reset-btn" class="hidden mt-3 w-full text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 underline transition">
+    Convert another file
+  </button>
+
+  <!-- Privacy note -->
+  <p class="text-xs text-gray-400 dark:text-gray-500 mt-6 text-center">
+    Powered by <a href="https://cloudconvert.com" target="_blank" rel="noopener noreferrer" class="underline">CloudConvert</a> ·
+    25 free conversions/day · Files auto-deleted within 24h ·
+    Image→PDF works offline (no server used)
+  </p>
+</div>
+
+<script>
+  const MODES: Record<string, { inputExt: string; outputFormat: string; clientSide: boolean }> = {
+    'docx-pdf': { inputExt: 'docx', outputFormat: 'pdf',  clientSide: false },
+    'xlsx-pdf': { inputExt: 'xlsx', outputFormat: 'pdf',  clientSide: false },
+    'pptx-pdf': { inputExt: 'pptx', outputFormat: 'pdf',  clientSide: false },
+    'pdf-docx': { inputExt: 'pdf',  outputFormat: 'docx', clientSide: false },
+    'pdf-xlsx': { inputExt: 'pdf',  outputFormat: 'xlsx', clientSide: false },
+    'img-pdf':  { inputExt: 'img',  outputFormat: 'pdf',  clientSide: true  },
+  };
+
+  let currentMode = '';
+
+  const dropzone    = document.getElementById('dropzone')!;
+  const fileInput   = document.getElementById('file-input') as HTMLInputElement;
+  const browseBtn   = document.getElementById('browse-btn')!;
+  const dzLabel     = document.getElementById('dz-label')!;
+  const dzIcon      = document.getElementById('dz-icon')!;
+  const progressWrap = document.getElementById('progress-wrap')!;
+  const progressBar  = document.getElementById('progress-bar') as HTMLElement;
+  const progressLabel = document.getElementById('progress-label')!;
+  const progressPct   = document.getElementById('progress-pct')!;
+  const statusMsg    = document.getElementById('status-msg')!;
+  const downloadBtn  = document.getElementById('download-btn') as HTMLAnchorElement;
+  const resetBtn     = document.getElementById('reset-btn')!;
+
+  // Mode selection
+  document.querySelectorAll<HTMLButtonElement>('.conv-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.conv-btn').forEach(b => {
+        b.classList.remove('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+      });
+      btn.classList.add('border-green-500', 'bg-green-50', 'dark:bg-green-900/20');
+      currentMode = btn.dataset.mode!;
+      fileInput.accept = btn.dataset.accept!;
+      const label = btn.querySelector('span:nth-child(2)')?.textContent ?? 'file';
+      dzLabel.textContent = `Drop your ${label.split('→')[0].trim()} file here or click "Choose File"`;
+      dzIcon.textContent = btn.querySelector('span:first-child')?.textContent ?? '📂';
+      resetUI();
+    });
+  });
+
+  browseBtn.addEventListener('click', () => {
+    if (!currentMode) { showStatus('Please select a conversion type first.', 'warn'); return; }
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files?.[0]) processFile(fileInput.files[0]);
+  });
+
+  dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('border-green-400'); });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-green-400'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('border-green-400');
+    if (!currentMode) { showStatus('Please select a conversion type first.', 'warn'); return; }
+    const f = e.dataTransfer?.files[0];
+    if (f) processFile(f);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    resetUI();
+    fileInput.value = '';
+  });
+
+  // ── Main handler ────────────────────────────────────────────────────────────
+  async function processFile(file: File) {
+    const mode = MODES[currentMode];
+    if (!mode) { showStatus('Please select a conversion type first.', 'warn'); return; }
+
+    resetUI();
+
+    if (mode.clientSide) {
+      await handleImageToPdf(file);
+      return;
+    }
+
+    // Validate file extension
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+    const validExts: Record<string, string[]> = {
+      'docx-pdf': ['docx','doc'], 'xlsx-pdf': ['xlsx','xls'],
+      'pptx-pdf': ['pptx','ppt'], 'pdf-docx': ['pdf'], 'pdf-xlsx': ['pdf'],
+    };
+    if (!validExts[currentMode]?.includes(ext)) {
+      showStatus(`Wrong file type. Expected: ${validExts[currentMode]?.join(' / ').toUpperCase()}`, 'error');
+      return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+      showStatus('File too large — maximum 20 MB.', 'error');
+      return;
+    }
+
+    await handleCloudConvert(file, mode.outputFormat);
+  }
+
+  // ── CloudConvert flow ────────────────────────────────────────────────────────
+  async function handleCloudConvert(file: File, outputFormat: string) {
+    setProgress(10, 'Uploading to conversion server…');
+
+    const fd = new FormData();
+    fd.append('file', file, file.name);
+    fd.append('outputFormat', outputFormat);
+
+    let jobId: string;
+    try {
+      const res = await fetch('/api/convert-document', { method: 'POST', body: fd });
+      const data = await res.json() as { jobId?: string; error?: string };
+
+      if (!res.ok || !data.jobId) {
+        showStatus(data.error ?? 'Upload failed. Please try again.', 'error');
+        hideProgress();
+        return;
+      }
+      jobId = data.jobId;
+    } catch {
+      showStatus('Network error — please check your connection and try again.', 'error');
+      hideProgress();
+      return;
+    }
+
+    // ── Poll for completion ───────────────────────────────────────────────────
+    setProgress(40, 'Converting… this takes 5–30 seconds');
+
+    let attempts = 0;
+    const maxAttempts = 60; // 60 × 2s = 2 minutes max
+
+    while (attempts < maxAttempts) {
+      await sleep(2000);
+      attempts++;
+
+      // Animate progress 40 → 90 while waiting
+      const pct = Math.min(90, 40 + (attempts / maxAttempts) * 50);
+      setProgress(pct, `Converting… (${attempts * 2}s)`);
+
+      let pollData: { status: string; downloadUrl?: string; filename?: string; error?: string };
+      try {
+        const res = await fetch(`/api/convert-document?jobId=${jobId}`);
+        pollData = await res.json() as typeof pollData;
+      } catch {
+        continue; // network blip — keep polling
+      }
+
+      if (pollData.status === 'finished' && pollData.downloadUrl) {
+        setProgress(100, 'Done!');
+        setTimeout(() => hideProgress(), 800);
+
+        downloadBtn.href = pollData.downloadUrl;
+        downloadBtn.download = pollData.filename ?? `converted.${outputFormat}`;
+        downloadBtn.innerHTML = `⬇️ Download ${pollData.filename ?? 'converted file'}`;
+        downloadBtn.classList.remove('hidden');
+        resetBtn.classList.remove('hidden');
+        showStatus(`✅ Converted successfully! Click the button below to download.`, 'success');
+        return;
+      }
+
+      if (pollData.status === 'error') {
+        hideProgress();
+        showStatus(`Conversion failed: ${pollData.error ?? 'Unknown error'}. Please try a different file.`, 'error');
+        resetBtn.classList.remove('hidden');
+        return;
+      }
+    }
+
+    hideProgress();
+    showStatus('Conversion timed out — file may be too complex. Try a smaller file.', 'error');
+    resetBtn.classList.remove('hidden');
+  }
+
+  // ── Client-side Image → PDF (pdf-lib, no server needed) ─────────────────────
+  async function handleImageToPdf(file: File) {
+    setProgress(20, 'Building PDF…');
+
+    try {
+      const { PDFDocument } = await import('pdf-lib');
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const pdfDoc = await PDFDocument.create();
+
+      const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+      const img = ext === 'png' ? await pdfDoc.embedPng(bytes) : await pdfDoc.embedJpg(bytes);
+
+      // A4 portrait, scale image to fit
+      const A4 = { w: 595, h: 842 };
+      const scale = Math.min(A4.w / img.width, A4.h / img.height, 1);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      const page = pdfDoc.addPage([A4.w, A4.h]);
+      page.drawImage(img, { x: (A4.w - w) / 2, y: (A4.h - h) / 2, width: w, height: h });
+
+      const pdfBytes = await pdfDoc.save();
+      setProgress(100, 'Done!');
+      setTimeout(() => hideProgress(), 600);
+
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const outName = file.name.replace(/\.(jpg|jpeg|png)$/i, '.pdf');
+
+      downloadBtn.href = url;
+      downloadBtn.download = outName;
+      downloadBtn.innerHTML = `⬇️ Download ${outName}`;
+      downloadBtn.classList.remove('hidden');
+      resetBtn.classList.remove('hidden');
+      showStatus(`✅ Image converted to PDF (${(pdfBytes.length / 1024).toFixed(0)} KB). No server used — 100% private.`, 'success');
+    } catch (err) {
+      hideProgress();
+      showStatus(`Error: ${String(err)}`, 'error');
+    }
+  }
+
+  // ── Helpers ──────────────────────────────────────────────────────────────────
+  function setProgress(pct: number, label: string) {
+    progressWrap.classList.remove('hidden');
+    progressBar.style.width = `${pct}%`;
+    progressLabel.textContent = label;
+    progressPct.textContent = `${Math.round(pct)}%`;
+  }
+
+  function hideProgress() {
+    progressWrap.classList.add('hidden');
+  }
+
+  function showStatus(msg: string, type: 'success' | 'error' | 'warn' | 'info') {
+    const colors = {
+      success: 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700',
+      error:   'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-700',
+      warn:    'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-700',
+      info:    'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-700',
+    };
+    statusMsg.className = `mt-4 p-3 rounded-lg text-sm font-medium ${colors[type]}`;
+    statusMsg.textContent = msg;
+    statusMsg.classList.remove('hidden');
+  }
+
+  function resetUI() {
+    hideProgress();
+    statusMsg.classList.add('hidden');
+    downloadBtn.classList.add('hidden');
+    resetBtn.classList.add('hidden');
+    downloadBtn.href = '';
+  }
+
+  const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+</script>
