@@ -253,6 +253,11 @@ async function getGoogleAccessToken(privateKeyPem: string, serviceAccount: strin
 
 async function notifyGoogleIndexing(slug: string, env: Env): Promise<void> {
   if (!env.GOOGLE_PRIVATE_KEY || !env.GOOGLE_SERVICE_ACCOUNT) return;
+  // Guard: must look like a real PEM key (starts with -----BEGIN)
+  if (!env.GOOGLE_PRIVATE_KEY.includes('BEGIN')) {
+    console.warn('[Publisher] GOOGLE_PRIVATE_KEY does not look like a PEM key — skipping Google Indexing');
+    return;
+  }
   const url = `https://hisaabkar.pk/blog/${slug}`;
   try {
     const accessToken = await getGoogleAccessToken(env.GOOGLE_PRIVATE_KEY, env.GOOGLE_SERVICE_ACCOUNT);
