@@ -2,8 +2,8 @@ name: Agent Swarm Trigger
 
 on:
   schedule:
-    # Run every 6 hours (UTC)
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *'   # Every 6h — rates, commodities, insights
+    - cron: '0 4 1 * *'     # 1st of month — policy rate, CPI, CDNS
   workflow_dispatch:
     inputs:
       force_run:

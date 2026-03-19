@@ -23,8 +23,4 @@ TELEGRAM_ENABLED = "true"
 #   TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID,
 #   GOOGLE_INDEXING_SA_KEY, NEWSLETTER_SECRET, AGENT_SECRET
 
-[triggers]
-crons = [
-  "0 */6 * * *",
-  "0 4 1 * *"
-]
+# Cron is handled by GitHub Actions (.github/workflows/agents.yml)
