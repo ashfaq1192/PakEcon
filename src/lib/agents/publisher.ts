@@ -192,10 +192,10 @@ async function createGitHubCommit(
 
 function pemToArrayBuffer(pem: string): ArrayBuffer {
   const base64 = pem
-    .replace(/-----BEGIN PRIVATE KEY-----/, '')
-    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/-----BEGIN[^-]+-----/, '')
+    .replace(/-----END[^-]+-----/, '')
     .replace(/\\n/g, '')
-    .replace(/\n/g, '')
+    .replace(/\s+/g, '')  // strip ALL whitespace including \r, spaces, tabs
     .trim();
   const binary = atob(base64);
   const buf = new ArrayBuffer(binary.length);
