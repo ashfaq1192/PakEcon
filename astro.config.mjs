@@ -30,7 +30,7 @@ export default defineConfig({
       workbox: {
         navigateFallback: '/',
         globPatterns: ['**/*.{css,js,html,svg,png}'],
-        globIgnores: ['og-image.png', 'logo.png'],
+        globIgnores: [],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/hisaabkar\.pk\/api\//,
