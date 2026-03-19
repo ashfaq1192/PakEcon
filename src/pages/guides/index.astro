@@ -1,12 +1,29 @@
 ---
 export const prerender = true;
+
+import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 import Icon from '../../components/ui/Icon.astro';
 import ScrollReveal from '../../components/ui/ScrollReveal.astro';
+
+const allGuides = await getCollection('guides');
+const guides = allGuides.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const categoryMeta: Record<string, { icon: string; badgeBg: string; badgeText: string }> = {
+  taxation:   { icon: 'percent',   badgeBg: 'bg-green-100 dark:bg-green-900/30',  badgeText: 'text-green-600 dark:text-green-400' },
+  policy:     { icon: 'lightbulb', badgeBg: 'bg-blue-100 dark:bg-blue-900/30',    badgeText: 'text-blue-600 dark:text-blue-400' },
+  investment: { icon: 'chartBar',  badgeBg: 'bg-purple-100 dark:bg-purple-900/30', badgeText: 'text-purple-600 dark:text-purple-400' },
+  inflation:  { icon: 'chartArea', badgeBg: 'bg-orange-100 dark:bg-orange-900/30', badgeText: 'text-orange-600 dark:text-orange-400' },
+  remittance: { icon: 'send',      badgeBg: 'bg-red-100 dark:bg-red-900/30',       badgeText: 'text-red-600 dark:text-red-400' },
+  banking:    { icon: 'creditCard',badgeBg: 'bg-teal-100 dark:bg-teal-900/30',     badgeText: 'text-teal-600 dark:text-teal-400' },
+};
 ---
 
-<MainLayout title="Finance Guides - HisaabKar.pk" description="Comprehensive guides on Pakistani taxation, investment, and financial planning">
-  <!-- Hero Section -->
+<MainLayout
+  title="Finance Guides — HisaabKar.pk"
+  description="Comprehensive guides on Pakistani taxation, investment, remittances, and financial planning."
+>
+  <!-- Hero -->
   <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-16">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
@@ -18,7 +35,7 @@ import ScrollReveal from '../../components/ui/ScrollReveal.astro';
         <span class="text-green-200">Economy & Finance</span>
       </h1>
       <p class="text-xl text-green-100 max-w-2xl mx-auto">
-        Comprehensive guides on taxation, investment, and financial planning for Pakistanis
+        In-depth guides on taxation, investment, remittances, and financial planning for Pakistanis.
       </p>
     </div>
   </ScrollReveal>
@@ -26,99 +43,42 @@ import ScrollReveal from '../../components/ui/ScrollReveal.astro';
   <!-- Guides Grid -->
   <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {[
-          {
-            icon: 'percent',
-            title: 'Complete Guide to FBR 2026 Tax Slabs',
-            desc: 'Understanding new income tax brackets, exemptions, and filing requirements for 2026',
-            category: 'Taxation',
-            badgeBg: 'bg-green-100 dark:bg-green-900/30',
-            badgeText: 'text-green-600 dark:text-green-400',
-          },
-          {
-            icon: 'lightbulb',
-            title: 'Digital Nation Act: Benefits for Freelancers',
-            desc: 'How the 2026 Digital Nation Act provides tax credits and incentives for IT professionals',
-            category: 'Policy',
-            badgeBg: 'bg-blue-100 dark:bg-blue-900/30',
-            badgeText: 'text-blue-600 dark:text-blue-400',
-          },
-          {
-            icon: 'chartBar',
-            title: "Investing in Pakistan: A Beginner's Guide",
-            desc: 'Understanding the Pakistani stock market, mutual funds, and government bonds',
-            category: 'Investment',
-            badgeBg: 'bg-purple-100 dark:bg-purple-900/30',
-            badgeText: 'text-purple-600 dark:text-purple-400',
-          },
-          {
-            icon: 'chartArea',
-            title: "Understanding Pakistan's CPI and Its Impact",
-            desc: 'How the Consumer Price Index is calculated and what it means for your finances',
-            category: 'Inflation',
-            badgeBg: 'bg-orange-100 dark:bg-orange-900/30',
-            badgeText: 'text-orange-600 dark:text-orange-400',
-          },
-          {
-            icon: 'send',
-            title: 'Remittances: A Guide for the Pakistani Diaspora',
-            desc: 'Best practices for sending money to Pakistan and understanding exchange rates',
-            category: 'Remittance',
-            badgeBg: 'bg-red-100 dark:bg-red-900/30',
-            badgeText: 'text-red-600 dark:text-red-400',
-          },
-          {
-            icon: 'creditCard',
-            title: "RAAST: Pakistan's Digital Payment System Explained",
-            desc: 'How to use RAAST for instant bank-to-bank transfers and bill payments',
-            category: 'Banking',
-            badgeBg: 'bg-teal-100 dark:bg-teal-900/30',
-            badgeText: 'text-teal-600 dark:text-teal-400',
-          },
-        ].map((guide, index) => (
-          <ScrollReveal
-            key={guide.category}
-            animation="fade-in-up"
-            delay={200 + index * 100}
-          >
-            <div class="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 relative">
-              <div class="absolute top-3 right-3 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs font-semibold px-2 py-0.5 rounded-full">
-                Coming Soon
-              </div>
-              <div class="p-6 md:p-8">
-                <div class="flex items-start justify-between mb-4">
-                  <div class={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${guide.badgeBg}`}>
-                    <Icon name={guide.icon as any} size={20} class={guide.badgeText} />
-                    <span class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{guide.category}</span>
+      {guides.length === 0 ? (
+        <p class="text-center text-gray-500 py-20">Guides coming soon.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {guides.map((guide, index) => {
+            const meta = categoryMeta[guide.data.category] ?? categoryMeta['banking'];
+            return (
+              <ScrollReveal animation="fade-in-up" delay={200 + index * 100}>
+                <a
+                  href={`/guides/${guide.id}`}
+                  class="block bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-green-300 dark:hover:border-green-600 transition-all duration-200 h-full"
+                >
+                  <div class="p-6 md:p-8 flex flex-col h-full">
+                    <div class="flex items-start justify-between mb-4">
+                      <div class={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${meta.badgeBg}`}>
+                        <Icon name={meta.icon as any} size={16} class={meta.badgeText} />
+                        <span class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">{guide.data.category}</span>
+                      </div>
+                      <span class="text-xs text-gray-400">{guide.data.readTime}</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3 flex-1">
+                      {guide.data.title}
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
+                      {guide.data.summary}
+                    </p>
+                    <span class="text-sm font-medium text-green-700 dark:text-green-400 hover:underline">
+                      Read guide →
+                    </span>
                   </div>
-                </div>
-                <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                  {guide.title}
-                </h2>
-                <p class="text-gray-600 dark:text-gray-400 mb-4">
-                  {guide.desc}
-                </p>
-                <div class="inline-flex items-center gap-2 text-gray-400 font-medium text-sm">
-                  <Icon name="clock" size={16} />
-                  Guide in progress
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        ))}
-      </div>
-
-      <!-- Coming Soon -->
-      <ScrollReveal animation="fade-in-up" delay={800} class="mt-12 text-center">
-        <div class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-2xl p-12 border border-gray-300 dark:border-gray-600">
-          <Icon name="clock" size={48} class="text-gray-400 dark:text-gray-500 mb-4" />
-          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">More Guides Coming Soon</h3>
-          <p class="text-gray-600 dark:text-gray-400 max-w-lg mx-auto">
-            We're constantly adding new guides. Subscribe to our newsletter for updates.
-          </p>
+                </a>
+              </ScrollReveal>
+            );
+          })}
         </div>
-      </ScrollReveal>
+      )}
     </div>
   </ScrollReveal>
 </MainLayout>
