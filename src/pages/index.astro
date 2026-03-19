@@ -98,7 +98,7 @@ const samplePrices = [
   <ScrollReveal animation="fade-in-up" delay={100} class="py-8 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <p class="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">More Tools</p>
-      <div class="grid grid-cols-3 sm:grid-cols-7 gap-3">
+      <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-9 gap-3">
         {[
           { href: '/tools/currency-converter',            emoji: '💱', label: 'Currency\nConverter' },
           { href: '/tools/loan-emi-calculator',           emoji: '🏦', label: 'Loan / EMI\nCalculator' },
@@ -107,6 +107,8 @@ const samplePrices = [
           { href: '/tools/pakistan-inflation-calculator', emoji: '📈', label: 'Inflation\nCalculator' },
           { href: '/tools/property-stamp-duty-calculator',emoji: '🏠', label: 'Stamp Duty\nCalculator' },
           { href: '/tools/eobi-calculator',               emoji: '👤', label: 'EOBI & PF\nCalculator' },
+          { href: '/utilities#age-calculator',            emoji: '🎂', label: 'Age\nCalculator' },
+          { href: '/utilities#image-resizer',             emoji: '🖼️', label: 'Image\nResizer' },
         ].map((tool) => (
           <a href={tool.href} class="group flex flex-col items-center gap-2 p-4 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 dark:hover:text-green-400 hover:scale-105 transition-all duration-200 text-center border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 shadow-sm">
             <span class="text-2xl" aria-hidden="true">{tool.emoji}</span>
