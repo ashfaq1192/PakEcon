@@ -14,7 +14,8 @@ interface CommodityPrice {
   source: string;
 }
 
-const PBS_SPI_URL = 'https://www.pbs.gov.pk/spi-data';
+// PBS uses WordPress — discover latest SPI post URL via WP REST API
+const PBS_WP_API = 'https://www.pbs.gov.pk/wp-json/wp/v2/posts?search=weekly+sensitive+price+indicator&per_page=1&_fields=link';
 
 const COMMODITY_MAP: Record<string, { unit: string; key: string }> = {
   'wheat flour': { unit: 'kg', key: 'wheat_flour' },
@@ -142,14 +143,34 @@ export async function scrapePBS(db: D1Database): Promise<CommodityPrice[]> {
 
   const today = new Date().toISOString().split('T')[0];
   try {
+    // Step 1: Discover latest SPI post URL via WordPress REST API
+    const wpCtrl = new AbortController();
+    const wpTid = setTimeout(() => wpCtrl.abort(), 5000);
+    const wpRes = await fetch(PBS_WP_API, {
+      signal: wpCtrl.signal,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'application/json' },
+    });
+    clearTimeout(wpTid);
+    if (!wpRes.ok) throw new Error(`PBS WP API HTTP ${wpRes.status}`);
+
+    const posts = await wpRes.json() as Array<{ link: string }>;
+    if (!posts.length || !posts[0].link) throw new Error('No SPI posts found via WP API');
+    const spiUrl = posts[0].link;
+    console.log(`[PBS Scraper] Latest SPI URL: ${spiUrl}`);
+
+    // Step 2: Fetch the SPI post page
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(PBS_SPI_URL, {
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(spiUrl, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+      },
     });
     clearTimeout(timeoutId);
-    if (!res.ok) throw new Error(`PBS HTTP ${res.status}`);
+    if (!res.ok) throw new Error(`PBS SPI page HTTP ${res.status}`);
 
     const html = await res.text();
     const prices = parsePricesFromHtml(html, today);

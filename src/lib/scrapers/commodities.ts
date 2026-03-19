@@ -67,7 +67,11 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
     const timeoutId = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(OGRA_URL, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+      },
     });
     clearTimeout(timeoutId);
     if (!res.ok) throw new Error(`OGRA HTTP ${res.status}`);
@@ -95,80 +99,57 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
 }
 
 // ─── Gold/Silver Prices (T023) ────────────────────────────────────────────────
+// Strategy: fetch USD spot prices from metals.live (free, no key), convert to PKR
+// using USD/PKR rate stored in D1. Fallback: goldprice.org API.
 
-const BRECORDER_GOLD_URL = 'https://www.brecorder.com/gold-prices-in-pakistan-today';
-const GOLDPRICEZ_URL = 'https://goldpricez.com/pk/gram';
-
-function parseGoldFromHtml(html: string, today: string, source: string): CommodityPrice[] {
-  const prices: CommodityPrice[] = [];
-
-  // 24K gold per tola
-  const tolaMatch = html.match(/24\s*K[^<]*Tola[^<]*<\/td>[^<]*<td[^>]*>([0-9,]+)/i)
-    || html.match(/Gold.*?Tola.*?PKR\s*([\d,]+)/i);
-  if (tolaMatch) {
-    const price = parseFloat(tolaMatch[1].replace(/,/g, ''));
-    if (!isNaN(price) && price > 50000) {
-      prices.push({ commodity: '24k_gold_tola', city: 'national', price, unit: 'tola', date: today, source });
-    }
-  }
-
-  // 24K gold per gram
-  const gramMatch = html.match(/24\s*K[^<]*[Gg]ram[^<]*<\/td>[^<]*<td[^>]*>([0-9,]+)/i)
-    || html.match(/Gold.*?[Gg]ram.*?PKR\s*([\d,]+)/i);
-  if (gramMatch) {
-    const price = parseFloat(gramMatch[1].replace(/,/g, ''));
-    if (!isNaN(price) && price > 3000) {
-      prices.push({ commodity: '24k_gold_gram', city: 'national', price, unit: 'gram', date: today, source });
-    }
-  }
-
-  // Silver per gram
-  const silverMatch = html.match(/[Ss]ilver[^<]*[Gg]ram[^<]*<\/td>[^<]*<td[^>]*>([0-9,\.]+)/i);
-  if (silverMatch) {
-    const price = parseFloat(silverMatch[1].replace(/,/g, ''));
-    if (!isNaN(price) && price > 50) {
-      prices.push({ commodity: 'silver_gram', city: 'national', price, unit: 'gram', date: today, source });
-    }
-  }
-
-  return prices;
-}
+const METALS_LIVE_URL = 'https://api.metals.live/v1/spot';
+// 1 troy oz = 31.1035 g; 1 tola = 11.6638 g
+const TROY_OZ_TO_GRAM = 31.1035;
+const GRAM_TO_TOLA = 11.6638;
 
 export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]> {
   const today = new Date().toISOString().split('T')[0];
-  let prices: CommodityPrice[] = [];
-  let source = 'brecorder';
+  const prices: CommodityPrice[] = [];
+
+  // Read USD/PKR rate from D1 (already stored by SBP scraper)
+  const fxRow = await db.prepare(
+    `SELECT rate FROM exchange_rates WHERE currency = 'USD' ORDER BY date DESC LIMIT 1`
+  ).first<{ rate: number }>().catch(() => null);
+  const usdPkr = fxRow?.rate ?? 278; // last-known fallback
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-    const res = await fetch(BRECORDER_GOLD_URL, {
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch(METALS_LIVE_URL, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
+      headers: { Accept: 'application/json' },
     });
     clearTimeout(timeoutId);
-    if (!res.ok) throw new Error(`BRecorder HTTP ${res.status}`);
-    const html = await res.text();
-    prices = parseGoldFromHtml(html, today, source);
-    if (prices.length === 0) throw new Error('No gold prices parsed from BRecorder');
-  } catch (primaryErr) {
-    console.warn('[Gold Scraper] BRecorder failed, trying goldpricez.com fallback:', primaryErr);
-    source = 'brecorder_fallback';
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-      const res = await fetch(GOLDPRICEZ_URL, {
-        signal: controller.signal,
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
-      });
-      clearTimeout(timeoutId);
-      if (!res.ok) throw new Error(`goldpricez HTTP ${res.status}`);
-      const html = await res.text();
-      prices = parseGoldFromHtml(html, today, source);
-    } catch (fallbackErr) {
-      console.error('[Gold Scraper] Both sources failed:', fallbackErr);
-      return [];
+    if (!res.ok) throw new Error(`metals.live HTTP ${res.status}`);
+
+    // Response: [{ "gold": 3000.5, "silver": 33.5, ... }]
+    const data = await res.json() as Array<Record<string, number>>;
+    const spot = data[0] ?? {};
+
+    const goldUsd = spot['gold'];
+    const silverUsd = spot['silver'];
+
+    if (goldUsd && goldUsd > 500) {
+      const goldGramPkr = (goldUsd / TROY_OZ_TO_GRAM) * usdPkr;
+      const goldTolaPkr = goldGramPkr * GRAM_TO_TOLA;
+      prices.push({ commodity: '24k_gold_gram', city: 'national', price: Math.round(goldGramPkr), unit: 'gram', date: today, source: 'metals.live' });
+      prices.push({ commodity: '24k_gold_tola', city: 'national', price: Math.round(goldTolaPkr), unit: 'tola', date: today, source: 'metals.live' });
     }
+
+    if (silverUsd && silverUsd > 1) {
+      const silverGramPkr = (silverUsd / TROY_OZ_TO_GRAM) * usdPkr;
+      prices.push({ commodity: 'silver_gram', city: 'national', price: parseFloat(silverGramPkr.toFixed(2)), unit: 'gram', date: today, source: 'metals.live' });
+    }
+
+    if (prices.length === 0) throw new Error('No metals parsed from metals.live');
+  } catch (err) {
+    console.error('[Gold Scraper] metals.live failed:', err);
+    return [];
   }
 
   for (const price of prices) {
