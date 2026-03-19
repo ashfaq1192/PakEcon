@@ -23,7 +23,8 @@ TELEGRAM_ENABLED = "true"
 #   TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID,
 #   GOOGLE_INDEXING_SA_KEY, NEWSLETTER_SECRET, AGENT_SECRET
 
-# Cron triggers: configure in Cloudflare Pages dashboard
-# Pages → hisaabkar → Settings → Functions → Cron Triggers
-# Add: "0 */6 * * *"  (every 6h — rates & commodities)
-# Add: "0 4 1 * *"    (1st of month — policy rate, CPI, CDNS)
+[triggers]
+crons = [
+  "0 */6 * * *",
+  "0 4 1 * *"
+]
