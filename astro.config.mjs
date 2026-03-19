@@ -1,18 +1,11 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
-import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import AstroPWA from '@vite-pwa/astro';
 
 export default defineConfig({
   output: 'static',
-  adapter: cloudflare({
-    imageService: 'passthrough',
-    platformProxy: {
-      enabled: false,
-    },
-  }),
   integrations: [
     tailwind(),
     react(),

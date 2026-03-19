@@ -11,10 +11,6 @@ database_id = "ae3be8c7-7ee5-4670-a6e0-b3dba698bb5a"
 binding = "KV"
 id = "7787cef3b0c24599bf5fc7644e3d9cbd"
 
-# Cloudflare sessions KV (required by @astrojs/cloudflare v13)
-[[kv_namespaces]]
-binding = "SESSION"
-id = "e86f60168e13496089c99899fd0af600"
 
 [vars]
 ENVIRONMENT = "production"
