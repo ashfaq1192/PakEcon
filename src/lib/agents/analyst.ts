@@ -121,8 +121,12 @@ function validateContent(content: string, scrapedNumbers: number[]): boolean {
   const words = content.split(/\s+/).length;
   if (words < 250) return false;
   if (content.includes('[INSERT') || content.includes('{{')) return false;
-  // Verify at least one scraped number appears in content
-  const hasData = scrapedNumbers.some(n => content.includes(String(Math.round(n))));
+  // Verify at least one scraped number appears in content.
+  // Check floor (integer part) since LLMs write "278.54" not "279",
+  // so Math.round would wrongly miss "278.54" when looking for "279".
+  const hasData = scrapedNumbers.some(n =>
+    content.includes(String(Math.floor(n))) || content.includes(String(Math.round(n)))
+  );
   return hasData;
 }
 

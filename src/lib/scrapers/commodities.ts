@@ -139,6 +139,8 @@ export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]
     ).bind(price.commodity, price.city, price.price, price.unit, price.date, price.source).run();
   }
 
+  const goldRow = prices.find(p => p.commodity === '24k_gold_tola');
+  if (goldRow) console.log(`[Gold Scraper] 24K gold: PKR ${goldRow.price.toLocaleString()}/tola (USD ${goldUsd?.toFixed(2)}/oz)`);
   return prices;
 }
 
