@@ -35,11 +35,14 @@ CREATE TABLE IF NOT EXISTS tax_slabs (
 CREATE TABLE IF NOT EXISTS market_insights (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT NOT NULL,
+  slug TEXT,
   content TEXT NOT NULL,
   summary TEXT NOT NULL,
   delta REAL NOT NULL,
   indicators TEXT NOT NULL,  -- JSON array
   published BOOLEAN DEFAULT FALSE,
+  category TEXT DEFAULT 'daily',
+  generated_by TEXT DEFAULT 'groq:llama-3.3-70b-versatile',
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -75,6 +78,27 @@ CREATE TABLE IF NOT EXISTS cdns_rates (
   source TEXT NOT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(certificate, effective_date)
+);
+
+-- Agent execution logs
+CREATE TABLE IF NOT EXISTS agent_logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  workflow_id TEXT NOT NULL,
+  stage TEXT NOT NULL,
+  status TEXT NOT NULL,
+  message TEXT,
+  duration_ms INTEGER,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Newsletter subscribers
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT NOT NULL UNIQUE,
+  confirmed BOOLEAN DEFAULT FALSE,
+  confirmation_token TEXT,
+  unsubscribed_at TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Indexes for query performance
