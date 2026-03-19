@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 
 export async function getStaticPaths() {
@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const pubDateISO = entry.data.pubDate.toISOString();
 const pubDateDisplay = entry.data.pubDate.toLocaleDateString('en-PK', {
@@ -39,7 +39,7 @@ const schemaArticle = JSON.stringify({
   },
   mainEntityOfPage: {
     '@type': 'WebPage',
-    '@id': `https://hisaabkar.pk/blog/${entry.slug}`,
+    '@id': `https://hisaabkar.pk/blog/${entry.id}`,
   },
 });
 ---
