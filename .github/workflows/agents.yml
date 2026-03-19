@@ -59,6 +59,10 @@ jobs:
             echo "Workflow ID: $WORKFLOW_ID"
             echo "Published Count: $PUBLISHED_COUNT"
             echo "Insight Count: $INSIGHT_COUNT"
+
+            echo "workflow_id=$WORKFLOW_ID" >> $GITHUB_OUTPUT
+            echo "published_count=$PUBLISHED_COUNT" >> $GITHUB_OUTPUT
+            echo "insight_count=$INSIGHT_COUNT" >> $GITHUB_OUTPUT
           else
             echo "success=false" >> $GITHUB_OUTPUT
             echo "error=$BODY" >> $GITHUB_OUTPUT
