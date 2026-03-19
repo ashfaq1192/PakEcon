@@ -6,7 +6,6 @@ import MandiTable from '../components/tools/MandiTable.astro';
 import Icon from '../components/ui/Icon.astro';
 import ScrollReveal from '../components/ui/ScrollReveal.astro';
 import QuickTools from '../components/QuickTools.astro';
-import { PkrUsdTrendChart } from '../components/charts/PkrUsdTrendChart';
 
 // Sample commodity data - will be replaced with D1 data
 const samplePrices = [
@@ -35,11 +34,11 @@ const samplePrices = [
             Real-time economic data, tax calculation tools, and financial insights for the digital age. All free, all accessible.
           </p>
           <div class="flex flex-col sm:flex-row gap-4">
-            <a href="#tax-calculator" class="inline-flex items-center justify-center gap-2 bg-white text-green-700 font-semibold py-3 px-6 rounded-lg hover:bg-green-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
+            <a href="/tools/salary-slip-generator" class="inline-flex items-center justify-center gap-2 bg-white text-green-700 font-semibold py-3 px-6 rounded-lg hover:bg-green-50 transition-all duration-200 transform hover:scale-105 shadow-lg">
               <Icon name="calculator" size={20} />
               Calculate Your Tax
             </a>
-            <a href="#market-data" class="inline-flex items-center justify-center gap-2 bg-green-800/50 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-900/50 transition-all duration-200 border border-green-500/30">
+            <a href="/tools/currency-converter" class="inline-flex items-center justify-center gap-2 bg-green-800/50 backdrop-blur-sm text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-900/50 transition-all duration-200 border border-green-500/30">
               <Icon name="chartBar" size={20} />
               View Market Data
             </a>
@@ -95,10 +94,26 @@ const samplePrices = [
   <!-- QuickTools Bar — visible immediately after hero, no scroll required -->
   <QuickTools />
 
-  <!-- PKR/USD Chart Section -->
-  <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
+  <!-- More Tools -->
+  <ScrollReveal animation="fade-in-up" delay={100} class="py-8 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <PkrUsdTrendChart client:load />
+      <p class="text-center text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">More Tools</p>
+      <div class="grid grid-cols-3 sm:grid-cols-7 gap-3">
+        {[
+          { href: '/tools/currency-converter',            emoji: '💱', label: 'Currency\nConverter' },
+          { href: '/tools/loan-emi-calculator',           emoji: '🏦', label: 'Loan / EMI\nCalculator' },
+          { href: '/tools/salary-slip-generator',         emoji: '📋', label: 'Salary Slip\nGenerator' },
+          { href: '/tools/national-savings-calculator',   emoji: '🏛️', label: 'National\nSavings' },
+          { href: '/tools/pakistan-inflation-calculator', emoji: '📈', label: 'Inflation\nCalculator' },
+          { href: '/tools/property-stamp-duty-calculator',emoji: '🏠', label: 'Stamp Duty\nCalculator' },
+          { href: '/tools/eobi-calculator',               emoji: '👤', label: 'EOBI & PF\nCalculator' },
+        ].map((tool) => (
+          <a href={tool.href} class="group flex flex-col items-center gap-2 p-4 rounded-xl bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 dark:hover:text-green-400 hover:scale-105 transition-all duration-200 text-center border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 shadow-sm">
+            <span class="text-2xl" aria-hidden="true">{tool.emoji}</span>
+            <span class="text-xs font-semibold leading-tight whitespace-pre-line">{tool.label}</span>
+          </a>
+        ))}
+      </div>
     </div>
   </ScrollReveal>
 
