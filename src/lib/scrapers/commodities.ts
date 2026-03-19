@@ -64,7 +64,7 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
 
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(OGRA_URL, {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
@@ -87,7 +87,6 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
       ).bind(price.commodity, price.city, price.price, price.unit, price.date, price.source).run();
     }
 
-    await new Promise(r => setTimeout(r, 10000));
     return prices;
   } catch (err) {
     console.error('[OGRA Scraper] Error:', err);
@@ -180,7 +179,6 @@ export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]
     ).bind(price.commodity, price.city, price.price, price.unit, price.date, price.source).run();
   }
 
-  await new Promise(r => setTimeout(r, 10000));
   return prices;
 }
 

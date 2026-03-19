@@ -38,7 +38,7 @@ export async function scrapeExchangeRates(db: D1Database): Promise<ExchangeRate[
   const today = new Date().toISOString().split('T')[0];
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(SBP_RATES_URL, {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
@@ -56,7 +56,6 @@ export async function scrapeExchangeRates(db: D1Database): Promise<ExchangeRate[
          ON CONFLICT(currency, date) DO UPDATE SET rate = excluded.rate, source = excluded.source`
       ).bind(rate.currency, rate.rate, rate.date, rate.source).run();
     }
-    await new Promise(r => setTimeout(r, 10000));
     return rates;
   } catch (err) {
     console.error('[SBP Scraper] Falling back to D1 cache:', err);
@@ -148,7 +147,7 @@ export async function scrapePolicyRates(db: D1Database): Promise<PolicyRate[]> {
   // Fetch policy rate
   try {
     const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 15000);
+    const tid = setTimeout(() => ctrl.abort(), 5000);
     const res = await fetch(SBP_POLICY_URL, {
       signal: ctrl.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
@@ -168,7 +167,7 @@ export async function scrapePolicyRates(db: D1Database): Promise<PolicyRate[]> {
   // Fetch KIBOR
   try {
     const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 15000);
+    const tid = setTimeout(() => ctrl.abort(), 5000);
     const res = await fetch(SBP_KIBOR_URL, {
       signal: ctrl.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; HisaabKar.pk/1.0)', Accept: 'text/html' },
