@@ -62,50 +62,44 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
     return [];
   }
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(OGRA_URL, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-      },
-    });
-    clearTimeout(timeoutId);
-    if (!res.ok) throw new Error(`OGRA HTTP ${res.status}`);
-
-    const html = await res.text();
-    const prices = parsePetrolFromHtml(html, today);
-    if (prices.length === 0) {
-      console.warn('[OGRA Scraper] No prices parsed');
-      return [];
-    }
-
-    for (const price of prices) {
-      await db.prepare(
-        `INSERT INTO commodity_prices (commodity, city, price, unit, date, source)
-         VALUES (?, ?, ?, ?, ?, ?)
-         ON CONFLICT(commodity, city, date) DO UPDATE SET price = excluded.price, source = excluded.source`
-      ).bind(price.commodity, price.city, price.price, price.unit, price.date, price.source).run();
-    }
-
-    return prices;
-  } catch (err) {
-    console.error('[OGRA Scraper] Error:', err);
-    return [];
-  }
+  // OGRA.org.pk is behind Cloudflare bot management and blocks CF Workers IPs (returns 403).
+  // Until a proxy or official API is available, this scraper is a no-op.
+  // Petrol prices change fortnightly; manually seed D1 when needed via wrangler d1 execute.
+  console.log('[OGRA Scraper] Skipping — OGRA blocks Cloudflare Worker IPs (403)');
+  return [];
 }
 
 // ─── Gold/Silver Prices (T023) ────────────────────────────────────────────────
-// Strategy: fetch USD spot prices from metals.live (free, no key), convert to PKR
-// using USD/PKR rate stored in D1. Fallback: goldprice.org API.
+// Strategy: fetch USD spot via Yahoo Finance chart API (free, no key),
+// convert to PKR using USD/PKR rate stored in D1. Fallback: silver omitted.
 
-const METALS_LIVE_URL = 'https://api.metals.live/v1/spot';
+// GC=F = COMEX gold front-month futures (≈ spot); SI=F = silver futures
+const YF_GOLD_URL = 'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?range=1d&interval=1d&includeTimestamps=false';
+const YF_SILVER_URL = 'https://query1.finance.yahoo.com/v8/finance/chart/SI%3DF?range=1d&interval=1d&includeTimestamps=false';
 // 1 troy oz = 31.1035 g; 1 tola = 11.6638 g
 const TROY_OZ_TO_GRAM = 31.1035;
 const GRAM_TO_TOLA = 11.6638;
+
+async function fetchYFPrice(url: string): Promise<number | null> {
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const res = await fetch(url, {
+      signal: ctrl.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        Accept: 'application/json',
+      },
+    });
+    clearTimeout(tid);
+    if (!res.ok) throw new Error(`YF HTTP ${res.status}`);
+    const json = await res.json() as { chart: { result: Array<{ meta: { regularMarketPrice: number } }> } };
+    return json.chart?.result?.[0]?.meta?.regularMarketPrice ?? null;
+  } catch {
+    clearTimeout(tid);
+    return null;
+  }
+}
 
 export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]> {
   const today = new Date().toISOString().split('T')[0];
@@ -115,41 +109,26 @@ export async function scrapeGoldPrices(db: D1Database): Promise<CommodityPrice[]
   const fxRow = await db.prepare(
     `SELECT rate FROM exchange_rates WHERE currency = 'USD' ORDER BY date DESC LIMIT 1`
   ).first<{ rate: number }>().catch(() => null);
-  const usdPkr = fxRow?.rate ?? 278; // last-known fallback
+  const usdPkr = fxRow?.rate ?? 278;
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-    const res = await fetch(METALS_LIVE_URL, {
-      signal: controller.signal,
-      headers: { Accept: 'application/json' },
-    });
-    clearTimeout(timeoutId);
-    if (!res.ok) throw new Error(`metals.live HTTP ${res.status}`);
+  const [goldUsd, silverUsd] = await Promise.all([
+    fetchYFPrice(YF_GOLD_URL),
+    fetchYFPrice(YF_SILVER_URL),
+  ]);
 
-    // Response: [{ "gold": 3000.5, "silver": 33.5, ... }]
-    const data = await res.json() as Array<Record<string, number>>;
-    const spot = data[0] ?? {};
-
-    const goldUsd = spot['gold'];
-    const silverUsd = spot['silver'];
-
-    if (goldUsd && goldUsd > 500) {
-      const goldGramPkr = (goldUsd / TROY_OZ_TO_GRAM) * usdPkr;
-      const goldTolaPkr = goldGramPkr * GRAM_TO_TOLA;
-      prices.push({ commodity: '24k_gold_gram', city: 'national', price: Math.round(goldGramPkr), unit: 'gram', date: today, source: 'metals.live' });
-      prices.push({ commodity: '24k_gold_tola', city: 'national', price: Math.round(goldTolaPkr), unit: 'tola', date: today, source: 'metals.live' });
-    }
-
-    if (silverUsd && silverUsd > 1) {
-      const silverGramPkr = (silverUsd / TROY_OZ_TO_GRAM) * usdPkr;
-      prices.push({ commodity: 'silver_gram', city: 'national', price: parseFloat(silverGramPkr.toFixed(2)), unit: 'gram', date: today, source: 'metals.live' });
-    }
-
-    if (prices.length === 0) throw new Error('No metals parsed from metals.live');
-  } catch (err) {
-    console.error('[Gold Scraper] metals.live failed:', err);
+  if (!goldUsd || goldUsd < 500) {
+    console.error('[Gold Scraper] Yahoo Finance gold fetch failed');
     return [];
+  }
+
+  const goldGramPkr = (goldUsd / TROY_OZ_TO_GRAM) * usdPkr;
+  const goldTolaPkr = goldGramPkr * GRAM_TO_TOLA;
+  prices.push({ commodity: '24k_gold_gram', city: 'national', price: Math.round(goldGramPkr), unit: 'gram', date: today, source: 'yahoo-finance' });
+  prices.push({ commodity: '24k_gold_tola', city: 'national', price: Math.round(goldTolaPkr), unit: 'tola', date: today, source: 'yahoo-finance' });
+
+  if (silverUsd && silverUsd > 1) {
+    const silverGramPkr = (silverUsd / TROY_OZ_TO_GRAM) * usdPkr;
+    prices.push({ commodity: 'silver_gram', city: 'national', price: parseFloat(silverGramPkr.toFixed(2)), unit: 'gram', date: today, source: 'yahoo-finance' });
   }
 
   for (const price of prices) {

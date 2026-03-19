@@ -17,40 +17,28 @@ interface CommodityPrice {
 // PBS uses WordPress — discover latest SPI post URL via WP REST API
 const PBS_WP_API = 'https://www.pbs.gov.pk/wp-json/wp/v2/posts?search=weekly+sensitive+price+indicator&per_page=1&_fields=link';
 
-const COMMODITY_MAP: Record<string, { unit: string; key: string }> = {
-  'wheat flour': { unit: 'kg', key: 'wheat_flour' },
-  'rice basmati': { unit: 'kg', key: 'rice_basmati' },
-  'sugar': { unit: 'kg', key: 'sugar' },
-  'eggs': { unit: 'dozen', key: 'eggs' },
-  'chicken': { unit: 'kg', key: 'chicken' },
-  'tomatoes': { unit: 'kg', key: 'tomatoes' },
-  'onions': { unit: 'kg', key: 'onions' },
-  'potatoes': { unit: 'kg', key: 'potatoes' },
-  'lentil': { unit: 'kg', key: 'lentil_mash' },
-  'cooking oil': { unit: 'liter', key: 'cooking_oil' },
-  'milk': { unit: 'liter', key: 'milk' },
-  'tea': { unit: 'kg', key: 'tea' },
-  'salt': { unit: 'kg', key: 'salt' },
-  'petrol': { unit: 'liter', key: 'petrol' },
-  'diesel': { unit: 'liter', key: 'diesel' },
-};
+/**
+ * PBS SPI posts don't embed HTML tables — data is in PDF/Excel downloads.
+ * The page does contain a summary text like:
+ *   "...for the week ended on 18-03-2026 is 326.22 with 0.21 % change"
+ * We extract the SPI index value + weekly change from that summary.
+ */
+function parseSPISummary(html: string, fallbackDate: string): { index: number; weeklyChange: number; date: string } | null {
+  // Extract week-end date from content (e.g. "week ended on 18-03-2026")
+  const dateMatch = html.match(/week\s+ended\s+on\s+(\d{2})-(\d{2})-(\d{4})/i);
+  const date = dateMatch
+    ? `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`
+    : fallbackDate;
 
-function parsePricesFromHtml(html: string, today: string): CommodityPrice[] {
-  const prices: CommodityPrice[] = [];
-  for (const [name, meta] of Object.entries(COMMODITY_MAP)) {
-    const regex = new RegExp(
-      `${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^<]*</td>[^<]*<td[^>]*>([\\d,\\.]+)`,
-      'i'
-    );
-    const match = html.match(regex);
-    if (match) {
-      const price = parseFloat(match[1].replace(/,/g, ''));
-      if (!isNaN(price) && price > 0) {
-        prices.push({ commodity: meta.key, city: 'national', price, unit: meta.unit, date: today, source: 'pbs' });
-      }
-    }
-  }
-  return prices;
+  // Extract "is 326.22 with 0.21 % change"
+  const indexMatch = html.match(/\bis\s+([\d.]+)\s+with\s+([-+]?[\d.]+)\s*%/i);
+  if (!indexMatch) return null;
+
+  const index = parseFloat(indexMatch[1]);
+  const weeklyChange = parseFloat(indexMatch[2]);
+  if (isNaN(index) || index < 100) return null;
+
+  return { index, weeklyChange, date };
 }
 
 // ─── PBS CPI (monthly — published around 4th of each month) ──────────────────
@@ -173,21 +161,29 @@ export async function scrapePBS(db: D1Database): Promise<CommodityPrice[]> {
     if (!res.ok) throw new Error(`PBS SPI page HTTP ${res.status}`);
 
     const html = await res.text();
-    const prices = parsePricesFromHtml(html, today);
-    if (prices.length === 0) {
-      console.warn('[PBS Scraper] No prices parsed — HTML structure may have changed');
+    const summary = parseSPISummary(html, today);
+    if (!summary) {
+      console.warn('[PBS Scraper] No SPI summary parsed from page');
       return [];
     }
 
-    for (const price of prices) {
-      await db.prepare(
-        `INSERT INTO commodity_prices (commodity, city, price, unit, date, source)
-         VALUES (?, ?, ?, ?, ?, ?)
-         ON CONFLICT(commodity, city, date) DO UPDATE SET price = excluded.price, source = excluded.source`
-      ).bind(price.commodity, price.city, price.price, price.unit, price.date, price.source).run();
-    }
+    // Store SPI index as a commodity_prices row so analyst can track weekly inflation
+    const row: CommodityPrice = {
+      commodity: 'spi_index',
+      city: 'national',
+      price: summary.index,
+      unit: 'index',
+      date: summary.date,
+      source: 'pbs',
+    };
+    await db.prepare(
+      `INSERT INTO commodity_prices (commodity, city, price, unit, date, source)
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT(commodity, city, date) DO UPDATE SET price = excluded.price, source = excluded.source`
+    ).bind(row.commodity, row.city, row.price, row.unit, row.date, row.source).run();
 
-    return prices;
+    console.log(`[PBS Scraper] SPI index ${summary.index} (${summary.weeklyChange >= 0 ? '+' : ''}${summary.weeklyChange}%) for week ${summary.date}`);
+    return [row];
   } catch (err) {
     console.error('[PBS Scraper] Error:', err);
     return [];
