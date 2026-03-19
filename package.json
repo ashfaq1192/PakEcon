@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && npx pagefind --site dist && node -e \"try{require('fs').unlinkSync('.wrangler/deploy/config.json');}catch(e){}\"",
-    "deploy": "npm run build && npx wrangler pages deploy dist/client --project-name hisaabkar",
+    "deploy": "npm run build && npx wrangler pages deploy dist --project-name hisaabkar",
     "preview": "astro preview",
     "astro": "astro",
     "setup": "./scripts/setup-local.sh"
