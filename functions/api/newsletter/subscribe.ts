@@ -6,7 +6,7 @@
 
 import type { Env } from '../../../src/lib/agents/types';
 
-type PagesContext = { env: Env & { SEND_EMAIL?: { send: (msg: object) => Promise<void> } }; request: Request };
+type PagesContext = { env: Env & { RESEND_API_KEY?: string }; request: Request };
 
 async function hmacToken(email: string, secret: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -69,20 +69,26 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
      ON CONFLICT(email) DO UPDATE SET confirmation_token = excluded.confirmation_token`
   ).bind(email, token).run();
 
-  // Send confirmation email (non-blocking if SEND_EMAIL not configured)
+  // Send confirmation email via Resend
   const confirmUrl = `https://hisaabkar.pk/api/newsletter/confirm?token=${token}&email=${encodeURIComponent(email)}`;
   const unsubUrl = `https://hisaabkar.pk/api/newsletter/unsubscribe?token=${token}&email=${encodeURIComponent(email)}`;
 
-  if (env.SEND_EMAIL) {
+  if (env.RESEND_API_KEY) {
     try {
-      await env.SEND_EMAIL.send({
-        from: 'noreply@hisaabkar.pk',
-        to: email,
-        subject: 'Confirm your HisaabKar.pk newsletter subscription',
-        text: `Please confirm your subscription to HisaabKar.pk Weekly Economic Digest:\n\n${confirmUrl}\n\nIf you did not subscribe, you can ignore this email or unsubscribe: ${unsubUrl}`,
-        html: `<p>Please confirm your subscription to <strong>HisaabKar.pk Weekly Economic Digest</strong>:</p>
-               <p><a href="${confirmUrl}" style="background:#16a34a;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;">Confirm Subscription</a></p>
-               <p style="font-size:12px;color:#666;">If you did not subscribe, <a href="${unsubUrl}">unsubscribe here</a>.</p>`,
+      await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: 'HisaabKar.pk <noreply@hisaabkar.pk>',
+          to: [email],
+          subject: 'Confirm your HisaabKar.pk newsletter subscription',
+          html: `<p>Please confirm your subscription to <strong>HisaabKar.pk Weekly Economic Digest</strong>:</p>
+                 <p><a href="${confirmUrl}" style="background:#16a34a;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;">Confirm Subscription</a></p>
+                 <p style="font-size:12px;color:#666;">If you did not subscribe, <a href="${unsubUrl}">unsubscribe here</a>.</p>`,
+        }),
       });
     } catch (err) {
       console.error('[Newsletter] Failed to send confirmation email:', err);
