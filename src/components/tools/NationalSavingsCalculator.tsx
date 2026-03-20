@@ -21,13 +21,14 @@ interface Certificate {
 }
 
 // Rates as of March 2026 — source: CDNS savings.gov.pk
-// These change periodically; always verify at savings.gov.pk
+// SBP Policy Rate: 12.0% (as of Mar 2026). CDNS rates track policy rate with a premium.
+// These change periodically; always verify current rates at savings.gov.pk before investing.
 const CERTIFICATES: Certificate[] = [
   {
     id: 'bsc',
     name: 'Behbood Savings Certificates',
     urduName: 'بہبود سیونگز سرٹیفکیٹ',
-    ratePA: 0.096,
+    ratePA: 0.1536,
     profitMode: 'monthly',
     tenure: 3,
     minInvestment: 500,
@@ -39,7 +40,7 @@ const CERTIFICATES: Certificate[] = [
     id: 'ric',
     name: 'Regular Income Certificates',
     urduName: 'ریگولر انکم سرٹیفکیٹ',
-    ratePA: 0.102,
+    ratePA: 0.1380,
     profitMode: 'monthly',
     tenure: 5,
     minInvestment: 500,
@@ -51,7 +52,7 @@ const CERTIFICATES: Certificate[] = [
     id: 'dsc',
     name: 'Defense Savings Certificates',
     urduName: 'ڈیفنس سیونگز سرٹیفکیٹ',
-    ratePA: 0.1056,
+    ratePA: 0.1440,
     profitMode: 'maturity',
     tenure: 10,
     minInvestment: 500,
@@ -63,7 +64,7 @@ const CERTIFICATES: Certificate[] = [
     id: 'ssc',
     name: 'Special Savings Certificates',
     urduName: 'اسپیشل سیونگز سرٹیفکیٹ',
-    ratePA: 0.105,
+    ratePA: 0.1416,
     profitMode: 'halfYearly',
     tenure: 3,
     minInvestment: 500,
@@ -75,7 +76,7 @@ const CERTIFICATES: Certificate[] = [
     id: 'sfwa',
     name: 'Shuhada Family Welfare Account',
     urduName: 'شہداء فیملی ویلفیئر اکاؤنٹ',
-    ratePA: 0.096,
+    ratePA: 0.1536,
     profitMode: 'monthly',
     tenure: 5,
     minInvestment: 100,
