@@ -83,6 +83,8 @@ const schemaDataWithDefaults = {
             </div>
             <span class="font-bold text-xl text-gray-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">HisaabKar.pk</span>
           </a>
+
+          <!-- Desktop nav -->
           <div class="hidden md:flex items-center space-x-6">
             <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-400 transition font-medium">Home</a>
             <!-- Tools mega-menu -->
@@ -121,6 +123,62 @@ const schemaDataWithDefaults = {
               <Icon name="sun" class="w-5 h-5 hidden dark:block" />
               <Icon name="moon" class="w-5 h-5 block dark:hidden" />
             </button>
+          </div>
+
+          <!-- Mobile: dark mode + hamburger -->
+          <div class="flex md:hidden items-center gap-2">
+            <button
+              id="dark-mode-toggle-mobile"
+              class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+              aria-label="Toggle dark mode"
+            >
+              <Icon name="sun" class="w-5 h-5 hidden dark:block" />
+              <Icon name="moon" class="w-5 h-5 block dark:hidden" />
+            </button>
+            <button
+              id="mobile-menu-toggle"
+              class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
+              aria-label="Open menu"
+              aria-expanded="false"
+            >
+              <!-- Hamburger icon -->
+              <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+              <!-- Close icon -->
+              <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile menu drawer -->
+        <div
+          id="mobile-menu"
+          class="md:hidden hidden border-t border-gray-200 dark:border-gray-700 pb-4"
+        >
+          <div class="pt-3 space-y-1">
+            <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 font-medium">🏠 Home</a>
+            <a href="/blog" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 font-medium">📰 Blog</a>
+            <a href="/guides" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 font-medium">📚 Guides</a>
+            <a href="/about" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-green-700 font-medium">ℹ️ About</a>
+
+            <!-- Tools section -->
+            <div class="pt-2 pb-1">
+              <p class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Tools</p>
+              <div class="grid grid-cols-2 gap-1">
+                <a href="/#tax-calculator" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">📊 Tax Calculator</a>
+                <a href="/tools/gold-price-calculator-pakistan" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">🥇 Gold Rate</a>
+                <a href="/tools/electricity-bill-calculator" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">⚡ Electricity</a>
+                <a href="/tools/zakat-calculator" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">🌙 Zakat</a>
+                <a href="/tools/currency-converter" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">💱 Currency</a>
+                <a href="/tools/remittance-calculator" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">💸 Remittance</a>
+                <a href="/tools/loan-emi-calculator" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">🏦 Loan / EMI</a>
+                <a href="/tools/salary-slip-generator" class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-sm text-gray-700 dark:text-gray-300">📄 Salary Slip</a>
+              </div>
+              <a href="/utilities" class="flex items-center gap-2 px-3 py-2 mt-1 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-sm font-medium">🔧 All Tools & Utilities →</a>
+            </div>
           </div>
         </div>
       </nav>
@@ -301,11 +359,47 @@ const schemaDataWithDefaults = {
 
     <!-- Dark Mode Toggle Event Listener -->
     <script>
+      // Desktop dark mode toggle
       const darkModeToggle = document.getElementById('dark-mode-toggle');
       darkModeToggle?.addEventListener('click', () => {
-        if (typeof toggleDarkMode === 'function') {
-          toggleDarkMode();
+        if (typeof toggleDarkMode === 'function') toggleDarkMode();
+      });
+
+      // Mobile dark mode toggle
+      const darkModeToggleMobile = document.getElementById('dark-mode-toggle-mobile');
+      darkModeToggleMobile?.addEventListener('click', () => {
+        if (typeof toggleDarkMode === 'function') toggleDarkMode();
+      });
+
+      // Mobile hamburger menu
+      const menuToggle = document.getElementById('mobile-menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const hamburgerIcon = document.getElementById('hamburger-icon');
+      const closeIcon = document.getElementById('close-icon');
+
+      menuToggle?.addEventListener('click', () => {
+        const isOpen = !mobileMenu?.classList.contains('hidden');
+        if (isOpen) {
+          mobileMenu?.classList.add('hidden');
+          hamburgerIcon?.classList.remove('hidden');
+          closeIcon?.classList.add('hidden');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        } else {
+          mobileMenu?.classList.remove('hidden');
+          hamburgerIcon?.classList.add('hidden');
+          closeIcon?.classList.remove('hidden');
+          menuToggle.setAttribute('aria-expanded', 'true');
         }
+      });
+
+      // Close mobile menu when a link inside it is clicked
+      mobileMenu?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+          hamburgerIcon?.classList.remove('hidden');
+          closeIcon?.classList.add('hidden');
+          menuToggle?.setAttribute('aria-expanded', 'false');
+        });
       });
     </script>
   </body>
