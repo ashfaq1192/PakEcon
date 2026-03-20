@@ -13,52 +13,81 @@ const latestPosts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
-// Tool categories — 4 cols on desktop for breathing room
-const toolCategories = [
+// Financial tools — 8 core tools, no EOBI / Electricity / Zakat / National Savings
+const financialTools = [
   {
-    label: 'Tax & Salary',
-    color: 'green',
-    tools: [
-      { href: '/#tax-calculator',                         emoji: '📊', title: 'Tax Calculator',     desc: 'FBR 2026 slabs' },
-      { href: '/tools/salary-slip-generator',             emoji: '📋', title: 'Salary Slip PDF',    desc: 'Auto tax, PDF' },
-      { href: '/tools/eobi-calculator',                   emoji: '👤', title: 'EOBI & PF',          desc: 'Retirement corpus' },
-    ],
+    href: '/#tax-calculator',
+    emoji: '📊',
+    title: 'Income Tax Calculator',
+    desc: 'Calculate your FBR 2026 tax liability instantly — salaried, freelancer, or business.',
+    tag: 'Tax',
+    gradient: 'from-green-500 to-emerald-600',
+    tagColor: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
   },
   {
-    label: 'Bills & Zakat',
-    color: 'amber',
-    tools: [
-      { href: '/tools/electricity-bill-calculator',       emoji: '⚡', title: 'Electricity Bill',   desc: 'All 9 DISCOs' },
-      { href: '/tools/zakat-calculator',                  emoji: '🌙', title: 'Zakat Calculator',   desc: 'Gold/Silver nisab' },
-      { href: '/tools/property-stamp-duty-calculator',    emoji: '🏠', title: 'Stamp Duty',         desc: 'By province' },
-    ],
+    href: '/tools/salary-slip-generator',
+    emoji: '📋',
+    title: 'Create Salary Slip PDF',
+    desc: 'Generate a professional salary slip with auto FBR tax deduction. Download as PDF.',
+    tag: 'Tax',
+    gradient: 'from-teal-500 to-green-600',
+    tagColor: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-400',
   },
   {
-    label: 'Markets & Rates',
-    color: 'blue',
-    tools: [
-      { href: '/tools/gold-price-calculator-pakistan',    emoji: '🥇', title: 'Gold Rate',          desc: 'Live 24K prices' },
-      { href: '/tools/currency-converter',                emoji: '💱', title: 'Currency',            desc: 'SBP interbank' },
-      { href: '/tools/pakistan-inflation-calculator',     emoji: '📈', title: 'Inflation',           desc: 'PBS CPI 2015–2026' },
-    ],
+    href: '/tools/property-stamp-duty-calculator',
+    emoji: '🏠',
+    title: 'Stamp Duty Calculator',
+    desc: 'Calculate property transfer stamp duty by province — filer vs non-filer rates.',
+    tag: 'Property',
+    gradient: 'from-orange-500 to-amber-600',
+    tagColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
   },
   {
-    label: 'Finance & More',
-    color: 'purple',
-    tools: [
-      { href: '/tools/loan-emi-calculator',               emoji: '🏦', title: 'Loan / EMI',         desc: 'Islamic & conv.' },
-      { href: '/tools/remittance-calculator',             emoji: '💸', title: 'Remittance',          desc: 'USD/GBP/AED→PKR' },
-      { href: '/tools/national-savings-calculator',       emoji: '🏛️', title: 'National Savings',   desc: 'Behbood, RIC, DSC' },
-    ],
+    href: '/tools/gold-price-calculator-pakistan',
+    emoji: '🪙',
+    title: 'Gold Price Calculator',
+    desc: 'Live 24K gold rates in PKR per tola & gram. Portfolio value & scenario analysis.',
+    tag: 'Markets',
+    gradient: 'from-yellow-500 to-amber-500',
+    tagColor: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+  },
+  {
+    href: '/tools/currency-converter',
+    emoji: '💱',
+    title: 'Currency Converter',
+    desc: 'Convert PKR to USD, EUR, GBP & more using live SBP interbank rates + 30-day chart.',
+    tag: 'Markets',
+    gradient: 'from-blue-500 to-cyan-600',
+    tagColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400',
+  },
+  {
+    href: '/tools/pakistan-inflation-calculator',
+    emoji: '📈',
+    title: 'Inflation Impact Calculator',
+    desc: 'See how Pakistan's inflation has eroded purchasing power using PBS CPI data 2015–2026.',
+    tag: 'Markets',
+    gradient: 'from-red-500 to-rose-600',
+    tagColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+  },
+  {
+    href: '/tools/loan-emi-calculator',
+    emoji: '🏦',
+    title: 'Loan & EMI Calculator',
+    desc: 'Calculate monthly instalments for conventional loans and Islamic Murabaha financing.',
+    tag: 'Finance',
+    gradient: 'from-purple-500 to-indigo-600',
+    tagColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-400',
+  },
+  {
+    href: '/tools/remittance-calculator',
+    emoji: '💸',
+    title: 'Remittance Calculator',
+    desc: 'Convert USD, GBP, AED & 5 more currencies to PKR using live SBP rates.',
+    tag: 'Finance',
+    gradient: 'from-violet-500 to-purple-600',
+    tagColor: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400',
   },
 ];
-
-const categoryColorMap: Record<string, { bg: string; border: string; badge: string; text: string }> = {
-  green:  { bg: 'bg-green-50 dark:bg-green-900/10',   border: 'border-green-100 dark:border-green-800',   badge: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400',   text: 'text-green-700 dark:text-green-400' },
-  amber:  { bg: 'bg-amber-50 dark:bg-amber-900/10',   border: 'border-amber-100 dark:border-amber-800',   badge: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400',   text: 'text-amber-700 dark:text-amber-400' },
-  blue:   { bg: 'bg-blue-50 dark:bg-blue-900/10',     border: 'border-blue-100 dark:border-blue-800',     badge: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400',       text: 'text-blue-700 dark:text-blue-400' },
-  purple: { bg: 'bg-purple-50 dark:bg-purple-900/10', border: 'border-purple-100 dark:border-purple-800', badge: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400', text: 'text-purple-700 dark:text-purple-400' },
-};
 
 const categoryIconColors: Record<string, string> = {
   market_insight: 'from-green-500 to-emerald-600',
@@ -136,48 +165,45 @@ const categoryEmoji: Record<string, string> = {
     </div>
   </section>
 
-  <!-- ═══ TOOLS GRID — 4 cols, more breathing room ═══ -->
-  <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
+  <!-- ═══ TOOLS GRID ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={100} class="py-14 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Free Financial Tools</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">15 tools built for Pakistan's economy — no signup required</p>
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Free Financial Tools</h2>
+        <p class="text-gray-500 dark:text-gray-400">Built for Pakistan's economy — no signup, no cost</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {toolCategories.map((cat) => {
-          const c = categoryColorMap[cat.color];
-          return (
-            <div class={`rounded-2xl border p-5 ${c.bg} ${c.border}`}>
-              <p class={`text-xs font-bold uppercase tracking-widest mb-4 px-2.5 py-1 rounded-full inline-block ${c.badge}`}>
-                {cat.label}
-              </p>
-              <div class="space-y-2.5">
-                {cat.tools.map(tool => (
-                  <a
-                    href={tool.href}
-                    class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 group"
-                  >
-                    <span class="text-2xl flex-shrink-0">{tool.emoji}</span>
-                    <div class="min-w-0">
-                      <p class={`text-sm font-semibold group-hover:${c.text} transition-colors text-gray-900 dark:text-white leading-tight`}>{tool.title}</p>
-                      <p class="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">{tool.desc}</p>
-                    </div>
-                  </a>
-                ))}
-              </div>
+        {financialTools.map((tool) => (
+          <a
+            href={tool.href}
+            class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          >
+            <!-- Gradient icon area -->
+            <div class={`h-24 bg-gradient-to-br ${tool.gradient} flex items-center justify-center`}>
+              <span class="text-4xl">{tool.emoji}</span>
             </div>
-          );
-        })}
+            <!-- Content -->
+            <div class="p-4">
+              <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${tool.tagColor}`}>{tool.tag}</span>
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white mt-2 mb-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-snug">
+                {tool.title}
+              </h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">{tool.desc}</p>
+              <p class="text-xs font-semibold text-green-600 dark:text-green-400 mt-3">Use Tool →</p>
+            </div>
+          </a>
+        ))}
       </div>
-      <!-- Utilities row below -->
-      <div class="mt-4 flex flex-wrap gap-3 justify-center">
+      <!-- Utilities pill row -->
+      <div class="mt-6 flex flex-wrap gap-3 justify-center">
+        <span class="text-xs text-gray-400 dark:text-gray-500 self-center font-medium uppercase tracking-wide">More tools:</span>
         {[
-          { href: '/tools/document-converter',   emoji: '📄', title: 'Doc Converter' },
-          { href: '/utilities#age-calculator',   emoji: '🎂', title: 'Age Calculator' },
-          { href: '/utilities#image-resizer',    emoji: '🖼️', title: 'Image Resizer' },
+          { href: '/tools/document-converter', emoji: '📄', title: 'Document Converter' },
+          { href: '/utilities#age-calculator',  emoji: '🎂', title: 'Age Calculator' },
+          { href: '/utilities#image-resizer',   emoji: '🖼️', title: 'Image Resizer' },
         ].map(t => (
-          <a href={t.href} class="inline-flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-full hover:shadow-md transition-all">
-            <span>{t.emoji}</span> {t.title}
+          <a href={t.href} class="inline-flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium px-4 py-2 rounded-full hover:border-green-400 hover:text-green-700 transition-all">
+            <span>{t.emoji}</span>{t.title}
           </a>
         ))}
       </div>
