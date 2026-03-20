@@ -48,31 +48,29 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     });
   }
 
-  // Check if already confirmed
+  // Check if already subscribed
   const existing = await env.DB.prepare(
     'SELECT confirmed FROM newsletter_subscribers WHERE email = ?'
   ).bind(email).first<{ confirmed: number }>();
 
   if (existing?.confirmed) {
-    return new Response(JSON.stringify({ message: 'You are already subscribed.' }), {
+    return new Response(JSON.stringify({ message: '✅ You\'re already on the list — see you Monday!' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
   const token = await hmacToken(email, env.NEWSLETTER_SECRET);
-
-  // UPSERT subscriber record
-  await env.DB.prepare(
-    `INSERT INTO newsletter_subscribers (email, confirmed, confirmation_token)
-     VALUES (?, 0, ?)
-     ON CONFLICT(email) DO UPDATE SET confirmation_token = excluded.confirmation_token`
-  ).bind(email, token).run();
-
-  // Send confirmation email via Resend
-  const confirmUrl = `https://hisaabkar.pk/api/newsletter/confirm?token=${token}&email=${encodeURIComponent(email)}`;
   const unsubUrl = `https://hisaabkar.pk/api/newsletter/unsubscribe?token=${token}&email=${encodeURIComponent(email)}`;
 
+  // UPSERT subscriber as confirmed immediately — no email confirmation step
+  await env.DB.prepare(
+    `INSERT INTO newsletter_subscribers (email, confirmed, confirmation_token)
+     VALUES (?, 1, ?)
+     ON CONFLICT(email) DO UPDATE SET confirmed = 1, confirmation_token = excluded.confirmation_token`
+  ).bind(email, token).run();
+
+  // Send a welcome email via Resend
   if (env.RESEND_API_KEY) {
     try {
       await fetch('https://api.resend.com/emails', {
@@ -84,18 +82,29 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
         body: JSON.stringify({
           from: 'HisaabKar.pk <noreply@hisaabkar.pk>',
           to: [email],
-          subject: 'Confirm your HisaabKar.pk newsletter subscription',
-          html: `<p>Please confirm your subscription to <strong>HisaabKar.pk Weekly Economic Digest</strong>:</p>
-                 <p><a href="${confirmUrl}" style="background:#16a34a;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;display:inline-block;">Confirm Subscription</a></p>
-                 <p style="font-size:12px;color:#666;">If you did not subscribe, <a href="${unsubUrl}">unsubscribe here</a>.</p>`,
+          subject: '✅ You\'re subscribed to HisaabKar.pk Weekly Digest',
+          html: `
+            <div style="font-family:sans-serif;max-width:520px;margin:auto;padding:24px;">
+              <h2 style="color:#16a34a;">Welcome to HisaabKar.pk! 🇵🇰</h2>
+              <p>You're now subscribed to the <strong>Weekly Economic Digest</strong>.</p>
+              <p>Every Monday morning you'll receive:</p>
+              <ul>
+                <li>📊 Pakistan exchange rate & gold price movements</li>
+                <li>📈 Inflation & SBP policy rate updates</li>
+                <li>💡 Key economic insights in plain language</li>
+              </ul>
+              <p style="color:#555;font-size:13px;margin-top:24px;">
+                Don't want emails? <a href="${unsubUrl}" style="color:#16a34a;">Unsubscribe here</a>.
+              </p>
+            </div>`,
         }),
       });
     } catch (err) {
-      console.error('[Newsletter] Failed to send confirmation email:', err);
+      console.error('[Newsletter] Failed to send welcome email:', err);
     }
   }
 
-  return new Response(JSON.stringify({ message: 'Confirmation email sent!' }), {
+  return new Response(JSON.stringify({ message: '🎉 You\'re subscribed! Your first digest arrives Monday morning.' }), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },
   });
