@@ -81,116 +81,128 @@
         <div id="images-preview" class="grid grid-cols-2 gap-4"></div>
       </div>
 
-      <!-- PDF.js Library -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" integrity="sha512-HHm2hG6+3bQkKdK4jv2fz5Mf5d9jB0v8jJF8/5h9k8yW7Uo8iJ8hN1i5Yv5d9N4Z0N5d9N4Z0N5d9N4Z0N5d9N4Z0N5d" crossorigin="anonymous"></script>
     </div>
   </div>
 
-  <script>
-    // Initialize PDF.js worker
-    if (window.pdfjsLib) {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  <script is:inline>
+    const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // Dynamically load PDF.js and resolve once ready
+    function loadPdfJs() {
+      return new Promise(function(resolve, reject) {
+        if (window.pdfjsLib) { resolve(window.pdfjsLib); return; }
+        var s = document.createElement('script');
+        s.src = PDFJS_CDN;
+        s.onload = function() {
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+          resolve(window.pdfjsLib);
+        };
+        s.onerror = function() { reject(new Error('Failed to load PDF.js')); };
+        document.head.appendChild(s);
+      });
     }
 
-    const pdfInput = document.getElementById('pdf-input');
-    const convertBtn = document.getElementById('convert-btn');
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
-    const resultsContainer = document.getElementById('results-container');
-    const imagesPreview = document.getElementById('images-preview');
-    const downloadAllBtn = document.getElementById('download-all-btn');
+    var pdfInput        = document.getElementById('pdf-input');
+    var convertBtn      = document.getElementById('convert-btn');
+    var progressContainer = document.getElementById('progress-container');
+    var progressBar     = document.getElementById('progress-bar');
+    var progressText    = document.getElementById('progress-text');
+    var resultsContainer = document.getElementById('results-container');
+    var imagesPreview   = document.getElementById('images-preview');
+    var downloadAllBtn  = document.getElementById('download-all-btn');
+    var convertedImages = [];
 
-    let convertedImages: Blob[] = [];
-
-    pdfInput.addEventListener('change', (e) => {
-      convertBtn.disabled = !e.target.files || !e.target.files[0];
+    pdfInput.addEventListener('change', function(e) {
+      convertBtn.disabled = !(e.target.files && e.target.files[0]);
       resultsContainer.classList.add('hidden');
       imagesPreview.innerHTML = '';
       convertedImages = [];
     });
 
-    convertBtn.addEventListener('click', async () => {
-      const file = pdfInput.files?.[0];
+    convertBtn.addEventListener('click', async function() {
+      var file = pdfInput.files && pdfInput.files[0];
       if (!file) return;
 
-      const imageFormat = document.getElementById('image-format').value;
-      const scale = parseFloat(document.getElementById('image-scale').value);
+      var imageFormat = document.getElementById('image-format').value;
+      var scale = parseFloat(document.getElementById('image-scale').value);
 
       convertBtn.disabled = true;
       progressContainer.classList.remove('hidden');
       resultsContainer.classList.add('hidden');
       imagesPreview.innerHTML = '';
       convertedImages = [];
+      progressBar.classList.remove('bg-red-600');
+      progressBar.classList.add('bg-green-600');
 
       try {
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        var pdfjsLib = await loadPdfJs();
+        var arrayBuffer = await file.arrayBuffer();
+        var pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        var totalPages = pdf.numPages;
 
-        const totalPages = pdf.numPages;
         progressBar.style.width = '0%';
-        progressText.textContent = `Processing page 0 of ${totalPages}...`;
+        progressText.textContent = 'Processing page 0 of ' + totalPages + '...';
 
-        for (let i = 1; i <= totalPages; i++) {
-          const page = await pdf.getPage(i);
-          const viewport = page.getViewport({ scale });
+        for (var i = 1; i <= totalPages; i++) {
+          var page = await pdf.getPage(i);
+          var viewport = page.getViewport({ scale: scale });
 
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
+          var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
           canvas.width = viewport.width;
           canvas.height = viewport.height;
 
-          await page.render({
-            canvasContext: context,
-            viewport
-          }).promise;
+          await page.render({ canvasContext: context, viewport: viewport }).promise;
 
-          const blob = await new Promise<Blob>((resolve) => {
+          var blob = await new Promise(function(resolve) {
             canvas.toBlob(resolve, imageFormat, 0.92);
           });
 
           convertedImages.push(blob);
 
-          // Add preview
-          const img = document.createElement('img');
-          img.src = URL.createObjectURL(blob);
-          img.className = 'w-full rounded-lg border border-gray-200';
-          img.alt = `Page ${i}`;
+          var objectUrl = URL.createObjectURL(blob);
+          var ext = imageFormat.split('/')[1];
+          var baseName = file.name.replace(/\.pdf$/i, '');
 
-          const div = document.createElement('div');
+          var img = document.createElement('img');
+          img.src = objectUrl;
+          img.className = 'w-full rounded-lg border border-gray-200 mt-1';
+          img.alt = 'Page ' + i;
+
+          var div = document.createElement('div');
           div.className = 'space-y-1';
-          div.innerHTML = `
-            <p class="text-sm font-medium text-gray-700">Page ${i}</p>
-            <a href="${img.src}" download="${file.name.replace('.pdf', '')}_page_${i}.${imageFormat.split('/')[1]}" class="text-sm text-green-600 hover:underline">Download</a>
-          `;
+          div.innerHTML =
+            '<p class="text-sm font-medium text-gray-700">Page ' + i + '</p>' +
+            '<a href="' + objectUrl + '" download="' + baseName + '_page_' + i + '.' + ext + '" class="text-sm text-green-600 hover:underline">Download</a>';
           div.appendChild(img);
           imagesPreview.appendChild(div);
 
-          // Update progress
-          const progress = (i / totalPages) * 100;
-          progressBar.style.width = `${progress}%`;
-          progressText.textContent = `Processing page ${i} of ${totalPages}...`;
+          var progress = (i / totalPages) * 100;
+          progressBar.style.width = progress + '%';
+          progressText.textContent = 'Processing page ' + i + ' of ' + totalPages + '...';
         }
 
         progressContainer.classList.add('hidden');
         resultsContainer.classList.remove('hidden');
-        progressText.textContent = `Successfully converted ${totalPages} page${totalPages !== 1 ? 's' : ''}!`;
 
-      } catch (error) {
-        progressText.textContent = `Error: ${error.message}`;
-        progressBar.classList.add('bg-red-600');
+      } catch (err) {
+        progressContainer.classList.remove('hidden');
+        progressText.textContent = 'Error: ' + (err.message || 'Conversion failed');
         progressBar.classList.remove('bg-green-600');
+        progressBar.classList.add('bg-red-600');
       }
 
       convertBtn.disabled = false;
     });
 
-    downloadAllBtn.addEventListener('click', () => {
-      convertedImages.forEach((blob, index) => {
-        const link = document.createElement('a');
+    downloadAllBtn.addEventListener('click', function() {
+      var imageFormat = document.getElementById('image-format').value;
+      var ext = imageFormat.split('/')[1];
+      convertedImages.forEach(function(blob, index) {
+        var link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `converted_page_${index + 1}.${blob.type.split('/')[1]}`;
+        link.download = 'converted_page_' + (index + 1) + '.' + ext;
         link.click();
       });
     });
