@@ -271,7 +271,7 @@ export async function topicWriterAgent(state: {
       ? selectedTopic.title
       : `${selectedTopic.title.slice(0, 147)}...`;
 
-    const slug = `${selectedTopic.slug}-${Date.now()}`;
+    const slug = `${selectedTopic.slug}-${new Date().toISOString().split('T')[0]}`;
 
     const insight: MarketInsight = {
       title: selectedTopic.title,

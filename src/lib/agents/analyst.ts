@@ -252,7 +252,7 @@ export async function analystAgent(state: {
         category: 'market_insight',
         generated_by: generatedBy,
         date: new Date().toISOString(),
-        slug: `pkr-${rate.currency.toLowerCase()}-${direction}-${Date.now()}`,
+        slug: `pkr-${rate.currency.toLowerCase()}-${direction}-${new Date().toISOString().split('T')[0]}`,
         source: 'https://www.sbp.org.pk',
         published: false,
       });
@@ -299,7 +299,7 @@ export async function analystAgent(state: {
           category: 'market_insight',
           generated_by: generatedBy,
           date: new Date().toISOString(),
-          slug: `${price.commodity.replace(/_/g, '-')}-price-update-${Date.now()}`,
+          slug: `${price.commodity.replace(/_/g, '-')}-price-update-${new Date().toISOString().split('T')[0]}`,
           source,
           published: false,
         });
