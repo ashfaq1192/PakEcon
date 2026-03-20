@@ -84,7 +84,7 @@ export interface AgentLog {
   error?: string;
 }
 
-export type AgentStage = 'scraper' | 'analyst' | 'publisher' | 'social' | 'complete' | 'error';
+export type AgentStage = 'scraper' | 'analyst' | 'topic_writer' | 'chief_editor' | 'publisher' | 'social' | 'complete' | 'error';
 
 export interface AgentState {
   scrapedData: ScrapedData | null;
