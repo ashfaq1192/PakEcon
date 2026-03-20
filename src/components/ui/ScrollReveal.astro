@@ -8,6 +8,7 @@ interface Props {
   threshold?: number;
   class?: string;
   as?: 'div' | 'section' | 'article';
+  id?: string;
 }
 
 const {
@@ -16,6 +17,7 @@ const {
   threshold = 0.1,
   class: className = '',
   as: tag = 'div',
+  id,
 } = Astro.props;
 ---
 
@@ -25,6 +27,7 @@ const {
   data-delay={delay}
   data-threshold={threshold}
   class={`scroll-reveal ${className}`}
+  id={id}
 >
   <slot />
 </div>
