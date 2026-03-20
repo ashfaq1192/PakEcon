@@ -91,11 +91,7 @@ export default function MandiTable() {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6">
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">Gold & Silver Prices</h3>
-        <p className="text-gray-600 text-sm">Live 24K gold and silver rates in PKR, sourced from international markets</p>
-        {error && <p className="mt-1 text-amber-600 text-xs">{error}</p>}
-      </div>
+      {error && <p className="mb-4 text-amber-600 text-xs">{error}</p>}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div>

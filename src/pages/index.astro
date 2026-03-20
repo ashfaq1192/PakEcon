@@ -13,7 +13,7 @@ const latestPosts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
-// Tool categories
+// Tool categories — 4 cols on desktop for breathing room
 const toolCategories = [
   {
     label: 'Tax & Salary',
@@ -43,21 +43,12 @@ const toolCategories = [
     ],
   },
   {
-    label: 'Finance',
+    label: 'Finance & More',
     color: 'purple',
     tools: [
       { href: '/tools/loan-emi-calculator',               emoji: '🏦', title: 'Loan / EMI',         desc: 'Islamic & conv.' },
       { href: '/tools/remittance-calculator',             emoji: '💸', title: 'Remittance',          desc: 'USD/GBP/AED→PKR' },
       { href: '/tools/national-savings-calculator',       emoji: '🏛️', title: 'National Savings',   desc: 'Behbood, RIC, DSC' },
-    ],
-  },
-  {
-    label: 'Utilities',
-    color: 'violet',
-    tools: [
-      { href: '/tools/document-converter',                emoji: '📄', title: 'Doc Converter',      desc: 'Word/Excel→PDF' },
-      { href: '/utilities#age-calculator',                emoji: '🎂', title: 'Age Calculator',      desc: 'Exact age & days' },
-      { href: '/utilities#image-resizer',                 emoji: '🖼️', title: 'Image Resizer',      desc: 'Resize & compress' },
     ],
   },
 ];
@@ -67,25 +58,20 @@ const categoryColorMap: Record<string, { bg: string; border: string; badge: stri
   amber:  { bg: 'bg-amber-50 dark:bg-amber-900/10',   border: 'border-amber-100 dark:border-amber-800',   badge: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400',   text: 'text-amber-700 dark:text-amber-400' },
   blue:   { bg: 'bg-blue-50 dark:bg-blue-900/10',     border: 'border-blue-100 dark:border-blue-800',     badge: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400',       text: 'text-blue-700 dark:text-blue-400' },
   purple: { bg: 'bg-purple-50 dark:bg-purple-900/10', border: 'border-purple-100 dark:border-purple-800', badge: 'bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400', text: 'text-purple-700 dark:text-purple-400' },
-  violet: { bg: 'bg-violet-50 dark:bg-violet-900/10', border: 'border-violet-100 dark:border-violet-800', badge: 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-400', text: 'text-violet-700 dark:text-violet-400' },
 };
-
-const samplePrices = [
-  { commodity: 'Wheat', city: 'Lahore', price: 5200, unit: '40kg', date: '2026-03-15', change: 1.2 },
-  { commodity: 'Rice (Basmati)', city: 'Lahore', price: 8500, unit: '40kg', date: '2026-03-15', change: -0.5 },
-  { commodity: 'Sugar', city: 'Karachi', price: 180, unit: 'kg', date: '2026-03-15', change: 0 },
-  { commodity: 'Flour', city: 'Islamabad', price: 140, unit: 'kg', date: '2026-03-15', change: 2.1 },
-  { commodity: 'Tomato', city: 'Peshawar', price: 220, unit: 'kg', date: '2026-03-15', change: -3.5 },
-  { commodity: 'Onion', city: 'Multan', price: 160, unit: 'kg', date: '2026-03-15', change: 1.8 },
-  { commodity: 'Potato', city: 'Quetta', price: 120, unit: 'kg', date: '2026-03-15', change: 0.5 },
-  { commodity: 'Gold (24k)', city: 'National', price: 513000, unit: 'tola', date: '2026-03-17', change: 0.8 },
-];
 
 const categoryIconColors: Record<string, string> = {
   market_insight: 'from-green-500 to-emerald-600',
   weekly_digest:  'from-purple-500 to-indigo-600',
   budget_alert:   'from-red-500 to-rose-600',
   policy_update:  'from-blue-500 to-indigo-600',
+};
+
+const categoryEmoji: Record<string, string> = {
+  market_insight: '📊',
+  weekly_digest:  '📰',
+  budget_alert:   '🏛️',
+  policy_update:  '📋',
 };
 ---
 
@@ -100,12 +86,13 @@ const categoryIconColors: Record<string, string> = {
           <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full mb-5 text-sm text-green-100 font-medium">
             🇵🇰 Pakistan's Free Finance Hub
           </div>
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight">
-            Calculate. Track.<br/>
-            <span class="text-green-200">Decide.</span>
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 leading-tight">
+            Hisaab Karein,<br/>
+            <span class="text-green-200">Sar Uthaa Karein</span>
           </h1>
+          <p class="text-base text-green-200 mb-2 font-medium" dir="rtl" lang="ur">حساب کریں، سر اٹھا کریں</p>
           <p class="text-lg text-green-100 mb-8 max-w-lg leading-relaxed">
-            Pakistan's free finance hub — taxes, gold, bills, currency & AI-powered economic insights, all in one place.
+            Pakistan's free finance hub — taxes, gold rates, bills, currency & AI-powered economic insights, all in one place.
           </p>
           <div class="flex flex-wrap gap-3">
             <a href="#tax-calculator" class="inline-flex items-center gap-2 bg-white text-green-700 font-semibold py-3 px-6 rounded-xl hover:bg-green-50 transition-all hover:scale-105 shadow-lg">
@@ -119,59 +106,62 @@ const categoryIconColors: Record<string, string> = {
             </a>
           </div>
         </div>
-        <!-- Right: live stats card -->
+        <!-- Right: key indicators (clearly labelled as reference data) -->
         <div class="hidden lg:block">
           <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-2xl">
-            <p class="text-xs text-green-300 uppercase tracking-widest font-semibold mb-4">Today's Key Indicators</p>
+            <div class="flex items-center justify-between mb-4">
+              <p class="text-xs text-green-300 uppercase tracking-widest font-semibold">Key Economic Indicators</p>
+              <span class="text-xs text-green-400/70 bg-white/10 px-2 py-0.5 rounded-full">Reference data</span>
+            </div>
             <div class="space-y-3">
               {[
-                { label: '💵 USD/PKR (Interbank)', value: '279.31', badge: '▼ -0.4%', badgeColor: 'text-green-300' },
-                { label: '🥇 Gold 24K / Tola',    value: 'PKR 5,13,000', badge: '▲ +0.8%', badgeColor: 'text-red-300' },
-                { label: '⛽ Petrol (92 RON)',      value: 'PKR 321.17',   badge: 'Stable', badgeColor: 'text-gray-300' },
-                { label: '📊 CPI Inflation (Feb)', value: '7.0% YoY',    badge: 'PBS', badgeColor: 'text-green-300' },
-                { label: '🏦 SBP Policy Rate',     value: '12.0%',        badge: 'SBP MPC', badgeColor: 'text-blue-300' },
+                { label: '💵 USD/PKR (Interbank)', value: '279.31', note: 'SBP' },
+                { label: '🥇 Gold 24K / Tola',    value: 'PKR 5,13,000', note: 'PMEX' },
+                { label: '⛽ Petrol (92 RON)',      value: 'PKR 321.17',   note: 'OGRA' },
+                { label: '📊 CPI Inflation (Feb)', value: '7.0% YoY',    note: 'PBS' },
+                { label: '🏦 SBP Policy Rate',     value: '12.0%',        note: 'SBP MPC' },
               ].map(stat => (
-                <div class="flex items-center justify-between bg-white/10 rounded-xl px-4 py-3">
+                <div class="flex items-center justify-between bg-white/10 rounded-xl px-4 py-2.5">
                   <span class="text-sm text-green-100">{stat.label}</span>
                   <div class="text-right">
                     <span class="font-bold text-white text-sm block">{stat.value}</span>
-                    <span class={`text-xs ${stat.badgeColor}`}>{stat.badge}</span>
+                    <span class="text-xs text-green-400/80">{stat.note}</span>
                   </div>
                 </div>
               ))}
             </div>
-            <p class="text-xs text-green-400/60 mt-3 text-right">Source: SBP · OGRA · PBS · As of Mar 2026</p>
+            <p class="text-xs text-green-400/50 mt-3 text-right">Figures are indicative — verify at source</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ═══ TOOLS GRID ═══ -->
-  <ScrollReveal animation="fade-in-up" delay={100} class="py-14 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-10">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Free Financial Tools</h2>
-        <p class="text-gray-500 dark:text-gray-400">15 tools built for Pakistan's economy — no signup required</p>
+  <!-- ═══ TOOLS GRID — 4 cols, more breathing room ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={100} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Free Financial Tools</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">15 tools built for Pakistan's economy — no signup required</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {toolCategories.map((cat) => {
           const c = categoryColorMap[cat.color];
           return (
-            <div class={`rounded-2xl border p-4 ${c.bg} ${c.border}`}>
-              <p class={`text-xs font-bold uppercase tracking-widest mb-3 px-2 py-1 rounded-full inline-block ${c.badge}`}>
+            <div class={`rounded-2xl border p-5 ${c.bg} ${c.border}`}>
+              <p class={`text-xs font-bold uppercase tracking-widest mb-4 px-2.5 py-1 rounded-full inline-block ${c.badge}`}>
                 {cat.label}
               </p>
-              <div class="space-y-2">
+              <div class="space-y-2.5">
                 {cat.tools.map(tool => (
                   <a
                     href={tool.href}
-                    class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:border-current hover:shadow-md transition-all duration-200 group"
+                    class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all duration-200 group"
                   >
-                    <span class="text-xl flex-shrink-0">{tool.emoji}</span>
+                    <span class="text-2xl flex-shrink-0">{tool.emoji}</span>
                     <div class="min-w-0">
                       <p class={`text-sm font-semibold group-hover:${c.text} transition-colors text-gray-900 dark:text-white leading-tight`}>{tool.title}</p>
-                      <p class="text-xs text-gray-400 dark:text-gray-500 truncate">{tool.desc}</p>
+                      <p class="text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">{tool.desc}</p>
                     </div>
                   </a>
                 ))}
@@ -180,27 +170,35 @@ const categoryIconColors: Record<string, string> = {
           );
         })}
       </div>
+      <!-- Utilities row below -->
+      <div class="mt-4 flex flex-wrap gap-3 justify-center">
+        {[
+          { href: '/tools/document-converter',   emoji: '📄', title: 'Doc Converter' },
+          { href: '/utilities#age-calculator',   emoji: '🎂', title: 'Age Calculator' },
+          { href: '/utilities#image-resizer',    emoji: '🖼️', title: 'Image Resizer' },
+        ].map(t => (
+          <a href={t.href} class="inline-flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-2 rounded-full hover:shadow-md transition-all">
+            <span>{t.emoji}</span> {t.title}
+          </a>
+        ))}
+      </div>
     </div>
   </ScrollReveal>
 
-  <!-- ═══ TAX CALCULATOR ═══ -->
-  <ScrollReveal animation="fade-in-up" delay={150} id="tax-calculator" class="py-14 bg-white dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8">
+  <!-- ═══ TAX CALCULATOR — tighter padding ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={150} id="tax-calculator" class="py-10 bg-white dark:bg-gray-800">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-6">
         <span class="inline-block bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">Most Used Tool</span>
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-1">
           FBR Income Tax Calculator 2026
         </h2>
-        <p class="text-green-600 dark:text-green-400 font-medium mb-3 text-lg" dir="rtl" lang="ur">اپنا ٹیکس یہاں کیلکولیٹ کریں</p>
-        <p class="text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-5">
+        <p class="text-gray-500 dark:text-gray-400 text-sm max-w-xl mx-auto mb-4">
           Calculate your income tax based on the latest FBR slabs, including Digital Nation Act credits for freelancers and IT professionals.
         </p>
         <div class="flex flex-wrap justify-center gap-2">
           <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-700 text-green-700 dark:text-green-400 text-xs font-medium px-3 py-1.5 rounded-full hover:bg-green-100 transition">
             🏛️ FBR Finance Act 2025-26
-          </a>
-          <a href="https://www.sbp.org.pk" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-400 text-xs font-medium px-3 py-1.5 rounded-full hover:bg-blue-100 transition">
-            🏦 SBP Interbank Rates
           </a>
           <span class="inline-flex items-center gap-1.5 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 text-purple-700 dark:text-purple-400 text-xs font-medium px-3 py-1.5 rounded-full">
             ✅ Verified by M.Phil Economics, ACCA
@@ -211,52 +209,48 @@ const categoryIconColors: Record<string, string> = {
     </div>
   </ScrollReveal>
 
-  <!-- ═══ LATEST BLOG POSTS ═══ -->
-  <ScrollReveal animation="fade-in-up" delay={200} class="py-14 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-end justify-between mb-8">
+  <!-- ═══ LATEST BLOG POSTS — smaller card banner ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={200} class="py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-6">
         <div>
-          <span class="inline-block bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2">AI-Generated Daily</span>
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Latest Market Insights</h2>
+          <span class="inline-block bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2">AI-Powered</span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Latest Market Insights</h2>
         </div>
         <a href="/blog" class="hidden sm:inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-medium text-sm hover:underline">
-          View all posts →
+          View all →
         </a>
       </div>
 
       {latestPosts.length === 0 ? (
-        <div class="text-center py-16 text-gray-400">
-          <p class="text-lg">First posts coming soon — our AI agent publishes daily.</p>
+        <div class="text-center py-12 text-gray-400">
+          <p>First posts coming soon — our AI agent publishes daily.</p>
         </div>
       ) : (
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
           {latestPosts.map((post) => {
             const gradColor = categoryIconColors[post.data.category] ?? 'from-green-500 to-emerald-600';
+            const emoji = categoryEmoji[post.data.category] ?? '📋';
             const dateDisplay = post.data.pubDate.toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
             return (
               <article class="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                <div class={`h-36 bg-gradient-to-br ${gradColor} flex items-center justify-center`}>
-                  <span class="text-4xl opacity-80">
-                    {post.data.category === 'market_insight' ? '📊' :
-                     post.data.category === 'weekly_digest' ? '📰' :
-                     post.data.category === 'budget_alert' ? '🏛️' : '📋'}
+                <!-- Shorter banner: h-20 instead of h-36 -->
+                <div class={`h-20 bg-gradient-to-br ${gradColor} flex items-center px-5 gap-3`}>
+                  <span class="text-2xl">{emoji}</span>
+                  <span class="text-xs font-semibold text-white/90 uppercase tracking-wider">
+                    {post.data.category.replace(/_/g, ' ')}
                   </span>
+                  {post.data.delta !== 0 && (
+                    <span class={`ml-auto text-xs font-bold ${post.data.delta > 0 ? 'text-red-200' : 'text-green-200'}`}>
+                      {post.data.delta > 0 ? '▲' : '▼'} {Math.abs(post.data.delta).toFixed(2)}%
+                    </span>
+                  )}
                 </div>
                 <div class="p-5">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="text-xs font-semibold text-green-600 dark:text-green-400 uppercase tracking-wider bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded">
-                      {post.data.category.replace(/_/g, ' ')}
-                    </span>
-                    {post.data.delta !== 0 && (
-                      <span class={`text-xs font-bold ${post.data.delta > 0 ? 'text-red-500' : 'text-green-600'}`}>
-                        {post.data.delta > 0 ? '▲' : '▼'} {Math.abs(post.data.delta).toFixed(2)}%
-                      </span>
-                    )}
-                  </div>
-                  <h3 class="text-base font-bold text-gray-900 dark:text-white mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors line-clamp-2">
+                  <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors line-clamp-2 leading-snug">
                     <a href={`/blog/${post.id}`}>{post.data.title}</a>
                   </h3>
-                  <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">{post.data.summary}</p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mb-4 leading-relaxed">{post.data.summary}</p>
                   <div class="flex items-center justify-between">
                     <time class="text-xs text-gray-400">{dateDisplay}</time>
                     <a href={`/blog/${post.id}`} class="text-xs font-semibold text-green-600 dark:text-green-400 hover:underline">Read →</a>
@@ -267,32 +261,31 @@ const categoryIconColors: Record<string, string> = {
           })}
         </div>
       )}
-      <div class="text-center mt-6 sm:hidden">
+      <div class="text-center mt-5 sm:hidden">
         <a href="/blog" class="text-green-600 dark:text-green-400 font-medium text-sm hover:underline">View all posts →</a>
       </div>
     </div>
   </ScrollReveal>
 
-  <!-- ═══ MANDI TABLE ═══ -->
-  <ScrollReveal animation="fade-in-up" delay={250} id="market-data" class="py-14 bg-white dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8">
+  <!-- ═══ GOLD & SILVER RATES — no double heading ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={250} id="market-data" class="py-12 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-6">
         <span class="inline-block bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2">Live Prices</span>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-1">Gold & Silver Rates</h2>
-        <p class="text-green-600 dark:text-green-400 font-medium text-lg mb-1" dir="rtl" lang="ur">سونے اور چاندی کے ریٹ</p>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">Gold & Silver Rates</h2>
         <p class="text-gray-500 dark:text-gray-400 text-sm">Live 24K gold and silver prices in PKR, updated daily via international markets</p>
       </div>
-      <MandiTable prices={samplePrices} loading={false} />
+      <MandiTable />
     </div>
   </ScrollReveal>
 
-  <!-- ═══ GUIDES TEASER ═══ -->
-  <ScrollReveal animation="fade-in-up" delay={300} class="py-14 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-end justify-between mb-8">
+  <!-- ═══ GUIDES TEASER — clear visual separation ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={300} class="py-12 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between mb-6">
         <div>
           <span class="inline-block bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-2">In-Depth Guides</span>
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Learn Pakistani Finance</h2>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Learn Pakistani Finance</h2>
         </div>
         <a href="/guides" class="hidden sm:inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-medium text-sm hover:underline">
           All guides →
@@ -300,12 +293,12 @@ const categoryIconColors: Record<string, string> = {
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { href: '/guides/fbr-income-tax-slabs-2026',                        emoji: '🏛️', title: 'FBR Tax Slabs 2026',              cat: 'Taxation',   color: 'green' },
-          { href: '/guides/investing-in-pakistan-beginners-guide',             emoji: '📈', title: 'Investing in Pakistan',           cat: 'Investment', color: 'purple' },
-          { href: '/guides/remittances-guide-pakistani-diaspora',              emoji: '💸', title: 'Remittances Guide',              cat: 'Remittance', color: 'blue' },
-          { href: '/guides/digital-nation-act-freelancers-it-professionals',   emoji: '💻', title: 'Digital Nation Act',             cat: 'Policy',     color: 'indigo' },
+          { href: '/guides/fbr-income-tax-slabs-2026',                        emoji: '🏛️', title: 'FBR Tax Slabs 2026',     cat: 'Taxation',   bg: 'bg-green-50 dark:bg-green-900/20',   border: 'border-green-100 dark:border-green-800' },
+          { href: '/guides/investing-in-pakistan-beginners-guide',             emoji: '📈', title: 'Investing in Pakistan',  cat: 'Investment', bg: 'bg-purple-50 dark:bg-purple-900/20', border: 'border-purple-100 dark:border-purple-800' },
+          { href: '/guides/remittances-guide-pakistani-diaspora',              emoji: '💸', title: 'Remittances Guide',      cat: 'Remittance', bg: 'bg-blue-50 dark:bg-blue-900/20',     border: 'border-blue-100 dark:border-blue-800' },
+          { href: '/guides/digital-nation-act-freelancers-it-professionals',   emoji: '💻', title: 'Digital Nation Act',    cat: 'Policy',     bg: 'bg-indigo-50 dark:bg-indigo-900/20', border: 'border-indigo-100 dark:border-indigo-800' },
         ].map(g => (
-          <a href={g.href} class="group flex items-center gap-4 bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200">
+          <a href={g.href} class={`group flex items-center gap-4 rounded-2xl p-4 border ${g.bg} ${g.border} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200`}>
             <span class="text-3xl flex-shrink-0">{g.emoji}</span>
             <div>
               <p class="text-xs text-gray-400 uppercase tracking-wide mb-0.5">{g.cat}</p>
