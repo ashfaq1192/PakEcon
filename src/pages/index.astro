@@ -138,8 +138,8 @@ const categoryEmoji: Record<string, string> = {
         <div class="hidden lg:block">
           <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-2xl">
             <div class="flex items-center justify-between mb-4">
-              <p class="text-xs text-green-300 uppercase tracking-widest font-semibold">Key Economic Indicators</p>
-              <span class="text-xs text-green-400/70 bg-white/10 px-2 py-0.5 rounded-full">Reference data</span>
+              <p class="text-xs text-emerald-300 uppercase tracking-widest font-bold">Key Economic Indicators</p>
+              <span class="text-xs text-white/70 bg-white/15 border border-white/20 px-2 py-0.5 rounded-full font-medium">Reference data</span>
             </div>
             <div class="space-y-3">
               {[
@@ -149,16 +149,16 @@ const categoryEmoji: Record<string, string> = {
                 { label: '📊 CPI Inflation (Feb)', value: '1.5% YoY',    note: 'PBS' },
                 { label: '🏦 SBP Policy Rate',     value: '12.0%',        note: 'SBP MPC' },
               ].map(stat => (
-                <div class="flex items-center justify-between bg-white/10 rounded-xl px-4 py-2.5">
-                  <span class="text-sm text-green-100">{stat.label}</span>
+                <div class="flex items-center justify-between bg-white/15 border border-white/30 rounded-xl px-4 py-3 hover:bg-white/20 transition-colors">
+                  <span class="text-sm font-medium text-white">{stat.label}</span>
                   <div class="text-right">
-                    <span class="font-bold text-white text-sm block">{stat.value}</span>
-                    <span class="text-xs text-green-400/80">{stat.note}</span>
+                    <span class="font-bold text-emerald-300 text-base block leading-tight">{stat.value}</span>
+                    <span class="text-xs text-white/60 font-medium">{stat.note}</span>
                   </div>
                 </div>
               ))}
             </div>
-            <p class="text-xs text-green-400/50 mt-3 text-right">Figures are indicative — verify at source</p>
+            <p class="text-xs text-white/40 mt-3 text-right">Figures are indicative — verify at source</p>
           </div>
         </div>
       </div>
