@@ -194,16 +194,52 @@ const categoryEmoji: Record<string, string> = {
           </a>
         ))}
       </div>
-      <!-- Utilities pill row -->
-      <div class="mt-6 flex flex-wrap gap-3 justify-center">
-        <span class="text-xs text-gray-400 dark:text-gray-500 self-center font-medium uppercase tracking-wide">More tools:</span>
+      <!-- Utility tools — same card style -->
+      <div class="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
         {[
-          { href: '/tools/document-converter', emoji: '📄', title: 'Document Converter' },
-          { href: '/utilities#age-calculator',  emoji: '🎂', title: 'Age Calculator' },
-          { href: '/utilities#image-resizer',   emoji: '🖼️', title: 'Image Resizer' },
-        ].map(t => (
-          <a href={t.href} class="inline-flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium px-4 py-2 rounded-full hover:border-green-400 hover:text-green-700 transition-all">
-            <span>{t.emoji}</span>{t.title}
+          {
+            href: '/tools/document-converter',
+            emoji: '📄',
+            title: 'Document Converter',
+            desc: 'Convert Word, Excel and PowerPoint files to PDF instantly — no upload to servers.',
+            tag: 'Utility',
+            gradient: 'from-slate-500 to-gray-600',
+            tagColor: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400',
+          },
+          {
+            href: '/utilities#age-calculator',
+            emoji: '🎂',
+            title: 'Age Calculator',
+            desc: 'Calculate your exact age in years, months, and days from your date of birth.',
+            tag: 'Utility',
+            gradient: 'from-pink-500 to-rose-500',
+            tagColor: 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-400',
+          },
+          {
+            href: '/utilities#image-resizer',
+            emoji: '🖼️',
+            title: 'Image Resizer',
+            desc: 'Resize and compress images to any dimension — all processing done in your browser.',
+            tag: 'Utility',
+            gradient: 'from-cyan-500 to-sky-600',
+            tagColor: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400',
+          },
+        ].map((tool) => (
+          <a
+            href={tool.href}
+            class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+          >
+            <div class={`h-24 bg-gradient-to-br ${tool.gradient} flex items-center justify-center`}>
+              <span class="text-4xl">{tool.emoji}</span>
+            </div>
+            <div class="p-4">
+              <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${tool.tagColor}`}>{tool.tag}</span>
+              <h3 class="text-sm font-bold text-gray-900 dark:text-white mt-2 mb-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-snug">
+                {tool.title}
+              </h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed line-clamp-2">{tool.desc}</p>
+              <p class="text-xs font-semibold text-green-600 dark:text-green-400 mt-3">Use Tool →</p>
+            </div>
           </a>
         ))}
       </div>
