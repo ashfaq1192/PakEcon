@@ -50,7 +50,20 @@ MANDATORY ARTICLE STRUCTURE:
 [Naturally embed 2-3 relevant tool links from the provided list]
 
 ## Frequently Asked Questions
-[4-5 Q&A pairs covering what readers will search for — these rank in featured snippets]
+
+### [Question one ending with ?]
+[Direct answer in 2-3 sentences.]
+
+### [Question two ending with ?]
+[Direct answer in 2-3 sentences.]
+
+### [Question three ending with ?]
+[Direct answer in 2-3 sentences.]
+
+### [Question four ending with ?]
+[Direct answer in 2-3 sentences.]
+
+IMPORTANT: Each FAQ item MUST be an ### H3 heading (the question) followed by a plain paragraph (the answer). Never write Q:/A: inline. Never put multiple Q&A pairs in the same paragraph.
 
 ## Market Outlook
 [100-150 words — forward-looking analysis, what to watch next]
