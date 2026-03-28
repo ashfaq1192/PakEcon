@@ -1,11 +1,44 @@
 ---
 export const prerender = true;
+import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 
 const title = 'Pakistan Personal Finance Guide 2026 — Tax, Savings, Investment & Loans';
 const description = 'Complete personal finance guide for Pakistanis. Covers income tax, National Savings, investment options, home loans, and how to make your money work harder in 2026.';
 const pageUrl = 'https://hisaabkar.pk/topics/pakistan-personal-finance';
 
+// ── Dynamic content from collections ────────────────────────────────────────
+const PERSONAL_FINANCE_CATEGORIES = ['taxation', 'banking', 'investment'];
+const PERSONAL_FINANCE_BLOG_CATEGORIES = ['budget_alert', 'policy_update'];
+
+const allGuides = await getCollection('guides');
+const personalFinanceGuides = allGuides
+  .filter(g => PERSONAL_FINANCE_CATEGORIES.includes(g.data.category))
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .filter(p => PERSONAL_FINANCE_BLOG_CATEGORIES.includes(p.data.category))
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .slice(0, 4);
+
+const categoryEmoji: Record<string, string> = {
+  taxation: '🏛️',
+  banking: '🏦',
+  investment: '📊',
+};
+
+const blogCategoryLabel: Record<string, string> = {
+  budget_alert: 'Budget Alert',
+  policy_update: 'Policy Update',
+};
+
+const blogCategoryColor: Record<string, string> = {
+  budget_alert: 'bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+  policy_update: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+};
+
+// ── Schemas ──────────────────────────────────────────────────────────────────
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -120,27 +153,49 @@ const faqSchema = JSON.stringify({
       </p>
     </div>
 
-    <!-- Spoke links: Guides -->
+    <!-- Dynamic Guides from content collection -->
     <div class="mt-12">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">In-Depth Guides</h2>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">In-Depth Guides</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{personalFinanceGuides.length} guides — updated automatically as new content is published</p>
       <div class="space-y-3">
-        {[
-          { href: '/guides/fbr-income-tax-slabs-2026/', title: 'FBR Income Tax Slabs 2026', desc: 'Full breakdown of salaried and business income tax brackets' },
-          { href: '/guides/national-savings-schemes-pakistan-guide/', title: 'National Savings Schemes Guide', desc: 'Behbood, RIC, DSC, SSC — rates, eligibility, and how to invest' },
-          { href: '/guides/investing-in-pakistan-beginners-guide/', title: 'Investing in Pakistan: Beginner\'s Guide', desc: 'Gold, NSS, PSX equities, and real estate compared' },
-          { href: '/guides/how-to-buy-property-pakistan/', title: 'How to Buy Property in Pakistan', desc: 'Step-by-step guide to property purchase, stamp duty, and taxes' },
-          { href: '/guides/how-to-invest-in-psx-pakistan-stock-exchange/', title: 'How to Invest in PSX', desc: 'Opening a brokerage account and investing in the Pakistan Stock Exchange' },
-        ].map(g => (
-          <a href={g.href} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
-            <span class="text-green-700 dark:text-green-400 font-bold mt-0.5">→</span>
-            <div>
-              <p class="font-semibold text-gray-900 dark:text-white text-sm">{g.title}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{g.desc}</p>
+        {personalFinanceGuides.map(g => (
+          <a href={`/guides/${g.id}/`} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
+            <span class="text-xl leading-none mt-0.5">{categoryEmoji[g.data.category] ?? '📄'}</span>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-gray-900 dark:text-white text-sm">{g.data.title}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{g.data.summary}</p>
             </div>
+            <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap mt-0.5">{g.data.readTime}</span>
           </a>
         ))}
       </div>
     </div>
+
+    <!-- Dynamic Recent Blog Posts -->
+    {recentPosts.length > 0 && (
+      <div class="mt-10">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Latest Updates</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Budget alerts and policy changes affecting your finances</p>
+        <div class="space-y-3">
+          {recentPosts.map(post => (
+            <a href={`/blog/${post.id}/`} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class={`text-xs font-medium px-2 py-0.5 rounded-full ${blogCategoryColor[post.data.category] ?? 'bg-gray-100 text-gray-600'}`}>
+                    {blogCategoryLabel[post.data.category] ?? post.data.category}
+                  </span>
+                  <span class="text-xs text-gray-400">{new Date(post.data.pubDate).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                </div>
+                <p class="font-semibold text-gray-900 dark:text-white text-sm">{post.data.title}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{post.data.summary}</p>
+              </div>
+              <span class="text-green-600 dark:text-green-400 font-bold mt-1">→</span>
+            </a>
+          ))}
+        </div>
+        <a href="/blog/" class="inline-block mt-3 text-sm text-green-600 dark:text-green-400 hover:underline font-medium">View all posts →</a>
+      </div>
+    )}
 
     <!-- Tools grid -->
     <div class="mt-8 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">

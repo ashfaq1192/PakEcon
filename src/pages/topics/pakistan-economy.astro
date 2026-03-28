@@ -1,11 +1,45 @@
 ---
 export const prerender = true;
+import { getCollection } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
 
 const title = 'Pakistan Economy Guide 2026 — Exchange Rates, Inflation, IMF & SBP';
 const description = 'Complete guide to the Pakistan economy in 2026. Covers exchange rates, inflation, IMF program, SBP policy rate, GDP growth, and what it all means for everyday Pakistanis.';
 const pageUrl = 'https://hisaabkar.pk/topics/pakistan-economy';
 
+// ── Dynamic content from collections ────────────────────────────────────────
+const ECONOMY_CATEGORIES = ['policy', 'inflation', 'remittance', 'investment'];
+const ECONOMY_BLOG_CATEGORIES = ['news_roundup', 'policy_update'];
+
+const allGuides = await getCollection('guides');
+const economyGuides = allGuides
+  .filter(g => ECONOMY_CATEGORIES.includes(g.data.category))
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .filter(p => ECONOMY_BLOG_CATEGORIES.includes(p.data.category))
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .slice(0, 4);
+
+const categoryEmoji: Record<string, string> = {
+  policy: '🏛️',
+  inflation: '📈',
+  remittance: '💸',
+  investment: '📊',
+};
+
+const blogCategoryLabel: Record<string, string> = {
+  news_roundup: 'Economy News',
+  policy_update: 'Policy Update',
+};
+
+const blogCategoryColor: Record<string, string> = {
+  news_roundup: 'bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
+  policy_update: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+};
+
+// ── Schemas ──────────────────────────────────────────────────────────────────
 const schema = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'Article',
@@ -120,28 +154,51 @@ const faqSchema = JSON.stringify({
       </p>
     </div>
 
-    <!-- Spoke links: Guides -->
+    <!-- Dynamic Guides from content collection -->
     <div class="mt-12">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">In-Depth Guides</h2>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">In-Depth Guides</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{economyGuides.length} guides — updated automatically as new content is published</p>
       <div class="space-y-3">
-        {[
-          { href: '/guides/sbp-monetary-policy-impact-guide/', title: 'SBP Monetary Policy Impact Guide', desc: 'How the policy rate affects loans, savings, and the PKR' },
-          { href: '/guides/pakistan-cpi-inflation-guide/', title: 'Pakistan CPI Inflation Guide', desc: 'How inflation is measured and what it means for you' },
-          { href: '/guides/remittances-guide-pakistani-diaspora/', title: 'Remittances Guide for Pakistani Diaspora', desc: 'Best ways to send money to Pakistan and maximise PKR value' },
-          { href: '/guides/investing-in-pakistan-beginners-guide/', title: 'Investing in Pakistan: Beginner\'s Guide', desc: 'Gold, NSS, PSX, and real estate compared' },
-        ].map(g => (
-          <a href={g.href} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
-            <span class="text-green-700 dark:text-green-400 font-bold mt-0.5">→</span>
-            <div>
-              <p class="font-semibold text-gray-900 dark:text-white text-sm">{g.title}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{g.desc}</p>
+        {economyGuides.map(g => (
+          <a href={`/guides/${g.id}/`} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
+            <span class="text-xl leading-none mt-0.5">{categoryEmoji[g.data.category] ?? '📄'}</span>
+            <div class="flex-1 min-w-0">
+              <p class="font-semibold text-gray-900 dark:text-white text-sm">{g.data.title}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{g.data.summary}</p>
             </div>
+            <span class="text-xs text-gray-400 dark:text-gray-500 whitespace-nowrap mt-0.5">{g.data.readTime}</span>
           </a>
         ))}
       </div>
     </div>
 
-    <!-- Spoke links: Tools -->
+    <!-- Dynamic Recent Blog Posts -->
+    {recentPosts.length > 0 && (
+      <div class="mt-10">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Latest Economy News</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Auto-updated daily from our agent pipeline</p>
+        <div class="space-y-3">
+          {recentPosts.map(post => (
+            <a href={`/blog/${post.id}/`} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class={`text-xs font-medium px-2 py-0.5 rounded-full ${blogCategoryColor[post.data.category] ?? 'bg-gray-100 text-gray-600'}`}>
+                    {blogCategoryLabel[post.data.category] ?? post.data.category}
+                  </span>
+                  <span class="text-xs text-gray-400">{new Date(post.data.pubDate).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                </div>
+                <p class="font-semibold text-gray-900 dark:text-white text-sm">{post.data.title}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">{post.data.summary}</p>
+              </div>
+              <span class="text-green-600 dark:text-green-400 font-bold mt-1">→</span>
+            </a>
+          ))}
+        </div>
+        <a href="/blog/" class="inline-block mt-3 text-sm text-green-600 dark:text-green-400 hover:underline font-medium">View all economy news →</a>
+      </div>
+    )}
+
+    <!-- Tools -->
     <div class="mt-8 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
       <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Economy Tools</h2>
       <div class="grid grid-cols-2 gap-3 text-sm">
