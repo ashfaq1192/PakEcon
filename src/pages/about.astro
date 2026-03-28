@@ -382,35 +382,53 @@ import ScrollReveal from '../components/ui/ScrollReveal.astro';
   <script>
     const forms = document.querySelectorAll('form[id$="-form"]');
     forms.forEach(form => {
+      // Skip contact form — it has its own handler
+      if ((form as HTMLFormElement).id === 'contact-form') return;
+
       form?.addEventListener('submit', async (e) => {
         e.preventDefault();
         const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
-        const msgElement = form.querySelector('p[id$="-msg"]');
+        const msgElement = form.querySelector('p[id$="-msg"]') as HTMLElement | null;
+        const submitBtn  = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
 
         const email = emailInput?.value?.trim();
         if (!email) return;
 
-        try {
-          // For now, show success message without API call
-          if (msgElement) {
-            msgElement.textContent = 'Thank you for subscribing! We will send updates to your email.';
-            msgElement.classList.remove('hidden');
-            msgElement.classList.add('text-green-600');
-          }
-          emailInput.value = '';
+        if (submitBtn) submitBtn.disabled = true;
 
-          if (typeof showToast !== 'undefined') {
-            showToast({ message: 'Successfully subscribed to newsletter!', type: 'success', duration: 3000 });
+        try {
+          const res = await fetch('/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          const data = await res.json() as { message?: string; error?: string };
+
+          if (res.ok) {
+            if (msgElement) {
+              msgElement.textContent = data.message ?? 'Subscribed!';
+              msgElement.classList.remove('hidden', 'text-red-600');
+              msgElement.classList.add('text-green-600');
+            }
+            emailInput.value = '';
+            if (typeof showToast !== 'undefined') {
+              showToast({ message: data.message ?? 'Subscribed!', type: 'success', duration: 4000 });
+            }
+          } else {
+            throw new Error(data.error ?? 'Subscription failed');
           }
         } catch (err) {
+          const msg = err instanceof Error ? err.message : 'Failed to subscribe. Please try again.';
           if (msgElement) {
-            msgElement.textContent = 'Failed to subscribe. Please try again.';
-            msgElement.classList.remove('hidden');
+            msgElement.textContent = msg;
+            msgElement.classList.remove('hidden', 'text-green-600');
             msgElement.classList.add('text-red-600');
           }
           if (typeof showToast !== 'undefined') {
-            showToast({ message: 'Subscription failed', type: 'error', duration: 3000 });
+            showToast({ message: msg, type: 'error', duration: 3000 });
           }
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
         }
       });
     });

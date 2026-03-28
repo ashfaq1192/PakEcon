@@ -24,7 +24,7 @@ interface HistoryResponse {
   history: { date: string; rate: number }[];
 }
 
-const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CAD', 'AUD', 'CNY', 'JPY', 'RON'];
+const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CAD', 'AUD', 'CNY', 'JPY'];
 
 function SparklineChart({ data }: { data: { date: string; rate: number }[] }) {
   if (data.length < 7) {

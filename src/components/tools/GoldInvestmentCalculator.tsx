@@ -14,11 +14,12 @@ interface GoldPriceResponse {
   stale?: boolean;
 }
 
-// Fallback prices used when API is unavailable
+// Fallback prices used only when API is unavailable — values kept roughly current
+// These are approximate; actual live prices come from /api/gold-price
 const FALLBACK_PRICES: GoldPriceResponse = {
-  goldPerGram: 27500,
-  goldPerTola: 320900,
-  silverPerGram: 310,
+  goldPerGram: 45000,
+  goldPerTola: 524000,
+  silverPerGram: 580,
   updatedAt: new Date().toISOString(),
   stale: true,
 };

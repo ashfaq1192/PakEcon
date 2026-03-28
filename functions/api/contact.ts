@@ -51,6 +51,13 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     });
   }
 
+  // Sanitize user input before embedding in HTML
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const safeName    = esc(name);
+  const safeEmail   = esc(email);
+  const safeMessage = esc(message);
+
   if (!env.RESEND_API_KEY) {
     console.warn('[Contact] RESEND_API_KEY not set — email not sent');
     return new Response(JSON.stringify({ message: 'Message received! We will get back to you soon.' }), {
@@ -76,15 +83,15 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
             <table style="width:100%;border-collapse:collapse;">
               <tr>
                 <td style="padding:8px;font-weight:bold;color:#374151;width:100px;">Name:</td>
-                <td style="padding:8px;color:#111827;">${name}</td>
+                <td style="padding:8px;color:#111827;">${safeName}</td>
               </tr>
               <tr style="background:#f9fafb;">
                 <td style="padding:8px;font-weight:bold;color:#374151;">Email:</td>
-                <td style="padding:8px;color:#111827;"><a href="mailto:${email}">${email}</a></td>
+                <td style="padding:8px;color:#111827;"><a href="mailto:${safeEmail}">${safeEmail}</a></td>
               </tr>
               <tr>
                 <td style="padding:8px;font-weight:bold;color:#374151;vertical-align:top;">Message:</td>
-                <td style="padding:8px;color:#111827;white-space:pre-wrap;">${message}</td>
+                <td style="padding:8px;color:#111827;white-space:pre-wrap;">${safeMessage}</td>
               </tr>
             </table>
             <p style="font-size:12px;color:#9ca3af;margin-top:24px;">

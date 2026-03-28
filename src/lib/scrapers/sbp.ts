@@ -15,7 +15,7 @@ interface ExchangeRate {
 
 // open.er-api.com: free, no API key, updated daily, has PKR
 const ER_API_URL = 'https://open.er-api.com/v6/latest/USD';
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CNY', 'CAD', 'AUD', 'JPY'];
+const CURRENCIES = ['USD', 'EUR', 'GBP', 'AED', 'SAR', 'CNY', 'CAD', 'AUD', 'JPY', 'RON'];
 
 export async function scrapeExchangeRates(db: D1Database): Promise<ExchangeRate[]> {
   const today = new Date().toISOString().split('T')[0];
