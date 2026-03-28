@@ -30,20 +30,32 @@ export async function onRequestPost(context: PagesContext): Promise<Response> {
     });
   }
 
+  // Read optional pipeline mode from request body
+  let pipeline: string = 'full';
+  try {
+    const body = await request.json() as Record<string, string>;
+    if (body.pipeline && ['rates', 'insights', 'news', 'full'].includes(body.pipeline)) {
+      pipeline = body.pipeline;
+    }
+  } catch {
+    // No body or invalid JSON — use default 'full'
+  }
+
   const workflowId = crypto.randomUUID();
+  console.log(`[Trigger] Starting pipeline: ${pipeline} (workflowId: ${workflowId})`);
 
   // Return 202 immediately — run workflow as background task via waitUntil.
   // This keeps the Cloudflare Worker slot free and avoids hitting the
   // 30-second wall-clock limit while scrapers are rate-limiting themselves.
   if (context.waitUntil) {
     context.waitUntil(
-      executeWorkflow(env.DB, env.KV, env).catch(err =>
+      executeWorkflow(env.DB, env.KV, env, pipeline).catch(err =>
         console.error('[Trigger] Background workflow error:', err)
       )
     );
   } else {
     // Fallback for environments without waitUntil (local dev)
-    executeWorkflow(env.DB, env.KV, env).catch(err =>
+    executeWorkflow(env.DB, env.KV, env, pipeline).catch(err =>
       console.error('[Trigger] Workflow error:', err)
     );
   }

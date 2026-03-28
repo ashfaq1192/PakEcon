@@ -156,8 +156,12 @@ const TOPIC_SCHEDULE: TopicConfig[] = [
   },
 ];
 
-// 14 days in seconds (KV TTL)
+// 14 days in seconds — per-topic cooldown (don't repeat same topic within 14 days)
 const TOPIC_TTL_SECONDS = 1209600;
+
+// 7 days in seconds — global cap (publish at most one guide per week)
+const WEEKLY_TTL_SECONDS = 604800;
+const WEEKLY_CAP_KEY = 'topic_writer:global_last_run';
 
 // ─── System prompt ────────────────────────────────────────────────────────────
 
@@ -252,6 +256,21 @@ export async function topicWriterAgent(state: {
   const agentLog: AgentLog[] = [];
   const { env, workflowId } = state;
 
+  // ── Global weekly cap: max one guide per week ─────────────────────────────
+  try {
+    const lastWeeklyRun = await env.KV.get(WEEKLY_CAP_KEY);
+    if (lastWeeklyRun) {
+      agentLog.push({
+        agent: 'topic_writer',
+        action: `weekly cap reached — last guide published at ${lastWeeklyRun}, skipping`,
+        timestamp: new Date().toISOString(),
+      });
+      return { insights: [], agentLog: [...(state.agentLog || []), ...agentLog] };
+    }
+  } catch {
+    // KV read failure — proceed
+  }
+
   // Find the first topic not covered in the last 14 days
   let selectedTopic: TopicConfig | null = null;
   for (const topic of TOPIC_SCHEDULE) {
@@ -293,10 +312,13 @@ export async function topicWriterAgent(state: {
       }
     }
 
-    // Mark topic as covered in KV (TTL = 14 days)
+    // Mark topic as covered (14-day per-topic TTL) + set global weekly cap
     const kvKey = `topic_writer:last_run:${selectedTopic.slug}`;
     try {
-      await env.KV.put(kvKey, new Date().toISOString(), { expirationTtl: TOPIC_TTL_SECONDS });
+      await Promise.all([
+        env.KV.put(kvKey, new Date().toISOString(), { expirationTtl: TOPIC_TTL_SECONDS }),
+        env.KV.put(WEEKLY_CAP_KEY, new Date().toISOString(), { expirationTtl: WEEKLY_TTL_SECONDS }),
+      ]);
     } catch (kvErr) {
       console.warn('[Topic Writer] KV write failed (non-blocking):', kvErr);
     }

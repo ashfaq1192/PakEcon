@@ -1,24 +1,55 @@
 name: Agent Swarm Trigger
 
+# Schedule (all times UTC, Pakistan = UTC+5):
+#   rates    — every 6h  → scraper only, refreshes live API data (no LLM)
+#   insights — 02:30 UTC → 07:30 AM PKT, market insights + weekly guide
+#   news     — 03:15 UTC → 08:15 AM PKT, daily economy news roundup
 on:
   schedule:
-    - cron: '0 */6 * * *'   # Every 6h — rates, commodities, insights
-    - cron: '0 4 1 * *'     # 1st of month — policy rate, CPI, CDNS
+    - cron: '0 */6 * * *'   # Every 6h  — rates pipeline (scraper only)
+    - cron: '30 2 * * *'    # 02:30 UTC — insights pipeline (7:30 AM PKT)
+    - cron: '15 3 * * *'    # 03:15 UTC — news pipeline    (8:15 AM PKT)
   workflow_dispatch:
     inputs:
-      force_run:
-        description: 'Force run even if recently executed'
+      pipeline:
+        description: 'Pipeline to run: rates | insights | news | full'
         required: false
-        default: 'false'
-        type: boolean
+        default: 'full'
+        type: choice
+        options:
+          - full
+          - insights
+          - news
+          - rates
 
 jobs:
   trigger-agents:
-    name: Trigger Agent Swarm
+    name: Trigger Agent Swarm (${{ github.event.schedule || inputs.pipeline || 'manual' }})
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
+      - name: Resolve pipeline mode
+        id: pipeline
+        run: |
+          SCHEDULE="${{ github.event.schedule }}"
+          MANUAL="${{ inputs.pipeline }}"
+
+          if [ -n "$MANUAL" ]; then
+            PIPELINE="$MANUAL"
+          elif [ "$SCHEDULE" = "0 */6 * * *" ]; then
+            PIPELINE="rates"
+          elif [ "$SCHEDULE" = "30 2 * * *" ]; then
+            PIPELINE="insights"
+          elif [ "$SCHEDULE" = "15 3 * * *" ]; then
+            PIPELINE="news"
+          else
+            PIPELINE="full"
+          fi
+
+          echo "pipeline=$PIPELINE" >> $GITHUB_OUTPUT
+          echo "Running pipeline: $PIPELINE"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -34,35 +65,28 @@ jobs:
       - name: Trigger Agent Swarm
         id: trigger
         run: |
-          echo "Triggering agent swarm..."
+          PIPELINE="${{ steps.pipeline.outputs.pipeline }}"
+          echo "Triggering agent swarm (pipeline: $PIPELINE)..."
+
           RESPONSE=$(curl -s -w "\n%{http_code}" \
             -X POST ${{ secrets.AGENT_URL }} \
             -H "Authorization: Bearer ${{ secrets.AGENT_SECRET }}" \
             -H "Content-Type: application/json" \
-            -d '{"source":"github"}')
+            -d "{\"source\":\"github\",\"pipeline\":\"$PIPELINE\"}")
 
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           BODY=$(echo "$RESPONSE" | sed '$d')
 
           echo "HTTP Status: $HTTP_CODE"
           echo "Response: $BODY"
+          echo "Pipeline: $PIPELINE"
 
           if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 202 ]; then
             echo "success=true" >> $GITHUB_OUTPUT
-            echo "response=$BODY" >> $GITHUB_OUTPUT
-
-            # Extract workflow details
             WORKFLOW_ID=$(echo "$BODY" | jq -r '.workflowId // empty')
             PUBLISHED_COUNT=$(echo "$BODY" | jq -r '.publishedCount // 0')
-            INSIGHT_COUNT=$(echo "$BODY" | jq -r '.insightCount // 0')
-
-            echo "Workflow ID: $WORKFLOW_ID"
-            echo "Published Count: $PUBLISHED_COUNT"
-            echo "Insight Count: $INSIGHT_COUNT"
-
             echo "workflow_id=$WORKFLOW_ID" >> $GITHUB_OUTPUT
             echo "published_count=$PUBLISHED_COUNT" >> $GITHUB_OUTPUT
-            echo "insight_count=$INSIGHT_COUNT" >> $GITHUB_OUTPUT
           else
             echo "success=false" >> $GITHUB_OUTPUT
             echo "error=$BODY" >> $GITHUB_OUTPUT
@@ -73,24 +97,19 @@ jobs:
       - name: Create summary
         if: steps.trigger.outputs.success == 'true'
         run: |
-          echo "## Agent Swarm Execution Summary 📊" >> $GITHUB_STEP_SUMMARY
+          echo "## Agent Swarm — ${{ steps.pipeline.outputs.pipeline }} pipeline" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Pipeline:** \`${{ steps.pipeline.outputs.pipeline }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Workflow ID:** \`${{ steps.trigger.outputs.workflow_id }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Published Count:** ${{ steps.trigger.outputs.published_count }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Insight Count:** ${{ steps.trigger.outputs.insight_count }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Trigger Time:** $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
 
       - name: Handle failure
         if: failure()
         run: |
           echo "## Agent Swarm Failed ❌" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Error:**" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "${{ steps.trigger.outputs.error }}" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Please check the Cloudflare logs for more details."
+          echo "**Pipeline:** ${{ steps.pipeline.outputs.pipeline }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Error:** ${{ steps.trigger.outputs.error }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Wait for deployment (if content was published)
         if: steps.trigger.outputs.success == 'true' && steps.trigger.outputs.published_count != '0'
@@ -99,7 +118,7 @@ jobs:
           sleep 30
 
       - name: Verify deployment
-        if: steps.trigger.outputs.success == 'true'
+        if: steps.trigger.outputs.success == 'true' && steps.trigger.outputs.published_count != '0'
         run: |
           echo "Checking site availability..."
           curl -f -I ${{ secrets.SITE_URL }} || exit 1
@@ -109,14 +128,12 @@ jobs:
     name: Health Check
     runs-on: ubuntu-latest
     if: always()
-
     steps:
       - name: Check site availability
         run: |
-          echo "Checking site health..."
           if curl -f -I ${{ secrets.SITE_URL }}; then
             echo "Site is healthy!"
           else
             echo "::warning::Site health check failed"
-            exit 0  # Don't fail the workflow
+            exit 0
           fi
