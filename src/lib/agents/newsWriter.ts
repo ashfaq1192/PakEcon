@@ -26,7 +26,7 @@ const MIN_WORD_COUNT = 1000;
 
 const NEWS_WRITER_SYSTEM_PROMPT = `You are a senior financial journalist specialising in Pakistani economics and business. You write authoritative, SEO-optimised news analysis articles for hisaabkar.pk — Pakistan's leading personal finance platform.
 
-Your flagship "Pakistan Economy Today" articles are:
+Your flagship daily articles are:
 - 1400–1600 words long (AdSense and SEO optimised length)
 - Written for educated Pakistani readers (English, non-specialist)
 - Authoritative yet accessible — cite sources, explain implications
@@ -34,15 +34,15 @@ Your flagship "Pakistan Economy Today" articles are:
 - Rich in Pakistan-specific economic context
 
 MANDATORY ARTICLE STRUCTURE:
-## Pakistan Economy Today: [Compelling headline summarising top story]
+## [SEO HEADLINE — see rules below]
 
 ### Key Takeaways
 [3-4 bullet points — the most important facts readers need to know]
 
-## [Main Story Section — largest story in detail]
+## [Main Story Section — name the actual event, e.g. "SBP Rate Cut: What Changed and Why"]
 [300-400 words with full context, background, and implications for Pakistan]
 
-## [Secondary Stories — cover 2-3 other stories]
+## [Secondary Stories — cover 2-3 other stories with specific H2 headings]
 [150-200 words each — concise, impactful analysis]
 
 ## What This Means for Pakistanis
@@ -55,7 +55,14 @@ MANDATORY ARTICLE STRUCTURE:
 ## Market Outlook
 [100-150 words — forward-looking analysis, what to watch next]
 
-SEO RULES:
+SEO HEADLINE RULES (the ## at the top — this becomes the page title in Google):
+- MUST name the specific event from the top story provided — never use generic phrases like "Latest Updates" or "Economic Roundup"
+- Format: "[Specific event or finding]: [Pakistan impact or context]"
+- Good examples: "SBP Cuts Rate to 17.5%: Economy Boost for Borrowers", "IMF Loan Clears: What Pakistan Must Do Next", "Petrol Price Hike: How It Hits Pakistani Households", "PKR Strengthens to 278: Dollar Rate Latest"
+- Bad examples (FORBIDDEN): "Pakistan Economy Today: Latest Economic Updates", "Pakistan Economic News Roundup", "Weekly Economic Summary"
+- Max 55 characters so month-year can be appended by the system
+
+CONTENT SEO RULES:
 1. Use these keywords naturally throughout: "Pakistan economy today", "Pakistan economic news", "PKR exchange rate", "inflation Pakistan", "SBP policy", "business news Pakistan"
 2. Embed ALL provided tool links naturally in the "What This Means for Pakistanis" section
 3. Reference real institutions by name: SBP, FBR, OGRA, NEPRA, PBS, PSX, IMF
@@ -129,11 +136,17 @@ function buildNewsPrompt(stories: NewsStory[]): string {
 
   const toolLinksText = EMBEDDED_TOOL_LINKS.join('\n- ');
 
-  return `Today is ${date}. Write a comprehensive Pakistan economy news roundup article based on the following stories.
+  const topStoryTitle = stories[0]?.title ?? '';
 
-## Today's Stories:
+  return `Today is ${date}. Write a comprehensive Pakistan economy news analysis article based on the following stories.
+
+## Today's Top Stories:
 
 ${storiesText}
+
+## Headline seed (base your ## SEO headline on this top story):
+"${topStoryTitle}"
+Your headline must name the specific event from this story. It must be under 55 characters. Do NOT write generic titles.
 
 ## Tool Links to embed naturally in "What This Means for Pakistanis":
 - ${toolLinksText}
@@ -261,11 +274,26 @@ export async function newsWriterAgent(state: {
     console.warn('[News Writer] KV rate-limit write failed (non-blocking):', kvErr);
   }
 
-  // Extract title from first H2 in content (fallback to date-based title)
-  const titleMatch = /^##?\s+(.+)$/m.exec(content);
-  const title = titleMatch
-    ? titleMatch[1].replace(/^Pakistan Economy Today:\s*/i, '').trim()
-    : `Pakistan Economy News: Latest Updates — ${new Date().toLocaleDateString('en-PK', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+  // Extract the SEO headline from the first H2 in content
+  const titleMatch = /^##\s+(.+)$/m.exec(content);
+  const monthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  let articleTitle: string;
+  if (titleMatch) {
+    // Strip any "Pakistan Economy Today:" prefix the LLM may still add
+    const raw = titleMatch[1].replace(/^Pakistan Economy Today:\s*/i, '').trim();
+    // Append "— Pakistan Economy {Month Year}" for freshness and keyword anchor
+    // Trim raw to 40 chars max so the suffix fits within 70 total
+    const hook = raw.length > 40 ? raw.slice(0, 38).replace(/\s\S+$/, '') + '…' : raw;
+    articleTitle = `${hook} — Pakistan Economy ${monthYear}`;
+  } else {
+    // Fallback: derive from top story title
+    const storyHook = (stories[0]?.title ?? 'Economy Update').slice(0, 38).replace(/\s\S+$/, '');
+    articleTitle = `${storyHook} — Pakistan Economy ${monthYear}`;
+  }
+
+  // Hard cap at 70 chars (Astro schema limit)
+  articleTitle = articleTitle.slice(0, 70);
 
   // Build citations from source stories
   const citations = stories.map(s => ({ source: s.source, url: s.url }));
@@ -275,7 +303,7 @@ export async function newsWriterAgent(state: {
   const summary = summaryMatch.slice(0, 157).replace(/\s\S+$/, '') + '...';
 
   const insight: MarketInsight = {
-    title: `Pakistan Economy Today: ${title}`.slice(0, 70),
+    title: articleTitle,
     content,
     summary,
     delta: 0,
