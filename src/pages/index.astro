@@ -134,29 +134,63 @@ const categoryEmoji: Record<string, string> = {
             </a>
           </div>
         </div>
-        <!-- Right: key indicators (clearly labelled as reference data) -->
+        <!-- Right: key indicators -->
         <div class="hidden lg:block">
           <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-2xl">
             <div class="flex items-center justify-between mb-4">
               <p class="text-xs text-emerald-300 uppercase tracking-widest font-bold">Key Economic Indicators</p>
-              <span class="text-xs text-white/70 bg-white/15 border border-white/20 px-2 py-0.5 rounded-full font-medium">Reference data</span>
+              <span class="flex items-center gap-1.5 text-xs text-white/70 bg-white/15 border border-white/20 px-2 py-0.5 rounded-full font-medium">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+                Reference data
+              </span>
             </div>
-            <div class="space-y-3">
-              {[
-                { label: '💵 USD/PKR (Interbank)', value: '278.50', note: 'SBP' },
-                { label: '🥇 Gold 24K / Tola',    value: 'PKR 5,24,000', note: 'PMEX' },
-                { label: '⛽ Petrol (92 RON)',      value: 'PKR 321.17',   note: 'OGRA' },
-                { label: '📊 CPI Inflation (Feb)', value: '1.5% YoY',    note: 'PBS' },
-                { label: '🏦 SBP Policy Rate',     value: '12.0%',        note: 'SBP MPC' },
-              ].map(stat => (
-                <div class="flex items-center justify-between bg-white/15 border border-white/30 rounded-xl px-4 py-3 hover:bg-white/20 transition-colors">
-                  <span class="text-sm font-medium text-white">{stat.label}</span>
-                  <div class="text-right">
-                    <span class="font-bold text-emerald-300 text-base block leading-tight">{stat.value}</span>
-                    <span class="text-xs text-white/60 font-medium">{stat.note}</span>
-                  </div>
+            <div class="space-y-3" id="indicators-list">
+              <!-- USD/PKR — blue -->
+              <div class="indicator-card opacity-0 flex items-center justify-between rounded-xl px-4 py-3 border transition-all duration-200 cursor-default
+                          bg-blue-500/20 border-blue-400/40 hover:bg-blue-500/30 hover:shadow-[0_0_16px_rgba(59,130,246,0.35)] hover:-translate-y-0.5"
+                   data-accent="text-blue-300" data-raw="278.50" data-prefix="" data-suffix="" data-decimals="2">
+                <span class="text-sm font-medium text-white">💵 USD/PKR (Interbank)</span>
+                <div class="text-right">
+                  <span class="font-bold text-blue-300 text-base block leading-tight count-up" data-target="278.50" data-decimals="2">278.50</span>
+                  <span class="text-xs text-white/60 font-medium">SBP</span>
                 </div>
-              ))}
+              </div>
+              <!-- Gold — amber -->
+              <div class="indicator-card opacity-0 flex items-center justify-between rounded-xl px-4 py-3 border transition-all duration-200 cursor-default
+                          bg-amber-500/20 border-amber-400/40 hover:bg-amber-500/30 hover:shadow-[0_0_16px_rgba(245,158,11,0.35)] hover:-translate-y-0.5">
+                <span class="text-sm font-medium text-white">🥇 Gold 24K / Tola</span>
+                <div class="text-right">
+                  <span class="font-bold text-amber-300 text-base block leading-tight count-up" data-target="524000" data-prefix="PKR " data-decimals="0">PKR 5,24,000</span>
+                  <span class="text-xs text-white/60 font-medium">PMEX</span>
+                </div>
+              </div>
+              <!-- Petrol — orange -->
+              <div class="indicator-card opacity-0 flex items-center justify-between rounded-xl px-4 py-3 border transition-all duration-200 cursor-default
+                          bg-orange-500/20 border-orange-400/40 hover:bg-orange-500/30 hover:shadow-[0_0_16px_rgba(249,115,22,0.35)] hover:-translate-y-0.5">
+                <span class="text-sm font-medium text-white">⛽ Petrol (92 RON)</span>
+                <div class="text-right">
+                  <span class="font-bold text-orange-300 text-base block leading-tight count-up" data-target="321.17" data-prefix="PKR " data-decimals="2">PKR 321.17</span>
+                  <span class="text-xs text-white/60 font-medium">OGRA</span>
+                </div>
+              </div>
+              <!-- CPI — rose (no count-up, text value) -->
+              <div class="indicator-card opacity-0 flex items-center justify-between rounded-xl px-4 py-3 border transition-all duration-200 cursor-default
+                          bg-rose-500/20 border-rose-400/40 hover:bg-rose-500/30 hover:shadow-[0_0_16px_rgba(244,63,94,0.35)] hover:-translate-y-0.5">
+                <span class="text-sm font-medium text-white">📊 CPI Inflation (Feb)</span>
+                <div class="text-right">
+                  <span class="font-bold text-rose-300 text-base block leading-tight count-up" data-target="1.5" data-suffix="% YoY" data-decimals="1">1.5% YoY</span>
+                  <span class="text-xs text-white/60 font-medium">PBS</span>
+                </div>
+              </div>
+              <!-- Policy Rate — purple -->
+              <div class="indicator-card opacity-0 flex items-center justify-between rounded-xl px-4 py-3 border transition-all duration-200 cursor-default
+                          bg-purple-500/20 border-purple-400/40 hover:bg-purple-500/30 hover:shadow-[0_0_16px_rgba(168,85,247,0.35)] hover:-translate-y-0.5">
+                <span class="text-sm font-medium text-white">🏦 SBP Policy Rate</span>
+                <div class="text-right">
+                  <span class="font-bold text-purple-300 text-base block leading-tight count-up" data-target="12.0" data-suffix="%" data-decimals="1">12.0%</span>
+                  <span class="text-xs text-white/60 font-medium">SBP MPC</span>
+                </div>
+              </div>
             </div>
             <p class="text-xs text-white/40 mt-3 text-right">Figures are indicative — verify at source</p>
           </div>
@@ -430,6 +464,67 @@ const categoryEmoji: Record<string, string> = {
         if (typeof showToast !== 'undefined') showToast({ message: 'Network error', type: 'error' });
       }
     });
+  </script>
+
+  <!-- ═══ INDICATORS: staggered entrance + count-up ═══ -->
+  <script>
+    (function () {
+      const cards = Array.from(document.querySelectorAll<HTMLElement>('#indicators-list .indicator-card'));
+      if (!cards.length) return;
+
+      // ── Count-up helper ──────────────────────────────────────────────────────
+      function animateCountUp(el: HTMLElement) {
+        const target = parseFloat(el.dataset.target ?? '0');
+        const decimals = parseInt(el.dataset.decimals ?? '0', 10);
+        const prefix = el.dataset.prefix ?? '';
+        const suffix = el.dataset.suffix ?? '';
+        const duration = 900; // ms
+        const start = performance.now();
+
+        function frame(now: number) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          // ease-out cubic
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = target * eased;
+          el.textContent = prefix + current.toLocaleString('en-PK', {
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+          }) + suffix;
+          if (progress < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+
+      // ── Staggered slide-in via IntersectionObserver ──────────────────────────
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
+
+          cards.forEach((card, i) => {
+            setTimeout(() => {
+              card.style.transition = 'opacity 400ms ease, transform 400ms ease';
+              card.style.transform = 'translateX(0)';
+              card.style.opacity = '1';
+
+              // Trigger count-up for this card's value span
+              const countEl = card.querySelector<HTMLElement>('.count-up');
+              if (countEl && countEl.dataset.target) animateCountUp(countEl);
+            }, i * 130); // 130ms between each card
+          });
+        });
+      }, { threshold: 0.2 });
+
+      // Set initial off-screen position
+      cards.forEach(card => {
+        card.style.transform = 'translateX(32px)';
+        card.style.opacity = '0';
+      });
+
+      const list = document.getElementById('indicators-list');
+      if (list) observer.observe(list);
+    })();
   </script>
 
 </MainLayout>
