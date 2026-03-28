@@ -125,7 +125,7 @@ async function callGroq(userPrompt: string, apiKey: string): Promise<string> {
           { role: 'system', content: CHIEF_EDITOR_SYSTEM_PROMPT },
           { role: 'user', content: userPrompt },
         ],
-        max_tokens: 2000,
+        max_completion_tokens: 2000,
         temperature: 0.35,
       }),
     });
