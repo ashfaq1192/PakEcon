@@ -10,6 +10,7 @@ const blog = defineCollection({
     category: z.enum(['market_insight', 'weekly_digest', 'budget_alert', 'policy_update', 'news_roundup']),
     source: z.string().url(),
     delta: z.number(),
+    author: z.string().optional(),
   }),
 });
 

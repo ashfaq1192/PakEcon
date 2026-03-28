@@ -310,6 +310,7 @@ export async function newsWriterAgent(state: {
     indicators: ['news_roundup', 'economy', 'pakistan'],
     citations,
     category: 'news_roundup',
+    author: 'HisaabKar Editorial',
     generated_by: 'news_writer:groq:llama-3.3-70b-versatile',
     date: new Date().toISOString(),
     slug,

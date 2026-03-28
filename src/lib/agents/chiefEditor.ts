@@ -77,16 +77,33 @@ function getCrossLinksForInsight(insight: MarketInsight): string {
 
 // ─── Chief Editor system prompt ───────────────────────────────────────────────
 
-const CHIEF_EDITOR_SYSTEM_PROMPT = `You are a senior SEO editor specialising in Pakistani financial content. Your job is to improve existing articles for search engine visibility without changing facts, numbers, or the overall H2 structure.
+const CHIEF_EDITOR_SYSTEM_PROMPT = `You are a senior SEO editor and copy editor specialising in Pakistani financial content. Improve the article using the four passes below — in order. Do not change H2 headings, facts, or numerical data.
 
-Apply these enhancements:
-1. Rewrite the opening paragraph (first 2-3 sentences) so it directly and concisely answers the main query — optimised for Google featured snippets.
-2. If a "## Frequently Asked Questions" section is NOT already present, add one at the very end (before any conclusion or after the conclusion) with exactly 3 questions and detailed answers.
-3. Ensure every tool link listed under "Tool Links" appears at least once in the article body (embed naturally in existing sentences — do not create a dedicated "Tools" section).
-4. Add 1-2 cross-links from the "Cross Links" list at a contextually appropriate location in the body (not in the FAQ).
-5. Do NOT change H2 headings, facts, or numerical data.
-6. Do NOT add a frontmatter block or any preamble.
-7. Return ONLY the improved markdown article content.`;
+PASS 1 — Featured Snippet Opening:
+Rewrite the opening paragraph (first 2-3 sentences) so it directly and concisely answers the main query. Keep it under 60 words. Write for position zero.
+
+PASS 2 — Specificity (copy-editing Sweep 5):
+Replace vague intensifiers and adjectives with concrete language.
+- "significant/major/huge/important" → name the actual scale (e.g. "2.5% rise", "third consecutive cut")
+- "could affect" → "will increase your monthly EMI by approximately X"
+- "many experts" → "economists at SBP" or "IMF forecasters"
+- "in recent times" → give the actual timeframe
+Do NOT invent numbers not in the original — use phrases like "according to official data" if specific figures are unavailable.
+
+PASS 3 — So What (copy-editing Sweep 3):
+After each key factual claim, add a one-sentence "which means..." bridge connecting it to the Pakistani reader's everyday life.
+Example: "SBP cut the policy rate by 100 bps. This means home loan EMIs will fall for borrowers on floating-rate mortgages."
+Add these bridges only where they add genuine value — do not force them into every sentence.
+
+PASS 4 — Links and FAQ:
+- Embed all "Tool Links" naturally in the body (not in a dedicated Tools section).
+- Add 1-2 "Cross Links" at contextually appropriate body locations.
+- If a "## Frequently Asked Questions" section is absent, add one at the end with 3 specific, high-search-volume questions and detailed answers.
+
+RULES:
+- Do NOT add frontmatter, preamble, or commentary.
+- Return ONLY the improved markdown article.
+- The enhanced article must be longer than the original.`;
 
 // ─── Groq API call ────────────────────────────────────────────────────────────
 
@@ -108,8 +125,8 @@ async function callGroq(userPrompt: string, apiKey: string): Promise<string> {
           { role: 'system', content: CHIEF_EDITOR_SYSTEM_PROMPT },
           { role: 'user', content: userPrompt },
         ],
-        max_tokens: 1500,
-        temperature: 0.4,
+        max_tokens: 2000,
+        temperature: 0.35,
       }),
     });
     clearTimeout(timeoutId);
@@ -178,6 +195,18 @@ export async function chiefEditorAgent(state: {
 
   // Process sequentially to avoid Groq rate limits
   for (const insight of state.insights) {
+    // news_roundup articles are already 1500-word SEO-optimised by the News Writer
+    // — skip to avoid token waste and rate-limit pressure
+    if (insight.category === 'news_roundup') {
+      enhancedInsights.push(insight);
+      agentLog.push({
+        agent: 'chief_editor',
+        action: `skipped news_roundup (pre-optimised): ${insight.title}`,
+        timestamp: new Date().toISOString(),
+      });
+      continue;
+    }
+
     try {
       const editorPrompt = buildEditorPrompt(insight);
       const enhanced = await callGroq(editorPrompt, env.GROQ_API_KEY);

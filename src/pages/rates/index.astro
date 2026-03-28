@@ -1,0 +1,33 @@
+---
+export const prerender = true;
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Pakistan Live Rates — USD/PKR, Gold, Petrol | HisaabKar.pk"
+  description="Live exchange rates, gold prices, and commodity rates for Pakistan. USD to PKR today, 24K gold rate per tola and gram, petrol prices. Updated daily from SBP and PMEX."
+>
+  <div class="max-w-4xl mx-auto px-4 py-10">
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">Pakistan Live Rates</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Official daily rates for exchange, commodities, and fuel in Pakistan.
+        Sourced from SBP, PMEX, and OGRA.
+      </p>
+    </header>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <a href="/rates/usd-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-3xl mb-3">💵</div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">USD to PKR Today</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Live SBP interbank dollar rate, open market comparison, remittance guide</p>
+      </a>
+
+      <a href="/rates/gold-rate-pakistan-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-yellow-300 transition">
+        <div class="text-3xl mb-3">🥇</div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">Gold Rate in Pakistan Today</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">24K gold price per tola and gram in PKR, zakat nisab, investment guide</p>
+      </a>
+    </div>
+  </div>
+</MainLayout>

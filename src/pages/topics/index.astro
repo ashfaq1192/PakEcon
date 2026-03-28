@@ -1,0 +1,30 @@
+---
+export const prerender = true;
+import MainLayout from '../../layouts/MainLayout.astro';
+---
+
+<MainLayout
+  title="Pakistan Finance Topics — Economy, Tax & Personal Finance | HisaabKar.pk"
+  description="Comprehensive guides on Pakistan's economy, personal finance, tax, and investment. Topic hubs linking all guides, tools, and daily analysis."
+>
+  <div class="max-w-4xl mx-auto px-4 py-10">
+    <header class="mb-10">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">Pakistan Finance Topics</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Deep-dive topic hubs connecting our guides, live data, and calculators.
+      </p>
+    </header>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <a href="/topics/pakistan-economy/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-3xl mb-3">🏦</div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">Pakistan Economy</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Exchange rates, inflation, IMF program, SBP policy rate, GDP, and economic outlook</p>
+      </a>
+      <a href="/topics/pakistan-personal-finance/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-3xl mb-3">💼</div>
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">Pakistan Personal Finance</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Income tax, National Savings, investment options, loans, zakat, and electricity bills</p>
+      </a>
+    </div>
+  </div>
+</MainLayout>

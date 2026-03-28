@@ -63,6 +63,7 @@ export interface MarketInsight {
   indicators: string[];
   citations: Citation[];
   category: 'market_insight' | 'weekly_digest' | 'budget_alert' | 'policy_update' | 'news_roundup';
+  author?: string;
   generated_by?: string;
   twitter_post_id?: string;
   telegram_message_id?: string;

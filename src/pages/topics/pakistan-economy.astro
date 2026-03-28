@@ -1,0 +1,157 @@
+---
+export const prerender = true;
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'Pakistan Economy Guide 2026 — Exchange Rates, Inflation, IMF & SBP';
+const description = 'Complete guide to the Pakistan economy in 2026. Covers exchange rates, inflation, IMF program, SBP policy rate, GDP growth, and what it all means for everyday Pakistanis.';
+const pageUrl = 'https://hisaabkar.pk/topics/pakistan-economy';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  about: { '@type': 'Thing', name: 'Pakistan Economy' },
+  inLanguage: 'en-US',
+  isAccessibleForFree: true,
+  keywords: 'Pakistan economy 2026, Pakistan economy guide, SBP, IMF Pakistan, PKR exchange rate, Pakistan inflation',
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the current state of Pakistan\'s economy in 2026?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Pakistan\'s economy in 2026 is in a recovery phase following the 2022–2023 balance-of-payments crisis. With IMF support, foreign reserves have stabilised, inflation has dropped from its peak, and the SBP has begun cutting the policy rate. GDP growth is projected to recover toward 3–4% as the stabilisation program takes effect.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is Pakistan\'s current inflation rate?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Pakistan\'s CPI inflation peaked at over 38% in mid-2023. By 2026, it has significantly declined as the IMF program, tight monetary policy, and improved supply chains brought price pressures under control. Check the Pakistan Inflation Calculator on HisaabKar.pk for the latest figures from PBS.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the SBP policy rate in Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The State Bank of Pakistan sets the policy rate through its Monetary Policy Committee (MPC), which meets every six to eight weeks. The policy rate directly influences bank lending rates, mortgage costs, and savings returns. Follow our daily blog for the latest SBP announcements.' },
+    },
+  ],
+});
+---
+
+<MainLayout {title} {description} type="Article">
+  <script type="application/ld+json" set:html={schema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/topics" class="hover:text-green-700">Topics</a>
+      <span class="mx-1">/</span>
+      <span>Pakistan Economy</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">
+      Everything you need to understand Pakistan's economy — from daily exchange rates to long-term policy trends.
+    </p>
+
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+
+      <h2>Overview: Pakistan's Economic Landscape in 2026</h2>
+      <p>
+        Pakistan's economy has navigated one of its most challenging periods in 2022–2024, facing a near-default crisis, record inflation, and currency depreciation. The country's recovery is anchored by a <strong>$7 billion Extended Fund Facility (EFF) with the IMF</strong>, fiscal consolidation by the federal government, and a more stable exchange rate following the 2023 liberalisation.
+      </p>
+      <p>
+        For Pakistanis, this translates to: a weakened but stabilising PKR, lower (though still elevated) inflation, gradually falling interest rates, and cautious optimism on growth. Understanding these macro dynamics helps you make better decisions on savings, investments, remittances, and business planning.
+      </p>
+
+      <h2>Key Economic Indicators</h2>
+      <ul>
+        <li><strong>Currency (PKR/USD):</strong> Market-determined since 2023 — see our <a href="/rates/usd-pkr-today/">live USD to PKR rate</a>.</li>
+        <li><strong>Inflation (CPI):</strong> Tracked monthly by <a href="https://www.pbs.gov.pk" target="_blank" rel="noopener">PBS (Pakistan Bureau of Statistics)</a>. Use the <a href="/tools/pakistan-inflation-calculator/">Inflation Calculator</a> to measure your personal cost-of-living change.</li>
+        <li><strong>Policy Rate:</strong> Set by SBP's MPC. Directly affects your loan EMIs and savings certificate returns. See the <a href="/guides/sbp-monetary-policy-impact-guide/">SBP Monetary Policy Guide</a>.</li>
+        <li><strong>Gold:</strong> Popular inflation hedge. Check the <a href="/rates/gold-rate-pakistan-today/">live gold rate in Pakistan</a>.</li>
+        <li><strong>Foreign Reserves:</strong> Published weekly by SBP. Key signal for PKR stability.</li>
+      </ul>
+
+      <h2>The IMF Program and What It Means</h2>
+      <p>
+        Pakistan's $7 billion Extended Fund Facility (EFF) runs through 2027. The conditions include:
+      </p>
+      <ul>
+        <li>Market-determined exchange rate (no SBP intervention to prop up the PKR artificially)</li>
+        <li>Fiscal deficit reduction through tax revenue increases (FBR targets) and subsidy reform</li>
+        <li>Energy price reforms (electricity and gas tariff increases)</li>
+        <li>SOE reforms and privatisation of loss-making state enterprises</li>
+      </ul>
+      <p>
+        IMF disbursements are linked to meeting these benchmarks. Each successful review releases the next tranche and sends a signal to foreign investors, directly influencing the PKR.
+      </p>
+
+      <h2>Inflation in Pakistan: What You Need to Know</h2>
+      <p>
+        Pakistan's inflation peaked at 38.4% in May 2023 — one of the highest in the country's history — driven by energy price increases, currency depreciation, and supply chain disruption. The SBP responded with one of the sharpest rate-hiking cycles in its history, raising the policy rate to 22% by 2023.
+      </p>
+      <p>
+        By 2026, CPI inflation has declined significantly as the IMF program stabilised the currency and energy prices found a new equilibrium. However, core inflation (excluding food and energy) remains stickier. Read the detailed <a href="/guides/pakistan-cpi-inflation-guide/">Pakistan CPI Inflation Guide</a> to understand how CPI is calculated and what it means for your purchasing power.
+      </p>
+
+      <h2>Pakistan Economy: Frequently Asked Questions</h2>
+
+      <h3>What is driving Pakistan's economic recovery in 2026?</h3>
+      <p>
+        Three factors: IMF program compliance rebuilding reserves and investor confidence; a declining policy rate supporting private sector credit; and remittance inflows exceeding $30 billion annually providing crucial forex support.
+      </p>
+
+      <h3>How does the PKR exchange rate affect ordinary Pakistanis?</h3>
+      <p>
+        A weaker PKR raises import prices — particularly fuel, industrial inputs, and consumer electronics. This feeds into inflation across the economy. Conversely, overseas Pakistanis sending remittances receive more PKR per dollar sent home. Use the <a href="/tools/remittance-calculator/">Remittance Calculator</a> to calculate the value of transfers at current rates.
+      </p>
+
+      <h3>Is it safe to invest in Pakistan right now?</h3>
+      <p>
+        For local investors, the declining interest rate environment makes fixed-income National Savings products attractive in the short term before returns fall further. Real estate, gold, and PSX equities each carry different risk profiles. See the <a href="/guides/investing-in-pakistan-beginners-guide/">Pakistan Investment Beginners Guide</a>.
+      </p>
+    </div>
+
+    <!-- Spoke links: Guides -->
+    <div class="mt-12">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">In-Depth Guides</h2>
+      <div class="space-y-3">
+        {[
+          { href: '/guides/sbp-monetary-policy-impact-guide/', title: 'SBP Monetary Policy Impact Guide', desc: 'How the policy rate affects loans, savings, and the PKR' },
+          { href: '/guides/pakistan-cpi-inflation-guide/', title: 'Pakistan CPI Inflation Guide', desc: 'How inflation is measured and what it means for you' },
+          { href: '/guides/remittances-guide-pakistani-diaspora/', title: 'Remittances Guide for Pakistani Diaspora', desc: 'Best ways to send money to Pakistan and maximise PKR value' },
+          { href: '/guides/investing-in-pakistan-beginners-guide/', title: 'Investing in Pakistan: Beginner\'s Guide', desc: 'Gold, NSS, PSX, and real estate compared' },
+        ].map(g => (
+          <a href={g.href} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
+            <span class="text-green-700 dark:text-green-400 font-bold mt-0.5">→</span>
+            <div>
+              <p class="font-semibold text-gray-900 dark:text-white text-sm">{g.title}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{g.desc}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Spoke links: Tools -->
+    <div class="mt-8 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Economy Tools</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/rates/usd-pkr-today/" class="text-green-700 dark:text-green-400 hover:underline">💵 USD to PKR Today</a>
+        <a href="/rates/gold-rate-pakistan-today/" class="text-green-700 dark:text-green-400 hover:underline">🥇 Gold Rate Today</a>
+        <a href="/tools/pakistan-inflation-calculator/" class="text-green-700 dark:text-green-400 hover:underline">📈 Inflation Calculator</a>
+        <a href="/tools/currency-converter/" class="text-green-700 dark:text-green-400 hover:underline">💱 Currency Converter</a>
+        <a href="/tools/remittance-calculator/" class="text-green-700 dark:text-green-400 hover:underline">💸 Remittance Calculator</a>
+        <a href="/blog/" class="text-green-700 dark:text-green-400 hover:underline">📰 Daily Economy News</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

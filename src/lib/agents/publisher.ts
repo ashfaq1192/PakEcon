@@ -25,6 +25,7 @@ function generateMDX(insight: MarketInsight): string {
   const summary = insight.summary.replace(/"/g, '\\"');
   const source = insight.citations[0]?.url ?? insight.source;
   const pubDate = insight.date.split('T')[0];
+  const author = insight.author ?? 'HisaabKar Editorial';
 
   return `---
 title: "${title}"
@@ -33,6 +34,7 @@ summary: "${summary}"
 category: ${insight.category}
 source: "${source}"
 delta: ${insight.delta}
+author: "${author}"
 ---
 
 ${insight.content}

@@ -1,0 +1,208 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'USD to PKR Today — Live Dollar Rate in Pakistan 2026';
+const description = 'Live USD to PKR exchange rate today. Check the current dollar rate in Pakistan from SBP interbank and open market. Updated daily from official sources.';
+const pageUrl = 'https://hisaabkar.pk/rates/usd-pkr-today';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  dateModified: new Date().toISOString().split('T')[0],
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  about: { '@type': 'Thing', name: 'USD PKR Exchange Rate' },
+  inLanguage: 'en-US',
+  isAccessibleForFree: true,
+  keywords: 'USD to PKR today, dollar rate Pakistan, 1 USD to PKR, PKR exchange rate, SBP interbank rate',
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the USD to PKR rate today?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The USD to PKR rate changes daily based on SBP interbank data. Check the live widget above for today\'s official rate from the State Bank of Pakistan.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why does the dollar rate in Pakistan keep changing?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The PKR exchange rate is influenced by Pakistan\'s foreign exchange reserves, IMF program conditions, trade deficit, remittance inflows, and global dollar strength. SBP sets the interbank rate based on market conditions.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the difference between SBP interbank rate and open market rate?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The SBP interbank rate is the official rate for bank-to-bank transactions. The open market rate (currency exchange shops) can differ by 1-3 PKR. For remittances, banks and digital platforms typically offer rates close to the interbank rate.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How can I get the best USD to PKR rate for sending money to Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'For the best exchange rate on remittances, compare rates on Wise, Remitly, and your bank\'s official remittance service. Avoid airport exchange counters which typically offer 3-5% below market rate.' },
+    },
+  ],
+});
+---
+
+<MainLayout {title} {description} type="Article">
+  <script type="application/ld+json" set:html={schema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/rates" class="hover:text-green-700">Rates</a>
+      <span class="mx-1">/</span>
+      <span>USD to PKR Today</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8 text-sm">
+      Official SBP interbank rate · Updated daily · Source: State Bank of Pakistan
+    </p>
+
+    <!-- Live rate widget -->
+    <div id="rate-widget" class="border border-gray-200 dark:border-gray-700 rounded-2xl p-6 bg-gradient-to-br from-green-50 to-white dark:from-green-900/20 dark:to-gray-900 mb-10">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">1 US Dollar (USD) =</p>
+          <p id="rate-value" class="text-5xl font-bold text-gray-900 dark:text-white">
+            <span class="text-2xl text-gray-400 animate-pulse">Loading…</span>
+          </p>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mt-1">Pakistani Rupee (PKR)</p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-gray-400 dark:text-gray-500">As of</p>
+          <p id="rate-date" class="text-sm font-medium text-gray-700 dark:text-gray-300">—</p>
+          <p class="text-xs text-gray-400 mt-2">SBP Interbank</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex gap-6 text-sm text-gray-600 dark:text-gray-400">
+        <div>
+          <span class="text-gray-400 text-xs">100 USD</span>
+          <p id="rate-100" class="font-semibold text-gray-800 dark:text-gray-200">—</p>
+        </div>
+        <div>
+          <span class="text-gray-400 text-xs">1,000 USD</span>
+          <p id="rate-1000" class="font-semibold text-gray-800 dark:text-gray-200">—</p>
+        </div>
+        <div>
+          <a href="/tools/currency-converter/" class="inline-block mt-1 text-green-700 dark:text-green-400 text-xs font-medium hover:underline">
+            Full Currency Converter →
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function loadUsdRate() {
+        try {
+          const res = await fetch('/api/exchange-rates?currency=USD');
+          if (!res.ok) return;
+          const data = await res.json();
+          const rate = data.rates?.[0]?.rate ?? data.rate;
+          if (!rate) return;
+          const date = data.rates?.[0]?.date ?? data.date ?? '';
+          document.getElementById('rate-value')!.textContent = `PKR ${rate.toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          document.getElementById('rate-date')!.textContent = date ? new Date(date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+          document.getElementById('rate-100')!.textContent = `PKR ${(rate * 100).toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+          document.getElementById('rate-1000')!.textContent = `PKR ${(rate * 1000).toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+        } catch { /* non-blocking */ }
+      }
+      loadUsdRate();
+    </script>
+
+    <!-- Article content -->
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+
+      <h2>What is the Dollar Rate in Pakistan Today?</h2>
+      <p>
+        The USD to PKR exchange rate in Pakistan is set through the interbank foreign exchange market supervised by the <strong>State Bank of Pakistan (SBP)</strong>. The interbank rate is the reference rate used by commercial banks for transactions above PKR 1 million. The open market rate — available at exchange counters across Karachi, Lahore, and Islamabad — typically trades within 1–3 PKR of the interbank rate.
+      </p>
+      <p>
+        Pakistan moved to a market-determined exchange rate system in 2023 as part of its IMF Stand-By Arrangement (SBA) and Extended Fund Facility (EFF) requirements. Before this, the SBP maintained an artificially controlled rate, creating a black-market premium. Today, the PKR rate reflects real supply-demand dynamics in the forex market.
+      </p>
+
+      <h2>What Determines the USD to PKR Exchange Rate?</h2>
+      <p>Several factors drive daily movements in the dollar rate in Pakistan:</p>
+      <ul>
+        <li><strong>Foreign exchange reserves:</strong> Pakistan's SBP gross reserves directly signal the country's ability to defend the currency. Reserves below $8 billion historically coincide with rupee pressure.</li>
+        <li><strong>Remittance inflows:</strong> Pakistan receives over $30 billion annually in remittances — the second-largest source of forex after exports. Monthly remittance data from SBP moves the rate.</li>
+        <li><strong>IMF program compliance:</strong> Disbursements from the IMF's $7 billion EFF program boost reserves and stabilise the PKR. Delays or conditions violations cause depreciation.</li>
+        <li><strong>Trade deficit:</strong> Pakistan imports significantly more than it exports. A widening trade deficit increases demand for dollars, weakening the PKR.</li>
+        <li><strong>Global dollar strength:</strong> When the US Federal Reserve raises interest rates, the Dollar Index (DXY) strengthens globally, putting pressure on emerging market currencies including the PKR.</li>
+      </ul>
+
+      <h2>SBP Interbank vs Open Market Rate — What's the Difference?</h2>
+      <p>
+        The <strong>SBP interbank rate</strong> is used for large institutional transactions between banks and is the official benchmark. The <strong>open market rate</strong> applies to retail exchange shop transactions. Since Pakistan unified its exchange rate in 2023, the spread between the two has narrowed significantly — from 15–20 PKR during the black market period to typically 1–3 PKR today.
+      </p>
+      <p>
+        For remittances, use the <a href="/tools/remittance-calculator/">Remittance Calculator</a> to compare what different services (banks, Wise, Western Union) offer relative to the interbank rate. The <a href="/tools/currency-converter/">Currency Converter</a> uses live SBP interbank data.
+      </p>
+
+      <h2>Historical PKR Performance Against USD</h2>
+      <p>
+        The Pakistani Rupee has depreciated significantly against the dollar over the past decade, driven by persistent current account deficits and periodic balance-of-payments crises. Key milestones:
+      </p>
+      <ul>
+        <li><strong>2018:</strong> PKR ~115 per USD (pre-IMF program)</li>
+        <li><strong>2022:</strong> PKR ~240 per USD (peak crisis, import restrictions)</li>
+        <li><strong>2023:</strong> PKR ~300+ per USD (post-SBA, market liberalisation)</li>
+        <li><strong>2026:</strong> See live widget above for current rate</li>
+      </ul>
+      <p>
+        Track inflation's effect on your purchasing power with the <a href="/tools/pakistan-inflation-calculator/">Pakistan Inflation Calculator</a>.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <h3>What is the USD to PKR rate today?</h3>
+      <p>Check the live widget at the top of this page for the current SBP interbank rate. The rate is updated daily from official State Bank of Pakistan data.</p>
+
+      <h3>Why does the dollar rate keep rising against the PKR?</h3>
+      <p>
+        The PKR weakens when Pakistan's foreign exchange demand (for imports, debt repayment) exceeds supply (from exports, remittances, FDI). IMF program conditions, SBP reserve levels, and global dollar strength all contribute. Since 2023, the exchange rate is market-determined, so daily fluctuations are normal.
+      </p>
+
+      <h3>What is the best rate for sending USD to Pakistan?</h3>
+      <p>
+        Digital transfer services like Wise and Remitly typically offer the closest rates to the SBP interbank benchmark. Bank wire transfers are competitive for large amounts. Airport exchange counters and informal channels should be avoided — the spread can cost 3–5% of your transfer value. Use the <a href="/tools/remittance-calculator/">Remittance Calculator</a> to compare options.
+      </p>
+
+      <h3>Is it legal to buy or sell US dollars in Pakistan?</h3>
+      <p>
+        Yes. Buying and selling foreign currency through licensed exchange companies and bank branches is fully legal. SBP licenses all authorised dealers. Transactions above a threshold require documentation under anti-money laundering regulations.
+      </p>
+    </div>
+
+    <!-- Related tools -->
+    <div class="mt-10 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Related Tools</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/tools/currency-converter/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          💱 Currency Converter
+        </a>
+        <a href="/tools/remittance-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          💸 Remittance Calculator
+        </a>
+        <a href="/tools/pakistan-inflation-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          📈 Inflation Calculator
+        </a>
+        <a href="/rates/gold-rate-pakistan-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          🥇 Gold Rate Today
+        </a>
+      </div>
+    </div>
+
+  </div>
+</MainLayout>

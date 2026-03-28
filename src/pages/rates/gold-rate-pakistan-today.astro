@@ -1,0 +1,203 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'Gold Rate in Pakistan Today — 24K Tola & Gram Price 2026';
+const description = 'Live gold rate in Pakistan today. Check 24K gold price per tola and per gram in PKR. Updated daily from PMEX and international spot prices.';
+const pageUrl = 'https://hisaabkar.pk/rates/gold-rate-pakistan-today';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  dateModified: new Date().toISOString().split('T')[0],
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  about: { '@type': 'Thing', name: 'Gold Price Pakistan' },
+  inLanguage: 'en-US',
+  isAccessibleForFree: true,
+  keywords: 'gold rate Pakistan today, gold price Pakistan, 24k gold tola price, gold gram price Pakistan, sona rate Pakistan',
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the gold rate in Pakistan today?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Check the live widget above for today\'s 24K gold rate per tola and per gram in PKR. Prices are sourced from PMEX (Pakistan Mercantile Exchange) and updated daily.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How is gold priced in Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Gold prices in Pakistan are derived from the international spot price (USD per troy ounce) converted at the SBP USD/PKR interbank rate, then adjusted for local market premiums and jeweller margins. PMEX provides the official benchmark.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is 1 tola of gold in grams?',
+      acceptedAnswer: { '@type': 'Answer', text: '1 tola = 11.6638 grams. This is the traditional South Asian unit still widely used in Pakistan for gold jewellery and investment. 10 tolas = approximately 116.64 grams.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is gold a good investment in Pakistan right now?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Gold historically performs well in Pakistan during periods of high inflation and PKR depreciation. As a hedge against currency risk, it has delivered strong PKR-denominated returns. However, gold is illiquid compared to savings certificates, which currently offer 15-18% annual returns. Diversification across gold, National Savings, and other instruments is generally recommended.' },
+    },
+  ],
+});
+---
+
+<MainLayout {title} {description} type="Article">
+  <script type="application/ld+json" set:html={schema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/rates" class="hover:text-green-700">Rates</a>
+      <span class="mx-1">/</span>
+      <span>Gold Rate Pakistan Today</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8 text-sm">
+      PMEX benchmark prices · Updated daily · Source: Pakistan Mercantile Exchange
+    </p>
+
+    <!-- Live gold rate widget -->
+    <div class="border border-yellow-200 dark:border-yellow-800/40 rounded-2xl p-6 bg-gradient-to-br from-yellow-50 to-white dark:from-yellow-900/10 dark:to-gray-900 mb-10">
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">24K Gold — Per Tola</p>
+          <p id="gold-tola" class="text-3xl font-bold text-gray-900 dark:text-white">
+            <span class="text-xl text-gray-400 animate-pulse">Loading…</span>
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">PKR / tola (11.66g)</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">24K Gold — Per Gram</p>
+          <p id="gold-gram" class="text-3xl font-bold text-gray-900 dark:text-white">
+            <span class="text-xl text-gray-400 animate-pulse">—</span>
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">PKR / gram</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-4 border-t border-yellow-100 dark:border-yellow-800/30 flex items-center justify-between text-sm">
+        <p id="gold-date" class="text-xs text-gray-400 dark:text-gray-500">—</p>
+        <a href="/tools/gold-price-calculator-pakistan/" class="text-yellow-700 dark:text-yellow-400 text-xs font-medium hover:underline">
+          Gold Price Calculator →
+        </a>
+      </div>
+    </div>
+
+    <script>
+      async function loadGoldRate() {
+        try {
+          const res = await fetch('/api/gold-price');
+          if (!res.ok) return;
+          const data = await res.json();
+          const prices = data.current ?? data.prices ?? data;
+
+          const tolaPrice = prices.find((p: any) => p.commodity === '24k_gold_tola')?.price;
+          const gramPrice = prices.find((p: any) => p.commodity === '24k_gold_gram')?.price;
+          const date = prices[0]?.date ?? '';
+
+          const fmt = (n: number) => `PKR ${n.toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+
+          if (tolaPrice) document.getElementById('gold-tola')!.textContent = fmt(tolaPrice);
+          if (gramPrice) document.getElementById('gold-gram')!.textContent = fmt(gramPrice);
+          if (date) document.getElementById('gold-date')!.textContent =
+            'As of ' + new Date(date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
+        } catch { /* non-blocking */ }
+      }
+      loadGoldRate();
+    </script>
+
+    <!-- Article content -->
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+
+      <h2>Gold Rate in Pakistan Today</h2>
+      <p>
+        The gold price in Pakistan is benchmarked by the <strong>Pakistan Mercantile Exchange (PMEX)</strong> and derived from the international spot price in US dollars per troy ounce, converted to PKR at the <strong>SBP interbank exchange rate</strong>. Local jewellery shops (sarafa bazaar) may charge a premium of 1–3% above the PMEX rate to cover fabrication and dealer margins.
+      </p>
+      <p>
+        Pakistan measures gold in <strong>tolas</strong> — the traditional South Asian unit where 1 tola = 11.6638 grams. Investment gold and imported bars are often quoted per 10 tolas (116.64 grams) or per gram for smaller quantities.
+      </p>
+
+      <h2>What Drives Gold Prices in Pakistan?</h2>
+      <p>Gold prices in PKR are affected by two distinct factors:</p>
+      <ul>
+        <li><strong>International gold price (USD/oz):</strong> Global supply-demand, US Federal Reserve interest rate decisions, geopolitical uncertainty, and dollar strength. When the Fed cuts rates, gold typically rises globally.</li>
+        <li><strong>PKR/USD exchange rate:</strong> Even if international gold prices are flat, a weakening rupee makes gold more expensive in PKR. This is why gold in Pakistan often rises faster than global prices during currency depreciation cycles.</li>
+      </ul>
+      <p>
+        Use the <a href="/tools/pakistan-inflation-calculator/">Inflation Calculator</a> to understand how gold has compared to PKR inflation as a store of value.
+      </p>
+
+      <h2>24K vs 22K vs 18K Gold — Price Differences</h2>
+      <p>
+        The purity of gold is measured in karats (K). In Pakistan, most investment gold is 24K (99.9% pure), while jewellery is typically 22K or 18K:
+      </p>
+      <ul>
+        <li><strong>24K gold:</strong> 99.9% pure — used for bars, coins, and investment. Highest price per gram.</li>
+        <li><strong>22K gold:</strong> 91.7% pure — standard for most Pakistani bridal jewellery (22 ÷ 24 × 24K price).</li>
+        <li><strong>18K gold:</strong> 75% pure — used for international-style fine jewellery (18 ÷ 24 × 24K price).</li>
+      </ul>
+      <p>
+        Calculate your gold's zakat value using the <a href="/tools/zakat-calculator/">Zakat Calculator</a>, which applies the current nisab threshold automatically.
+      </p>
+
+      <h2>Is Now a Good Time to Buy Gold in Pakistan?</h2>
+      <p>
+        Gold has delivered strong returns in PKR terms over the past decade, largely because of rupee depreciation rather than gold price appreciation alone. As a hedge against currency risk and inflation, gold remains popular with Pakistani savers.
+      </p>
+      <p>
+        However, gold is less liquid than National Savings instruments (Behbood, RIC, DSC), which currently offer returns in the 15–18% range. A common approach for Pakistani investors is to hold 10–20% of savings in physical gold or gold funds while keeping the majority in higher-yielding instruments. Use the <a href="/tools/national-savings-calculator/">National Savings Calculator</a> to compare returns.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <h3>What is the gold rate in Pakistan today?</h3>
+      <p>Check the live widget at the top of this page for today's 24K gold price per tola and per gram, sourced from PMEX.</p>
+
+      <h3>What is 1 tola of gold worth in grams?</h3>
+      <p>1 tola = 11.6638 grams. This traditional South Asian unit is the standard measure for gold in Pakistan. To convert: multiply the per-tola price by (grams ÷ 11.6638).</p>
+
+      <h3>Why is gold more expensive in Pakistan than the international price suggests?</h3>
+      <p>
+        Pakistan's gold price in PKR = (international USD/oz price ÷ 31.1 × 11.6638) × USD/PKR rate + local premium. The "extra cost" is mostly the PKR/USD exchange rate and local jeweller margin, not an anomaly.
+      </p>
+
+      <h3>How do I calculate zakat on gold?</h3>
+      <p>
+        Zakat is due on gold holdings above the nisab threshold (approximately 87.48 grams of 24K gold) at a rate of 2.5% of total gold value. Use the <a href="/tools/zakat-calculator/">Zakat Calculator</a> to calculate your exact obligation based on today's gold rate.
+      </p>
+    </div>
+
+    <!-- Related tools -->
+    <div class="mt-10 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Related Tools</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/tools/gold-price-calculator-pakistan/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          🥇 Gold Price Calculator
+        </a>
+        <a href="/tools/zakat-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          🌙 Zakat Calculator
+        </a>
+        <a href="/tools/national-savings-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          💰 National Savings Calculator
+        </a>
+        <a href="/rates/usd-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">
+          💵 USD to PKR Today
+        </a>
+      </div>
+    </div>
+
+  </div>
+</MainLayout>

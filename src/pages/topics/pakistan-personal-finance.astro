@@ -1,0 +1,158 @@
+---
+export const prerender = true;
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'Pakistan Personal Finance Guide 2026 — Tax, Savings, Investment & Loans';
+const description = 'Complete personal finance guide for Pakistanis. Covers income tax, National Savings, investment options, home loans, and how to make your money work harder in 2026.';
+const pageUrl = 'https://hisaabkar.pk/topics/pakistan-personal-finance';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  about: { '@type': 'Thing', name: 'Pakistan Personal Finance' },
+  inLanguage: 'en-US',
+  isAccessibleForFree: true,
+  keywords: 'Pakistan personal finance, income tax Pakistan 2026, savings Pakistan, investment options Pakistan, home loan Pakistan',
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What are the income tax slabs in Pakistan for 2026?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Pakistan\'s income tax for salaried individuals is progressive, ranging from 0% on income below the taxable threshold to higher rates on upper brackets. FBR updates slabs in the annual budget. Use the Income Tax Calculator on HisaabKar.pk for the exact 2026 slabs or see the FBR Tax Slabs Guide.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the best savings option in Pakistan right now?',
+      acceptedAnswer: { '@type': 'Answer', text: 'National Savings Certificates (NSC), Behbood Savings Certificates, and Regular Income Certificates currently offer competitive returns in the 15-18% range, significantly above bank savings accounts. These are government-backed and considered low-risk. Use the National Savings Calculator to compare different schemes.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What are the benefits of becoming a tax filer in Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Tax filers in Pakistan benefit from lower withholding taxes on property transactions, vehicle registration, and bank transactions. Non-filers pay double the withholding tax in many categories. Filing taxes also builds a verifiable income record useful for loan applications.' },
+    },
+  ],
+});
+---
+
+<MainLayout {title} {description} type="Article">
+  <script type="application/ld+json" set:html={schema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/topics" class="hover:text-green-700">Topics</a>
+      <span class="mx-1">/</span>
+      <span>Pakistan Personal Finance</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">
+      Practical financial guidance for salaried Pakistanis, freelancers, and business owners.
+    </p>
+
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+
+      <h2>Income Tax in Pakistan: The Basics</h2>
+      <p>
+        Pakistan operates a <strong>progressive income tax system</strong> administered by the <strong>Federal Board of Revenue (FBR)</strong>. Salaried employees have tax deducted at source by their employer. Freelancers and business owners must file returns themselves through the <strong>FBR IRIS portal</strong> by September 30 each year.
+      </p>
+      <p>
+        Key threshold: income below the taxable threshold is exempt. Above that, rates rise progressively. Being a <strong>tax filer</strong> unlocks substantially lower withholding tax rates on property purchases, car registration, and banking transactions — savings that can run into hundreds of thousands of rupees on a property deal.
+      </p>
+      <p>
+        Calculate your exact tax liability with the <a href="/tools/salary-slip-generator/">Income Tax Calculator</a> or read the full <a href="/guides/fbr-income-tax-slabs-2026/">FBR Tax Slabs 2026 Guide</a>.
+      </p>
+
+      <h2>Best Savings Options for Pakistanis in 2026</h2>
+      <p>
+        With the SBP policy rate declining from its 22% peak, the window for locking in high fixed-income returns is narrowing. Current best options by risk profile:
+      </p>
+      <ul>
+        <li><strong>National Savings (Behbood, RIC, DSC):</strong> Government-backed, 15–18% returns, available at any NSS office or online. Best for low-risk savers. Use the <a href="/tools/national-savings-calculator/">National Savings Calculator</a>.</li>
+        <li><strong>Bank Fixed Deposits:</strong> Rate tracks SBP policy rate minus a spread. Lower than NSS but more liquid.</li>
+        <li><strong>Gold:</strong> Inflation and currency hedge. Historically strong PKR-denominated returns. See the <a href="/rates/gold-rate-pakistan-today/">live gold rate</a>.</li>
+        <li><strong>PSX Equities:</strong> Higher risk/return. The KSE-100 has delivered strong returns in dollar terms. Suitable for 3+ year horizons. See the <a href="/guides/how-to-invest-in-psx-pakistan-stock-exchange/">PSX Investment Guide</a>.</li>
+        <li><strong>Real Estate:</strong> Capital preservation but illiquid. High transaction costs (stamp duty, withholding tax) eat into short-term returns. See the <a href="/guides/how-to-buy-property-pakistan/">Property Buying Guide</a>.</li>
+      </ul>
+
+      <h2>Loans and Financing in Pakistan</h2>
+      <p>
+        Car loans and home mortgages are priced as a spread over the SBP policy rate (typically 2–5%). As the policy rate falls, floating-rate borrowers see their EMIs reduce automatically. Fixed-rate products lock in today's rate.
+      </p>
+      <p>
+        For a car loan at the current market rate, a PKR 2,000,000 loan over 5 years at 20% annual rate generates a monthly EMI of approximately PKR 52,870. Calculate your exact EMI with the <a href="/tools/loan-emi-calculator/">Loan EMI Calculator</a>.
+      </p>
+
+      <h2>Zakat and Religious Obligations</h2>
+      <p>
+        Zakat is due annually on savings, gold, silver, and business assets above the <strong>nisab threshold</strong> (currently equivalent to approximately 87.48 grams of gold or 612.36 grams of silver). The rate is 2.5% of total zakatable assets.
+      </p>
+      <p>
+        SBP automatically deducts zakat from bank accounts on the 1st of Ramadan unless you submit a declaration of being non-Hanafi. Use the <a href="/tools/zakat-calculator/">Zakat Calculator</a> for a full calculation including gold, cash, and business assets.
+      </p>
+
+      <h2>Pakistan Personal Finance: Frequently Asked Questions</h2>
+
+      <h3>Do I need to file an income tax return in Pakistan?</h3>
+      <p>
+        You must file if your income exceeds the taxable threshold, you own property or a vehicle, or you have a bank account with significant activity. Beyond obligation, filing is highly recommended because filer status reduces withholding tax significantly on property transactions, imports, and banking. See the <a href="/guides/fbr-income-tax-slabs-2026/">FBR Tax Slabs Guide</a>.
+      </p>
+
+      <h3>What is the safest investment in Pakistan right now?</h3>
+      <p>
+        National Savings Certificates are government-backed (sovereign guarantee) and currently offer the highest risk-free returns in Pakistan. Behbood Savings Certificates are specifically designed for women, senior citizens, and widows, offering monthly profit payments.
+      </p>
+
+      <h3>How do I calculate my electricity bill in Pakistan?</h3>
+      <p>
+        NEPRA sets tiered tariffs by DISCO and consumption slab. Your bill includes the energy charge, fixed charges, fuel adjustment charges (FAC), and multiple taxes and surcharges. Use the <a href="/tools/electricity-bill-calculator/">Electricity Bill Calculator</a> to estimate your bill at current NEPRA rates.
+      </p>
+    </div>
+
+    <!-- Spoke links: Guides -->
+    <div class="mt-12">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">In-Depth Guides</h2>
+      <div class="space-y-3">
+        {[
+          { href: '/guides/fbr-income-tax-slabs-2026/', title: 'FBR Income Tax Slabs 2026', desc: 'Full breakdown of salaried and business income tax brackets' },
+          { href: '/guides/national-savings-schemes-pakistan-guide/', title: 'National Savings Schemes Guide', desc: 'Behbood, RIC, DSC, SSC — rates, eligibility, and how to invest' },
+          { href: '/guides/investing-in-pakistan-beginners-guide/', title: 'Investing in Pakistan: Beginner\'s Guide', desc: 'Gold, NSS, PSX equities, and real estate compared' },
+          { href: '/guides/how-to-buy-property-pakistan/', title: 'How to Buy Property in Pakistan', desc: 'Step-by-step guide to property purchase, stamp duty, and taxes' },
+          { href: '/guides/how-to-invest-in-psx-pakistan-stock-exchange/', title: 'How to Invest in PSX', desc: 'Opening a brokerage account and investing in the Pakistan Stock Exchange' },
+        ].map(g => (
+          <a href={g.href} class="flex items-start gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-green-300 hover:shadow-sm transition bg-white dark:bg-gray-800/30">
+            <span class="text-green-700 dark:text-green-400 font-bold mt-0.5">→</span>
+            <div>
+              <p class="font-semibold text-gray-900 dark:text-white text-sm">{g.title}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{g.desc}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tools grid -->
+    <div class="mt-8 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Personal Finance Tools</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/tools/salary-slip-generator/" class="text-green-700 dark:text-green-400 hover:underline">🧮 Income Tax Calculator</a>
+        <a href="/tools/national-savings-calculator/" class="text-green-700 dark:text-green-400 hover:underline">💰 National Savings Calculator</a>
+        <a href="/tools/loan-emi-calculator/" class="text-green-700 dark:text-green-400 hover:underline">🏦 Loan EMI Calculator</a>
+        <a href="/tools/zakat-calculator/" class="text-green-700 dark:text-green-400 hover:underline">🌙 Zakat Calculator</a>
+        <a href="/tools/electricity-bill-calculator/" class="text-green-700 dark:text-green-400 hover:underline">⚡ Electricity Bill Calculator</a>
+        <a href="/tools/property-stamp-duty-calculator/" class="text-green-700 dark:text-green-400 hover:underline">🏠 Stamp Duty Calculator</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>
