@@ -4,7 +4,7 @@
  * Rates source: National Savings of Pakistan (CDNS) — verify at savings.gov.pk
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { formatLakhCrore, formatIndianComma } from '../../lib/utils/formatPKR';
 
 interface Certificate {
@@ -94,8 +94,34 @@ export default function NationalSavingsCalculator() {
   const [certId, setCertId] = useState('ric');
   const [amount, setAmount] = useState<number>(500_000);
   const [isFiler, setIsFiler] = useState(true);
+  // Live rates from /api/policy-rates (cdnsRates) — override static CERTIFICATES on load
+  const [liveRates, setLiveRates] = useState<Record<string, number>>({});
+  const [ratesDate, setRatesDate] = useState<string>('');
 
-  const cert = CERTIFICATES.find(c => c.id === certId)!;
+  useEffect(() => {
+    fetch('/api/policy-rates')
+      .then(r => r.ok ? r.json() : null)
+      .then((d: any) => {
+        if (!d?.cdnsRates) return;
+        const map: Record<string, number> = {};
+        for (const [key, val] of Object.entries(d.cdnsRates as Record<string, { rate_pa: number; effective_date: string; source: string }>)) {
+          if (val.source !== 'hardcoded') {
+            map[key] = val.rate_pa;
+            if (!ratesDate && val.effective_date) setRatesDate(val.effective_date);
+          }
+        }
+        if (Object.keys(map).length > 0) setLiveRates(map);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Merge static certificates with live rates
+  const certificates = CERTIFICATES.map(c => ({
+    ...c,
+    ratePA: liveRates[c.id] ?? c.ratePA,
+  }));
+
+  const cert = certificates.find(c => c.id === certId)!;
   const wht = isFiler ? WHT_FILER : WHT_NON_FILER;
 
   const annualGrossProfit = amount * cert.ratePA;
@@ -118,7 +144,7 @@ export default function NationalSavingsCalculator() {
           Select Certificate Type
         </label>
         <div className="space-y-2">
-          {CERTIFICATES.map(c => (
+          {certificates.map(c => (
             <button
               key={c.id}
               onClick={() => setCertId(c.id)}
@@ -277,8 +303,12 @@ export default function NationalSavingsCalculator() {
       <div className="mt-6 bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg text-sm">
         <p className="font-semibold text-amber-800 mb-1">⚠️ Important</p>
         <p className="text-amber-700">
-          Rates shown are approximate as of March 2026. National Savings rates change periodically.
-          Always verify current rates at{' '}
+          Rates shown are{' '}
+          {ratesDate
+            ? <>from CDNS data effective {new Date(ratesDate).toLocaleDateString('en-PK', { month: 'long', year: 'numeric' })}.</>
+            : <>approximate — could not load live rates.</>
+          }{' '}
+          National Savings rates change periodically. Always verify current rates at{' '}
           <a href="https://www.savings.gov.pk" target="_blank" rel="noopener noreferrer" className="underline font-medium">savings.gov.pk</a>{' '}
           before investing. Not financial advice.
         </p>

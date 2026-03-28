@@ -154,7 +154,7 @@ const categoryEmoji: Record<string, string> = {
                   <span class="text-sm font-medium text-white/90">USD/PKR (Interbank)</span>
                 </div>
                 <div class="text-right">
-                  <span class="font-bold text-sky-300 text-base block leading-tight count-up" data-target="278.50" data-decimals="2">278.50</span>
+                  <span id="ind-usd" class="font-bold text-sky-300 text-base block leading-tight count-up" data-target="278.50" data-decimals="2">—</span>
                   <span class="text-xs text-white/50">SBP</span>
                 </div>
               </div>
@@ -167,7 +167,7 @@ const categoryEmoji: Record<string, string> = {
                   <span class="text-sm font-medium text-white/90">Gold 24K / Tola</span>
                 </div>
                 <div class="text-right">
-                  <span class="font-bold text-amber-300 text-base block leading-tight count-up" data-target="524000" data-prefix="PKR " data-decimals="0">PKR 5,24,000</span>
+                  <span id="ind-gold" class="font-bold text-amber-300 text-base block leading-tight count-up" data-target="524000" data-prefix="PKR " data-decimals="0">—</span>
                   <span class="text-xs text-white/50">PMEX</span>
                 </div>
               </div>
@@ -180,7 +180,7 @@ const categoryEmoji: Record<string, string> = {
                   <span class="text-sm font-medium text-white/90">Petrol (92 RON)</span>
                 </div>
                 <div class="text-right">
-                  <span class="font-bold text-orange-300 text-base block leading-tight count-up" data-target="321.17" data-prefix="PKR " data-decimals="2">PKR 321.17</span>
+                  <span id="ind-petrol" class="font-bold text-orange-300 text-base block leading-tight count-up" data-target="321.17" data-prefix="PKR " data-decimals="2">—</span>
                   <span class="text-xs text-white/50">OGRA</span>
                 </div>
               </div>
@@ -190,10 +190,10 @@ const categoryEmoji: Record<string, string> = {
                           border-l-[3px] border-l-rose-400">
                 <div class="flex items-center gap-2.5">
                   <span class="w-2 h-2 rounded-full bg-rose-400 shrink-0"></span>
-                  <span class="text-sm font-medium text-white/90">CPI Inflation (Feb)</span>
+                  <span id="ind-cpi-label" class="text-sm font-medium text-white/90">CPI Inflation</span>
                 </div>
                 <div class="text-right">
-                  <span class="font-bold text-rose-300 text-base block leading-tight count-up" data-target="1.5" data-suffix="% YoY" data-decimals="1">1.5% YoY</span>
+                  <span id="ind-cpi" class="font-bold text-rose-300 text-base block leading-tight count-up" data-target="1.5" data-suffix="% YoY" data-decimals="1">—</span>
                   <span class="text-xs text-white/50">PBS</span>
                 </div>
               </div>
@@ -206,7 +206,7 @@ const categoryEmoji: Record<string, string> = {
                   <span class="text-sm font-medium text-white/90">SBP Policy Rate</span>
                 </div>
                 <div class="text-right">
-                  <span class="font-bold text-violet-300 text-base block leading-tight count-up" data-target="12.0" data-suffix="%" data-decimals="1">12.0%</span>
+                  <span id="ind-policy" class="font-bold text-violet-300 text-base block leading-tight count-up" data-target="12.0" data-suffix="%" data-decimals="1">—</span>
                   <span class="text-xs text-white/50">SBP MPC</span>
                 </div>
               </div>
@@ -485,61 +485,131 @@ const categoryEmoji: Record<string, string> = {
     });
   </script>
 
-  <!-- ═══ INDICATORS: staggered entrance + count-up ═══ -->
+  <!-- ═══ INDICATORS: live fetch + staggered entrance + count-up ═══ -->
   <script>
     (function () {
       const cards = Array.from(document.querySelectorAll<HTMLElement>('#indicators-list .indicator-card'));
       if (!cards.length) return;
 
-      // ── Count-up helper ──────────────────────────────────────────────────────
+      // ── Count-up animation ───────────────────────────────────────────────────
       function animateCountUp(el: HTMLElement) {
         const target = parseFloat(el.dataset.target ?? '0');
+        if (!target) { el.textContent = (el.dataset.prefix ?? '') + '—' + (el.dataset.suffix ?? ''); return; }
         const decimals = parseInt(el.dataset.decimals ?? '0', 10);
         const prefix = el.dataset.prefix ?? '';
         const suffix = el.dataset.suffix ?? '';
-        const duration = 900; // ms
+        const duration = 900;
         const start = performance.now();
-
         function frame(now: number) {
           const elapsed = now - start;
           const progress = Math.min(elapsed / duration, 1);
-          // ease-out cubic
           const eased = 1 - Math.pow(1 - progress, 3);
-          const current = target * eased;
-          el.textContent = prefix + current.toLocaleString('en-PK', {
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
+          el.textContent = prefix + (target * eased).toLocaleString('en-PK', {
+            minimumFractionDigits: decimals, maximumFractionDigits: decimals,
           }) + suffix;
           if (progress < 1) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
       }
 
-      // ── Staggered slide-in via IntersectionObserver ──────────────────────────
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (!entry.isIntersecting) return;
-          observer.disconnect();
-
-          cards.forEach((card, i) => {
-            setTimeout(() => {
-              card.style.transition = 'opacity 400ms ease, transform 400ms ease';
-              card.style.transform = 'translateX(0)';
-              card.style.opacity = '1';
-
-              // Trigger count-up for this card's value span
-              const countEl = card.querySelector<HTMLElement>('.count-up');
-              if (countEl && countEl.dataset.target) animateCountUp(countEl);
-            }, i * 130); // 130ms between each card
-          });
+      // ── Staggered entrance ───────────────────────────────────────────────────
+      function runEntrance() {
+        cards.forEach((card, i) => {
+          setTimeout(() => {
+            card.style.transition = 'opacity 400ms ease, transform 400ms ease';
+            card.style.transform = 'translateX(0)';
+            card.style.opacity = '1';
+            const countEl = card.querySelector<HTMLElement>('.count-up');
+            if (countEl) animateCountUp(countEl);
+          }, i * 130);
         });
-      }, { threshold: 0.2 });
+      }
 
-      // Set initial off-screen position
+      // ── Set initial off-screen position ─────────────────────────────────────
       cards.forEach(card => {
         card.style.transform = 'translateX(32px)';
         card.style.opacity = '0';
       });
+
+      // ── Fetch live data, update targets, then animate ────────────────────────
+      async function loadIndicators() {
+        try {
+          const [fxRes, goldRes, commRes, policyRes] = await Promise.allSettled([
+            fetch('/api/exchange-rates?currency=USD'),
+            fetch('/api/gold-price'),
+            fetch('/api/commodities?commodity=petrol'),
+            fetch('/api/policy-rates'),
+          ]);
+
+          // USD/PKR
+          if (fxRes.status === 'fulfilled' && fxRes.value.ok) {
+            const d = await fxRes.value.json() as any;
+            const rate = d.rates?.[0]?.rate;
+            if (rate) {
+              const el = document.getElementById('ind-usd');
+              if (el) el.dataset.target = String(rate);
+            }
+          }
+
+          // Gold per tola
+          if (goldRes.status === 'fulfilled' && goldRes.value.ok) {
+            const d = await goldRes.value.json() as any;
+            const tola = d.goldPerTola;
+            if (tola) {
+              const el = document.getElementById('ind-gold');
+              if (el) el.dataset.target = String(tola);
+            }
+          }
+
+          // Petrol
+          if (commRes.status === 'fulfilled' && commRes.value.ok) {
+            const d = await commRes.value.json() as any;
+            const price = d.commodities?.[0]?.price;
+            if (price) {
+              const el = document.getElementById('ind-petrol');
+              if (el) el.dataset.target = String(price);
+            }
+          }
+
+          // CPI + Policy Rate
+          if (policyRes.status === 'fulfilled' && policyRes.value.ok) {
+            const d = await policyRes.value.json() as any;
+
+            const cpiYoY = d.cpi?.yoy_change;
+            if (cpiYoY !== undefined) {
+              const el = document.getElementById('ind-cpi');
+              if (el) el.dataset.target = String(cpiYoY);
+            }
+            // Update CPI label with real month (e.g. "2026-02" → "Feb")
+            const cpiMonth = d.cpi?.month;
+            if (cpiMonth) {
+              const label = document.getElementById('ind-cpi-label');
+              if (label) {
+                const mon = new Date(cpiMonth + '-02').toLocaleDateString('en-PK', { month: 'short' });
+                label.textContent = `CPI Inflation (${mon})`;
+              }
+            }
+
+            const policyRate = d.policyRates?.policy_rate?.rate;
+            if (policyRate !== undefined) {
+              const el = document.getElementById('ind-policy');
+              if (el) el.dataset.target = String(policyRate);
+            }
+          }
+        } catch { /* use fallback data-target values already in HTML */ }
+
+        // Run entrance animation regardless of fetch outcome
+        runEntrance();
+      }
+
+      // ── Trigger on intersection ──────────────────────────────────────────────
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
+          loadIndicators();
+        });
+      }, { threshold: 0.2 });
 
       const list = document.getElementById('indicators-list');
       if (list) observer.observe(list);

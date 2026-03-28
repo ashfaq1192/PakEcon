@@ -101,12 +101,12 @@ const faqSchema = JSON.stringify({
         try {
           const res = await fetch('/api/gold-price');
           if (!res.ok) return;
-          const data = await res.json();
-          const prices = data.current ?? data.prices ?? data;
+          const data = await res.json() as any;
 
-          const tolaPrice = prices.find((p: any) => p.commodity === '24k_gold_tola')?.price;
-          const gramPrice = prices.find((p: any) => p.commodity === '24k_gold_gram')?.price;
-          const date = prices[0]?.date ?? '';
+          // API returns { goldPerTola, goldPerGram, updatedAt, ... }
+          const tolaPrice: number | null = data.goldPerTola ?? null;
+          const gramPrice: number | null = data.goldPerGram ?? null;
+          const date: string | null = data.updatedAt ?? null;
 
           const fmt = (n: number) => `PKR ${n.toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
 
