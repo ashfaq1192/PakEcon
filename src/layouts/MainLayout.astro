@@ -380,7 +380,7 @@ const schemaDataWithDefaults = {
 
         <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-3">
           <p class="text-gray-500 text-sm">
-            &copy; 2026 HisaabKar.pk. All rights reserved.
+            &copy; <span id="footer-year">2026</span> HisaabKar.pk. All rights reserved.
           </p>
           <div class="flex flex-wrap gap-4 text-xs text-gray-500">
             <a href="/privacy-policy" class="hover:text-green-400 transition">Privacy Policy</a>
@@ -404,6 +404,11 @@ const schemaDataWithDefaults = {
 
     <!-- Toaster Component -->
     <Toaster />
+
+    <script is:inline>
+      const y = document.getElementById('footer-year');
+      if (y) y.textContent = String(new Date().getFullYear());
+    </script>
 
     <!-- Dark Mode Toggle Event Listener -->
     <script>

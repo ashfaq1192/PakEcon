@@ -15,15 +15,16 @@ interface ApiResponse {
   updatedAt: string | null;
 }
 
+const TODAY = new Date().toISOString().split('T')[0];
 const SAMPLE_DATA: CommodityPrice[] = [
-  { commodity: 'Wheat', city: 'Lahore', price: 5200, unit: '40kg', date: '2026-03-15', source: 'Sample', change: 1.2 },
-  { commodity: 'Rice (Basmati)', city: 'Lahore', price: 8500, unit: '40kg', date: '2026-03-15', source: 'Sample', change: -0.5 },
-  { commodity: 'Sugar', city: 'Karachi', price: 180, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 0 },
-  { commodity: 'Flour', city: 'Islamabad', price: 140, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 2.1 },
-  { commodity: 'Tomato', city: 'Peshawar', price: 220, unit: 'kg', date: '2026-03-15', source: 'Sample', change: -3.5 },
-  { commodity: 'Onion', city: 'Multan', price: 160, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 1.8 },
-  { commodity: 'Potato', city: 'Quetta', price: 120, unit: 'kg', date: '2026-03-15', source: 'Sample', change: 0.5 },
-  { commodity: 'Gold (24k)', city: 'National', price: 320900, unit: 'tola', date: '2026-03-15', source: 'Sample', change: 0.8 },
+  { commodity: 'Wheat', city: 'Lahore', price: 5200, unit: '40kg', date: TODAY, source: 'Sample', change: 1.2 },
+  { commodity: 'Rice (Basmati)', city: 'Lahore', price: 8500, unit: '40kg', date: TODAY, source: 'Sample', change: -0.5 },
+  { commodity: 'Sugar', city: 'Karachi', price: 185, unit: 'kg', date: TODAY, source: 'Sample', change: 0 },
+  { commodity: 'Flour', city: 'Islamabad', price: 145, unit: 'kg', date: TODAY, source: 'Sample', change: 2.1 },
+  { commodity: 'Tomato', city: 'Peshawar', price: 230, unit: 'kg', date: TODAY, source: 'Sample', change: -3.5 },
+  { commodity: 'Onion', city: 'Multan', price: 165, unit: 'kg', date: TODAY, source: 'Sample', change: 1.8 },
+  { commodity: 'Potato', city: 'Quetta', price: 125, unit: 'kg', date: TODAY, source: 'Sample', change: 0.5 },
+  { commodity: 'Gold (24k)', city: 'National', price: 524000, unit: 'tola', date: TODAY, source: 'Sample', change: 0.8 },
 ];
 
 export default function MandiTable() {
