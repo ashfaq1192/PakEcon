@@ -7,7 +7,7 @@ const blog = defineCollection({
     title: z.string().max(70),
     pubDate: z.coerce.date(),
     summary: z.string(),
-    category: z.enum(['market_insight', 'weekly_digest', 'budget_alert', 'policy_update']),
+    category: z.enum(['market_insight', 'weekly_digest', 'budget_alert', 'policy_update', 'news_roundup']),
     source: z.string().url(),
     delta: z.number(),
   }),

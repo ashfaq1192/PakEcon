@@ -2,17 +2,21 @@
  * Agent Workflow Orchestrator
  *
  * Coordinates the sequential execution of:
- * 1. Scraper Agent (A) — fetch economic data
+ * 1. Scraper Agent (A) — fetch economic data (rates, commodities, CPI)
  * 2. Analyst Agent (B) — generate LLM insights from scraped data
- * 3. Topic Writer Agent (E) — generate 1 SEO article per run (rotating schedule)
- * 4. Chief Editor Agent (F) — enhance ALL insights for SEO before publishing
- * 5. Publisher Agent (C) — commit MDX to GitHub
- * 6. Social Agent (D) — post to Telegram
+ * 3. News Scraper Agent (G) — scrape RSS feeds (Dawn, BR, ARY, Tribune)
+ * 4. News Writer Agent (H) — generate flagship ~1500-word news article (12h rate-limited)
+ * 5. Topic Writer Agent (E) — generate 1 evergreen SEO article per run
+ * 6. Chief Editor Agent (F) — enhance ALL insights for SEO before publishing
+ * 7. Publisher Agent (C) — commit MDX to GitHub
+ * 8. Social Agent (D) — post to Telegram
  */
 
 import type { AgentState, AgentLog, MarketInsight, Env } from './types';
 import { scraperAgent } from './scraper';
 import { analystAgent } from './analyst';
+import { newsScraperAgent } from './newsScraper';
+import { newsWriterAgent } from './newsWriter';
 import { topicWriterAgent } from './topicWriter';
 import { chiefEditorAgent } from './chiefEditor';
 import { publisherAgent } from './publisher';
@@ -74,9 +78,37 @@ export async function executeWorkflow(db: D1Database, kv: KVNamespace, env: Env)
       console.error('[Workflow] Analyst error (non-fatal):', err);
       analystResult = { insights: [], agentLog: state.agentLog };
     }
-    Object.assign(state, analystResult, { stage: 'topic_writer', updatedAt: new Date().toISOString() });
+    Object.assign(state, analystResult, { stage: 'news_scraper', updatedAt: new Date().toISOString() });
 
-    // ── Stage 3: Topic Writer ─────────────────────────────────────────────────
+    // ── Stage 3: News Scraper ─────────────────────────────────────────────────
+    console.log(`[Workflow ${workflowId}] Stage: news_scraper`);
+    let newsStories: import('./newsScraper').NewsStory[] = [];
+    try {
+      const newsScraperResult = await newsScraperAgent({ env, workflowId, agentLog: state.agentLog });
+      newsStories = newsScraperResult.stories;
+      state.agentLog = newsScraperResult.agentLog;
+    } catch (err) {
+      console.error('[Workflow] News Scraper error (non-fatal):', err);
+    }
+    Object.assign(state, { stage: 'news_writer', updatedAt: new Date().toISOString() });
+
+    // ── Stage 4: News Writer ──────────────────────────────────────────────────
+    console.log(`[Workflow ${workflowId}] Stage: news_writer`);
+    try {
+      const newsWriterResult = await newsWriterAgent({
+        stories: newsStories,
+        env,
+        workflowId,
+        agentLog: state.agentLog,
+      });
+      state.insights = [...(state.insights || []), ...(newsWriterResult.insights || [])];
+      state.agentLog = newsWriterResult.agentLog;
+    } catch (err) {
+      console.error('[Workflow] News Writer error (non-fatal):', err);
+    }
+    Object.assign(state, { stage: 'topic_writer', updatedAt: new Date().toISOString() });
+
+    // ── Stage 5: Topic Writer ─────────────────────────────────────────────────
     console.log(`[Workflow ${workflowId}] Stage: topic_writer`);
     try {
       const topicResult = await topicWriterAgent({ env, workflowId, agentLog: state.agentLog });
@@ -88,7 +120,7 @@ export async function executeWorkflow(db: D1Database, kv: KVNamespace, env: Env)
     }
     Object.assign(state, { stage: 'chief_editor', updatedAt: new Date().toISOString() });
 
-    // ── Stage 4: Chief Editor ─────────────────────────────────────────────────
+    // ── Stage 6: Chief Editor ─────────────────────────────────────────────────
     console.log(`[Workflow ${workflowId}] Stage: chief_editor`);
     try {
       const editorResult = await chiefEditorAgent({
@@ -105,7 +137,7 @@ export async function executeWorkflow(db: D1Database, kv: KVNamespace, env: Env)
     }
     Object.assign(state, { stage: 'publisher', updatedAt: new Date().toISOString() });
 
-    // ── Stage 5: Publisher ────────────────────────────────────────────────────
+    // ── Stage 7: Publisher ────────────────────────────────────────────────────
     console.log(`[Workflow ${workflowId}] Stage: publisher`);
     let publisherResult: Partial<WorkflowState>;
     try {
@@ -116,7 +148,7 @@ export async function executeWorkflow(db: D1Database, kv: KVNamespace, env: Env)
     }
     Object.assign(state, publisherResult, { stage: 'social', updatedAt: new Date().toISOString() });
 
-    // ── Stage 6: Social (Telegram) ────────────────────────────────────────────
+    // ── Stage 8: Social (Telegram) ────────────────────────────────────────────
     if (env.TELEGRAM_ENABLED === 'true' && state.insights.length > 0) {
       console.log(`[Workflow ${workflowId}] Stage: social`);
       try {

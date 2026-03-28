@@ -62,7 +62,7 @@ export interface MarketInsight {
   delta: number;
   indicators: string[];
   citations: Citation[];
-  category: 'market_insight' | 'weekly_digest' | 'budget_alert' | 'policy_update';
+  category: 'market_insight' | 'weekly_digest' | 'budget_alert' | 'policy_update' | 'news_roundup';
   generated_by?: string;
   twitter_post_id?: string;
   telegram_message_id?: string;
@@ -84,7 +84,7 @@ export interface AgentLog {
   error?: string;
 }
 
-export type AgentStage = 'scraper' | 'analyst' | 'topic_writer' | 'chief_editor' | 'publisher' | 'social' | 'complete' | 'error';
+export type AgentStage = 'scraper' | 'analyst' | 'news_scraper' | 'news_writer' | 'topic_writer' | 'chief_editor' | 'publisher' | 'social' | 'complete' | 'error';
 
 export interface AgentState {
   scrapedData: ScrapedData | null;
