@@ -1,0 +1,147 @@
+---
+export const prerender = true;
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const tools = [
+  {
+    href: '/tools/currency-converter/',
+    icon: '💱',
+    title: 'Currency Converter',
+    desc: 'Convert PKR to USD, EUR, GBP, SAR and 30+ currencies at live SBP rates.',
+    tag: 'Forex',
+  },
+  {
+    href: '/tools/gold-price-calculator-pakistan/',
+    icon: '🪙',
+    title: 'Gold Price Calculator',
+    desc: 'Calculate 24k/22k gold value per tola or gram at today\'s Pakistan market rate.',
+    tag: 'Commodities',
+  },
+  {
+    href: '/tools/zakat-calculator/',
+    icon: '🕌',
+    title: 'Zakat Calculator',
+    desc: 'Calculate your annual Zakat obligation based on gold nisab and asset values.',
+    tag: 'Islamic Finance',
+  },
+  {
+    href: '/tools/loan-emi-calculator/',
+    icon: '🏦',
+    title: 'Loan EMI Calculator',
+    desc: 'Monthly instalment, total interest, and amortisation schedule for any loan.',
+    tag: 'Loans',
+  },
+  {
+    href: '/tools/national-savings-calculator/',
+    icon: '💰',
+    title: 'National Savings Calculator',
+    desc: 'Project returns on CDNS certificates: Special Savings, Defence Savings, SSC, and more.',
+    tag: 'Investment',
+  },
+  {
+    href: '/tools/pakistan-inflation-calculator/',
+    icon: '📈',
+    title: 'Inflation Calculator',
+    desc: 'See how much PKR purchasing power has changed using PBS CPI data.',
+    tag: 'Economy',
+  },
+  {
+    href: '/tools/salary-slip-generator/',
+    icon: '🧾',
+    title: 'Salary Slip Generator',
+    desc: 'Create a printable salary slip with tax, EOBI, provident fund deductions.',
+    tag: 'Payroll',
+  },
+  {
+    href: '/tools/eobi-calculator/',
+    icon: '👷',
+    title: 'EOBI Calculator',
+    desc: 'Compute monthly EOBI contributions for employer and employee.',
+    tag: 'Payroll',
+  },
+  {
+    href: '/tools/remittance-calculator/',
+    icon: '✈️',
+    title: 'Remittance Calculator',
+    desc: 'Estimate PKR received from overseas remittances after exchange and fees.',
+    tag: 'Forex',
+  },
+  {
+    href: '/tools/property-stamp-duty-calculator/',
+    icon: '🏠',
+    title: 'Property Stamp Duty',
+    desc: 'Calculate stamp duty, CVT, and registration charges on property purchases.',
+    tag: 'Property',
+  },
+  {
+    href: '/tools/electricity-bill-calculator/',
+    icon: '⚡',
+    title: 'Electricity Bill Calculator',
+    desc: 'Estimate monthly electricity bill with NEPRA tariff slabs and surcharges.',
+    tag: 'Utilities',
+  },
+  {
+    href: '/tools/document-converter/',
+    icon: '📄',
+    title: 'Document Converter',
+    desc: 'Convert PDF, Word, and image documents online — no upload required.',
+    tag: 'Utility',
+  },
+];
+
+const tagColors: Record<string, string> = {
+  Forex: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  Commodities: 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
+  'Islamic Finance': 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  Loans: 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  Investment: 'bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+  Economy: 'bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+  Payroll: 'bg-orange-50 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300',
+  Property: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300',
+  Utilities: 'bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
+  Utility: 'bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300',
+};
+---
+
+<MainLayout
+  title="Free Financial Calculators for Pakistan — HisaabKar.pk"
+  description="12 free calculators for Pakistani finance: currency converter, gold price, zakat, loan EMI, electricity bill, salary slip, and more. Powered by live SBP and PBS data."
+>
+  <section class="max-w-5xl mx-auto px-4 py-10">
+    <header class="mb-8">
+      <nav class="text-xs text-gray-500 mb-4">
+        <a href="/" class="hover:text-green-700">Home</a>
+        <span class="mx-1">/</span>
+        <span>Tools</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">Financial Calculators</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Free, browser-based tools for everyday Pakistani financial decisions.
+        Live SBP rates, NEPRA tariffs, and PBS inflation data built-in.
+      </p>
+      <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">{tools.length} tools available · No signup required</p>
+    </header>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {tools.map((tool) => {
+        const tagColor = tagColors[tool.tag] ?? 'bg-gray-100 text-gray-600';
+        return (
+          <a
+            href={tool.href}
+            class="group flex flex-col gap-3 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 hover:shadow-md hover:border-green-300 dark:hover:border-green-600 transition"
+          >
+            <div class="flex items-start justify-between">
+              <span class="text-3xl">{tool.icon}</span>
+              <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${tagColor}`}>{tool.tag}</span>
+            </div>
+            <div>
+              <h2 class="font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition">{tool.title}</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{tool.desc}</p>
+            </div>
+            <span class="mt-auto text-sm font-medium text-green-700 dark:text-green-400 group-hover:underline">Open calculator →</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+</MainLayout>

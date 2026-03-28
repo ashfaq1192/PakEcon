@@ -1,0 +1,129 @@
+---
+export const prerender = true;
+
+import { getCollection } from 'astro:content';
+import MainLayout from '../../../layouts/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const POSTS_PER_PAGE = 20;
+  const allPosts = await getCollection('blog');
+  const posts = allPosts.sort((a, b) =>
+    b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  );
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+
+  return Array.from({ length: totalPages - 1 }, (_, i) => {
+    const page = i + 2; // pages 2, 3, 4...
+    return {
+      params: { page: String(page) },
+      props: {
+        posts,
+        page,
+        totalPages,
+        POSTS_PER_PAGE,
+      },
+    };
+  });
+}
+
+const { posts, page, totalPages, POSTS_PER_PAGE } = Astro.props;
+const pagePosts = posts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE);
+
+const categoryLabels: Record<string, string> = {
+  market_insight: 'Market Insight',
+  weekly_digest: 'Weekly Digest',
+  budget_alert: 'Budget Alert',
+  policy_update: 'Policy Update',
+  news_roundup: 'Economy News',
+};
+
+const categoryColors: Record<string, string> = {
+  market_insight: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  weekly_digest: 'bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+  budget_alert: 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  policy_update: 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  news_roundup: 'bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+};
+---
+
+<MainLayout
+  title={`Pakistan Economy Blog — Page ${page} of ${totalPages} — HisaabKar.pk`}
+  description="Daily economic analysis, market insights, and policy updates for Pakistan. AI-powered briefings on PKR exchange rates, inflation, gold prices, and more."
+>
+  <section class="max-w-4xl mx-auto px-4 py-10">
+    <header class="mb-8">
+      <nav class="text-xs text-gray-500 mb-4">
+        <a href="/" class="hover:text-green-700">Home</a>
+        <span class="mx-1">/</span>
+        <a href="/blog/" class="hover:text-green-700">Blog</a>
+        <span class="mx-1">/</span>
+        <span>Page {page}</span>
+      </nav>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">Pakistan Economy Blog</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400">
+        Daily analysis on PKR exchange rates, inflation, gold prices, and policy updates.
+      </p>
+      <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">
+        {posts.length} articles · Page {page} of {totalPages}
+      </p>
+    </header>
+
+    <div class="space-y-5">
+      {pagePosts.map((post) => {
+        const dateDisplay = post.data.pubDate.toLocaleDateString('en-PK', {
+          year: 'numeric', month: 'short', day: 'numeric',
+        });
+        const catColor = categoryColors[post.data.category] ?? 'bg-gray-100 text-gray-600';
+        const catLabel = categoryLabels[post.data.category] ?? post.data.category;
+        return (
+          <article class="border border-gray-200 dark:border-gray-700 rounded-xl p-5 hover:shadow-md hover:border-green-300 dark:hover:border-green-600 transition bg-white dark:bg-gray-800/40">
+            <div class="flex items-center gap-2 mb-2 flex-wrap">
+              <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${catColor}`}>
+                {catLabel}
+              </span>
+              {post.data.delta !== 0 && (
+                <span class={`text-xs font-medium ${post.data.delta > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                  {post.data.delta > 0 ? '▲' : '▼'} {Math.abs(post.data.delta).toFixed(2)}%
+                </span>
+              )}
+              <time class="text-xs text-gray-400 ml-auto">{dateDisplay}</time>
+            </div>
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
+              <a href={`/blog/${post.id}`} class="hover:text-green-700 dark:hover:text-green-400 transition">
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-2">{post.data.summary}</p>
+            <a
+              href={`/blog/${post.id}`}
+              class="inline-block mt-3 text-sm font-medium text-green-700 dark:text-green-400 hover:underline"
+            >
+              Read analysis →
+            </a>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Pagination controls -->
+    <nav class="mt-10 flex items-center justify-between" aria-label="Pagination">
+      <a
+        href={page === 2 ? '/blog/' : `/blog/page/${page - 1}/`}
+        class="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition text-gray-700 dark:text-gray-300"
+      >
+        ← Previous
+      </a>
+      <span class="text-sm text-gray-500 dark:text-gray-400">Page {page} of {totalPages}</span>
+      {page < totalPages ? (
+        <a
+          href={`/blog/page/${page + 1}/`}
+          class="inline-flex items-center gap-2 px-4 py-2 bg-green-700 text-white text-sm font-medium rounded-lg hover:bg-green-800 transition"
+        >
+          Next page →
+        </a>
+      ) : (
+        <span class="px-4 py-2 text-sm text-gray-400">You're on the last page</span>
+      )}
+    </nav>
+  </section>
+</MainLayout>
