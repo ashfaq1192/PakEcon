@@ -62,7 +62,9 @@ export interface MarketInsight {
   delta: number;
   indicators: string[];
   citations: Citation[];
-  category: 'market_insight' | 'weekly_digest' | 'budget_alert' | 'policy_update' | 'news_roundup';
+  category: 'market_insight' | 'weekly_digest' | 'budget_alert' | 'policy_update' | 'news_roundup' | string;
+  collection?: 'blog' | 'guides';
+  readTime?: string;
   author?: string;
   generated_by?: string;
   twitter_post_id?: string;

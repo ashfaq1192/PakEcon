@@ -20,7 +20,7 @@ export interface PublisherAgentOutput {
 
 // ─── MDX generation ──────────────────────────────────────────────────────────
 
-function generateMDX(insight: MarketInsight): string {
+function generateBlogMDX(insight: MarketInsight): string {
   const title = insight.title.replace(/"/g, '\\"');
   const summary = insight.summary.replace(/"/g, '\\"');
   const source = insight.citations[0]?.url ?? insight.source;
@@ -43,6 +43,32 @@ ${insight.content}
 
 *Information provided is for educational purposes and based on public data. Not financial advice.*
 `;
+}
+
+function generateGuideMDX(insight: MarketInsight): string {
+  const title = insight.title.replace(/"/g, '\\"');
+  const summary = insight.summary.replace(/"/g, '\\"');
+  const pubDate = insight.date.split('T')[0];
+  const readTime = insight.readTime ?? '7 min read';
+
+  return `---
+title: "${title}"
+pubDate: ${pubDate}
+summary: "${summary}"
+category: "${insight.category}"
+readTime: "${readTime}"
+---
+
+${insight.content}
+
+---
+
+*Information provided is for educational purposes and based on public data. Not financial advice.*
+`;
+}
+
+function generateMDX(insight: MarketInsight): string {
+  return insight.collection === 'guides' ? generateGuideMDX(insight) : generateBlogMDX(insight);
 }
 
 function generateSlug(title: string): string {
@@ -253,14 +279,14 @@ async function getGoogleAccessToken(privateKeyPem: string, serviceAccount: strin
   return data.access_token;
 }
 
-async function notifyGoogleIndexing(slug: string, env: Env): Promise<void> {
+async function notifyGoogleIndexing(slug: string, env: Env, section: 'blog' | 'guides' = 'blog'): Promise<void> {
   if (!env.GOOGLE_PRIVATE_KEY || !env.GOOGLE_SERVICE_ACCOUNT) return;
   // Guard: must look like a real PEM key (starts with -----BEGIN)
   if (!env.GOOGLE_PRIVATE_KEY.includes('BEGIN')) {
     console.warn('[Publisher] GOOGLE_PRIVATE_KEY does not look like a PEM key — skipping Google Indexing');
     return;
   }
-  const url = `https://hisaabkar.pk/blog/${slug}`;
+  const url = `https://hisaabkar.pk/${section}/${slug}`;
   try {
     const accessToken = await getGoogleAccessToken(env.GOOGLE_PRIVATE_KEY, env.GOOGLE_SERVICE_ACCOUNT);
     const res = await fetch('https://indexing.googleapis.com/v3/urlNotifications:publish', {
@@ -322,15 +348,19 @@ export async function publisherAgent(state: {
     try {
       const slug = insight.slug || generateSlug(insight.title);
       const filename = `${slug}.mdx`;
-      const filePath = `src/content/blog/${filename}`;
+      const isGuide = insight.collection === 'guides';
+      const filePath = isGuide
+        ? `src/content/guides/${filename}`
+        : `src/content/blog/${filename}`;
       const mdxContent = generateMDX({ ...insight, slug });
+      const commitPrefix = isGuide ? 'feat(guide)' : 'feat(insight)';
 
       await createGitHubCommit(
         env.GITHUB_OWNER,
         env.GITHUB_REPO,
         filePath,
         mdxContent,
-        `feat(insight): ${insight.title}`,
+        `${commitPrefix}: ${insight.title}`,
         env.GITHUB_TOKEN,
         humanReviewMode
       );
@@ -343,7 +373,7 @@ export async function publisherAgent(state: {
       }
 
       // Non-blocking Google Indexing notification
-      await notifyGoogleIndexing(slug, env);
+      await notifyGoogleIndexing(slug, env, isGuide ? 'guides' : 'blog');
 
       publishedCount++;
       insight.slug = slug; // ensure slug is set for social stage

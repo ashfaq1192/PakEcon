@@ -14,7 +14,8 @@ import type { MarketInsight, AgentLog, Env } from './types';
 interface TopicConfig {
   slug: string;
   title: string;
-  category: 'market_insight' | 'policy_update';
+  category: string;        // guide category: taxation | banking | investment | policy | inflation | remittance
+  readTime: string;
   keywords: string[];
   toolLinks: string[];
   prompt: string;
@@ -25,56 +26,61 @@ const TOPIC_SCHEDULE: TopicConfig[] = [
   {
     slug: 'usd-pkr-rate-today',
     title: "USD to PKR Rate Today: What Drives Pakistan's Exchange Rate",
-    category: 'market_insight',
+    category: 'remittance',
+    readTime: '7 min read',
     keywords: ['USD to PKR', 'dollar rate in Pakistan', 'SBP interbank rate', 'PKR exchange rate today'],
     toolLinks: [
       '[Currency Converter](https://hisaabkar.pk/tools/currency-converter/)',
       '[Remittance Calculator](https://hisaabkar.pk/tools/remittance-calculator/)',
     ],
-    prompt: "Write a comprehensive SEO article about USD/PKR exchange rate dynamics in Pakistan. Cover: how SBP sets interbank rates, open market vs interbank difference, impact of IMF program on PKR, how to get best remittance rates, what PKR weakening means for imports and inflation. Target audience: Pakistani professionals and diaspora sending money home.",
+    prompt: "Write a comprehensive SEO guide about USD/PKR exchange rate dynamics in Pakistan. Cover: how SBP sets interbank rates, open market vs interbank difference, impact of IMF program on PKR, how to get best remittance rates, what PKR weakening means for imports and inflation. Target audience: Pakistani professionals and diaspora sending money home.",
     source: 'https://www.sbp.org.pk',
   },
   {
     slug: 'petrol-price-pakistan-today',
     title: 'Petrol Price in Pakistan Today: OGRA Formula & When Prices Change',
-    category: 'market_insight',
+    category: 'inflation',
+    readTime: '6 min read',
     keywords: ['petrol price Pakistan', 'fuel price today', 'OGRA petrol price', 'petrol rate Pakistan 2026'],
     toolLinks: [
       '[Pakistan Inflation Calculator](https://hisaabkar.pk/tools/pakistan-inflation-calculator/)',
       '[Electricity Bill Calculator](https://hisaabkar.pk/tools/electricity-bill-calculator/)',
     ],
-    prompt: 'Write a comprehensive SEO article about petrol prices in Pakistan. Cover: current petrol price, how OGRA sets prices (fortnightly review), how crude oil and PKR/USD rate affect pump price, difference between petrol 92 RON and 95 RON, how fuel price changes affect inflation and everyday Pakistanis. Target audience: Pakistani consumers and vehicle owners.',
+    prompt: 'Write a comprehensive SEO guide about petrol prices in Pakistan. Cover: current petrol price, how OGRA sets prices (fortnightly review), how crude oil and PKR/USD rate affect pump price, difference between petrol 92 RON and 95 RON, how fuel price changes affect inflation and everyday Pakistanis. Target audience: Pakistani consumers and vehicle owners.',
     source: 'https://www.ogra.org.pk',
   },
   {
     slug: 'how-to-file-income-tax-return-pakistan',
     title: 'How to File Income Tax Return in Pakistan (FBR IRIS Guide 2026)',
-    category: 'policy_update',
+    category: 'taxation',
+    readTime: '9 min read',
     keywords: ['how to file tax return Pakistan', 'FBR IRIS', 'income tax return 2026', 'tax filer Pakistan'],
     toolLinks: [
       '[Income Tax Calculator](https://hisaabkar.pk/tools/salary-slip-generator/)',
       '[Salary Slip Generator](https://hisaabkar.pk/tools/salary-slip-generator/)',
     ],
-    prompt: 'Write a step-by-step SEO guide on how to file an income tax return in Pakistan using FBR IRIS portal. Cover: who must file (salaried, business, freelancers), documents needed, step-by-step IRIS filing process, deadline dates, filer vs non-filer benefits, common mistakes. Target audience: first-time tax filers in Pakistan.',
+    prompt: 'Write a detailed step-by-step SEO guide on how to file an income tax return in Pakistan using FBR IRIS portal. Cover: who must file (salaried, business, freelancers), documents needed, step-by-step IRIS filing process, deadline dates, filer vs non-filer benefits, common mistakes. Target audience: first-time tax filers in Pakistan.',
     source: 'https://fbr.gov.pk',
   },
   {
     slug: 'best-investment-options-pakistan-2026',
     title: 'Best Investment Options in Pakistan 2026: Savings, Gold & More',
-    category: 'market_insight',
+    category: 'investment',
+    readTime: '8 min read',
     keywords: ['best investment Pakistan', 'where to invest money Pakistan', 'National Savings Pakistan', 'investment options 2026'],
     toolLinks: [
       '[National Savings Calculator](https://hisaabkar.pk/tools/national-savings-calculator/)',
       '[Gold Price Calculator](https://hisaabkar.pk/tools/gold-price-calculator-pakistan/)',
       '[Loan EMI Calculator](https://hisaabkar.pk/tools/loan-emi-calculator/)',
     ],
-    prompt: 'Write a comprehensive SEO article about the best investment options in Pakistan in 2026. Cover: National Savings (Behbood, RIC, DSC) with current rates, gold investment, stock market (PSX), real estate, bank fixed deposits, mutual funds. Compare risk, return, and liquidity. Target audience: Pakistani middle-class savers wanting to beat inflation.',
+    prompt: 'Write a comprehensive SEO guide about the best investment options in Pakistan in 2026. Cover: National Savings (Behbood, RIC, DSC) with current rates, gold investment, stock market (PSX), real estate, bank fixed deposits, mutual funds. Compare risk, return, and liquidity for each. Target audience: Pakistani middle-class savers wanting to beat inflation.',
     source: 'https://www.savings.gov.pk',
   },
   {
     slug: 'how-to-calculate-zakat-pakistan',
     title: 'How to Calculate Zakat in Pakistan: Nisab, Gold & Silver Rates 2026',
-    category: 'market_insight',
+    category: 'taxation',
+    readTime: '7 min read',
     keywords: ['zakat calculation Pakistan', 'nisab 2026', 'zakat on gold Pakistan', 'how to calculate zakat'],
     toolLinks: [
       '[Zakat Calculator](https://hisaabkar.pk/tools/zakat-calculator/)',
@@ -86,31 +92,34 @@ const TOPIC_SCHEDULE: TopicConfig[] = [
   {
     slug: 'electricity-bill-calculation-pakistan',
     title: 'How Electricity Bills Are Calculated in Pakistan (NEPRA Tariff 2026)',
-    category: 'market_insight',
+    category: 'policy',
+    readTime: '7 min read',
     keywords: ['electricity bill Pakistan', 'NEPRA tariff 2026', 'DISCO electricity rate', 'how to reduce electricity bill Pakistan'],
     toolLinks: [
       '[Electricity Bill Calculator](https://hisaabkar.pk/tools/electricity-bill-calculator/)',
       '[Pakistan Inflation Calculator](https://hisaabkar.pk/tools/pakistan-inflation-calculator/)',
     ],
-    prompt: 'Write a comprehensive SEO article about how electricity bills are calculated in Pakistan. Cover: NEPRA tariff slabs 2026, how DISCOs (LESCO, KESC, MEPCO etc) apply tariffs, fixed charges vs variable, fuel adjustment charges, taxes and surcharges, how to read your bill, tips to reduce electricity consumption. Target audience: Pakistani household consumers.',
+    prompt: 'Write a comprehensive SEO guide about how electricity bills are calculated in Pakistan. Cover: NEPRA tariff slabs 2026, how DISCOs (LESCO, KESC, MEPCO etc) apply tariffs, fixed charges vs variable, fuel adjustment charges, taxes and surcharges, how to read your bill, tips to reduce electricity consumption. Target audience: Pakistani household consumers.',
     source: 'https://www.nepra.org.pk',
   },
   {
     slug: 'sbp-policy-rate-impact-pakistan',
     title: 'SBP Policy Rate in Pakistan: What It Means for Your Loans & Savings',
-    category: 'policy_update',
+    category: 'policy',
+    readTime: '8 min read',
     keywords: ['SBP policy rate', 'interest rate Pakistan', 'monetary policy Pakistan', 'SBP rate cut 2026'],
     toolLinks: [
       '[Loan EMI Calculator](https://hisaabkar.pk/tools/loan-emi-calculator/)',
       '[National Savings Calculator](https://hisaabkar.pk/tools/national-savings-calculator/)',
     ],
-    prompt: 'Write a comprehensive SEO article about the SBP (State Bank of Pakistan) policy rate. Cover: what is the policy rate, how SBP sets it through MPC meetings, how rate changes affect home loans, car financing, business credit, savings returns, and PKR value. Cover recent 2026 rate decisions and outlook. Target audience: Pakistani borrowers, savers, and investors.',
+    prompt: 'Write a comprehensive SEO guide about the SBP (State Bank of Pakistan) policy rate. Cover: what is the policy rate, how SBP sets it through MPC meetings, how rate changes affect home loans, car financing, business credit, savings returns, and PKR value. Cover recent 2026 rate decisions and outlook. Target audience: Pakistani borrowers, savers, and investors.',
     source: 'https://www.sbp.org.pk',
   },
   {
     slug: 'property-stamp-duty-guide-pakistan',
-    title: 'Property Stamp Duty & Transfer Taxes in Pakistan: Province-by-Province Guide',
-    category: 'policy_update',
+    title: 'Property Stamp Duty & Transfer Taxes in Pakistan: Province Guide',
+    category: 'investment',
+    readTime: '8 min read',
     keywords: ['property stamp duty Pakistan', 'property transfer tax Pakistan', 'filer non-filer property tax', 'buying property Pakistan'],
     toolLinks: [
       '[Property Stamp Duty Calculator](https://hisaabkar.pk/tools/property-stamp-duty-calculator/)',
@@ -118,6 +127,32 @@ const TOPIC_SCHEDULE: TopicConfig[] = [
     ],
     prompt: 'Write a comprehensive SEO guide on property stamp duty and transfer taxes in Pakistan. Cover: stamp duty rates by province (Punjab, Sindh, KPK, Balochistan), CVT, withholding tax for filers vs non-filers, how DC rates work, total buying cost calculation, tips for first-time property buyers. Target audience: Pakistanis buying or selling property.',
     source: 'https://fbr.gov.pk',
+  },
+  {
+    slug: 'how-to-open-bank-account-online-pakistan',
+    title: 'How to Open a Bank Account Online in Pakistan (2026 Guide)',
+    category: 'banking',
+    readTime: '6 min read',
+    keywords: ['open bank account Pakistan', 'online bank account Pakistan', 'Meezan bank account', 'HBL online account'],
+    toolLinks: [
+      '[Loan EMI Calculator](https://hisaabkar.pk/tools/loan-emi-calculator/)',
+      '[National Savings Calculator](https://hisaabkar.pk/tools/national-savings-calculator/)',
+    ],
+    prompt: 'Write a comprehensive SEO guide on how to open a bank account in Pakistan in 2026. Cover: types of accounts (current, savings, Asaan), required documents (CNIC, proof of income), major banks comparison (HBL, UBL, Meezan, MCB), digital/app-based account opening process, Roshan Digital Account for overseas Pakistanis. Target audience: young Pakistanis and overseas Pakistanis.',
+    source: 'https://www.sbp.org.pk',
+  },
+  {
+    slug: 'national-savings-pakistan-rates-2026',
+    title: 'National Savings Pakistan: Complete Guide to Schemes & Rates 2026',
+    category: 'investment',
+    readTime: '9 min read',
+    keywords: ['National Savings Pakistan', 'Behbood certificate rate', 'DSC rate 2026', 'RIC Pakistan', 'CDNS Pakistan'],
+    toolLinks: [
+      '[National Savings Calculator](https://hisaabkar.pk/tools/national-savings-calculator/)',
+      '[Pakistan Inflation Calculator](https://hisaabkar.pk/tools/pakistan-inflation-calculator/)',
+    ],
+    prompt: 'Write a comprehensive SEO guide on National Savings schemes in Pakistan in 2026. Cover all schemes: Behbood Savings Certificate, Regular Income Certificate (RIC), Defence Savings Certificate (DSC), Special Savings Certificate (SSC), Short-term Savings Certificate. For each: eligibility, minimum investment, profit rate, payout frequency, tax treatment. Compare with bank fixed deposits. Target audience: Pakistani savers and retirees.',
+    source: 'https://www.savings.gov.pk',
   },
 ];
 
@@ -135,7 +170,7 @@ Structure every article with these H2 sections:
 [3 questions with detailed answers in Q&A format]
 ## Conclusion
 
-Article length: 500–700 words total.
+Article length: 800–1200 words total.
 
 IMPORTANT rules:
 1. Naturally embed ALL tool links provided in the "Tool Links" section into the article body — prefer the body sections, not just the conclusion.
@@ -164,7 +199,7 @@ async function callGroq(userPrompt: string, apiKey: string): Promise<string> {
           { role: 'system', content: TOPIC_WRITER_SYSTEM_PROMPT },
           { role: 'user', content: userPrompt },
         ],
-        max_completion_tokens: 1200,
+        max_completion_tokens: 2000,
         temperature: 0.7,
       }),
     });
@@ -281,6 +316,8 @@ export async function topicWriterAgent(state: {
       indicators: [selectedTopic.slug, selectedTopic.category],
       citations: [{ source: selectedTopic.source, url: selectedTopic.source }],
       category: selectedTopic.category,
+      collection: 'guides',
+      readTime: selectedTopic.readTime,
       generated_by: 'topic_writer:groq:llama-3.3-70b-versatile',
       date: new Date().toISOString(),
       slug,
