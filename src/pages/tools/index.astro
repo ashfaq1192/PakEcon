@@ -4,32 +4,94 @@ import MainLayout from '../../layouts/MainLayout.astro';
 
 const tools = [
   {
-    href: '/tools/currency-converter/',
-    icon: '💱',
-    title: 'Currency Converter',
-    desc: 'Convert PKR to USD, EUR, GBP, SAR and 30+ currencies at live SBP rates.',
-    tag: 'Forex',
+    href: '/#tax-calculator',
+    icon: '📊',
+    title: 'Income Tax Calculator',
+    desc: 'Calculate your FBR 2026 tax liability — salaried, freelancer, or business. Includes Digital Nation Act credits.',
+    tag: 'Tax',
+    popular: true,
+    gradient: 'from-green-500 to-emerald-600',
+  },
+  {
+    href: '/tools/salary-slip-generator/',
+    icon: '🧾',
+    title: 'Salary Slip Generator',
+    desc: 'Create a printable PDF salary slip with auto FBR tax, EOBI, and provident fund deductions.',
+    tag: 'Payroll',
+    popular: true,
+    gradient: 'from-teal-500 to-green-600',
   },
   {
     href: '/tools/gold-price-calculator-pakistan/',
     icon: '🪙',
     title: 'Gold Price Calculator',
-    desc: 'Calculate 24k/22k gold value per tola or gram at today\'s Pakistan market rate.',
+    desc: 'Live 24K gold rates in PKR per tola & gram. Portfolio value & scenario analysis.',
     tag: 'Commodities',
+    popular: true,
+    gradient: 'from-yellow-500 to-amber-500',
+  },
+  {
+    href: '/tools/currency-converter/',
+    icon: '💱',
+    title: 'Currency Converter',
+    desc: 'Convert PKR to USD, EUR, GBP, SAR and 30+ currencies at live SBP interbank rates.',
+    tag: 'Forex',
+    popular: false,
+    gradient: 'from-blue-500 to-cyan-600',
+  },
+  {
+    href: '/tools/loan-emi-calculator/',
+    icon: '🏦',
+    title: 'Loan & EMI Calculator',
+    desc: 'Monthly instalment, total interest, and amortisation schedule. Supports Islamic Murabaha.',
+    tag: 'Loans',
+    popular: false,
+    gradient: 'from-purple-500 to-indigo-600',
+  },
+  {
+    href: '/tools/property-stamp-duty-calculator/',
+    icon: '🏠',
+    title: 'Property Stamp Duty',
+    desc: 'Calculate stamp duty, CVT, and registration charges by province — filer vs non-filer.',
+    tag: 'Property',
+    popular: false,
+    gradient: 'from-orange-500 to-amber-600',
   },
   {
     href: '/tools/zakat-calculator/',
     icon: '🕌',
     title: 'Zakat Calculator',
-    desc: 'Calculate your annual Zakat obligation based on gold nisab and asset values.',
+    desc: 'Calculate your annual Zakat obligation based on gold nisab and total asset values.',
     tag: 'Islamic Finance',
+    popular: false,
+    gradient: 'from-emerald-500 to-green-700',
   },
   {
-    href: '/tools/loan-emi-calculator/',
-    icon: '🏦',
-    title: 'Loan EMI Calculator',
-    desc: 'Monthly instalment, total interest, and amortisation schedule for any loan.',
-    tag: 'Loans',
+    href: '/tools/electricity-bill-calculator/',
+    icon: '⚡',
+    title: 'Electricity Bill Calculator',
+    desc: 'Estimate monthly electricity bill with NEPRA tariff slabs, fuel charges, and surcharges.',
+    tag: 'Utilities',
+    popular: false,
+    gradient: 'from-cyan-500 to-sky-600',
+  },
+  {
+    href: '/tools/remittance-calculator/',
+    icon: '✈️',
+    title: 'Remittance Calculator',
+    desc: 'Estimate PKR received from overseas — compare USD, GBP, AED, SAR & more at SBP rates.',
+    tag: 'Forex',
+    popular: false,
+    gradient: 'from-violet-500 to-purple-600',
+  },
+  {
+    href: '/tools/pakistan-inflation-calculator/',
+    icon: '📈',
+    title: 'Inflation Calculator',
+    desc: "See how Pakistan's inflation eroded your PKR purchasing power using PBS CPI data 2015–2026.",
+    tag: 'Economy',
+    popular: false,
+    gradient: 'from-red-500 to-rose-600',
   },
   {
     href: '/tools/national-savings-calculator/',
@@ -37,62 +99,34 @@ const tools = [
     title: 'National Savings Calculator',
     desc: 'Project returns on CDNS certificates: Special Savings, Defence Savings, SSC, and more.',
     tag: 'Investment',
-  },
-  {
-    href: '/tools/pakistan-inflation-calculator/',
-    icon: '📈',
-    title: 'Inflation Calculator',
-    desc: 'See how much PKR purchasing power has changed using PBS CPI data.',
-    tag: 'Economy',
-  },
-  {
-    href: '/tools/salary-slip-generator/',
-    icon: '🧾',
-    title: 'Salary Slip Generator',
-    desc: 'Create a printable salary slip with tax, EOBI, provident fund deductions.',
-    tag: 'Payroll',
+    popular: false,
+    gradient: 'from-indigo-500 to-blue-600',
   },
   {
     href: '/tools/eobi-calculator/',
     icon: '👷',
     title: 'EOBI Calculator',
-    desc: 'Compute monthly EOBI contributions for employer and employee.',
+    desc: 'Compute monthly EOBI contributions for employer and employee accurately.',
     tag: 'Payroll',
-  },
-  {
-    href: '/tools/remittance-calculator/',
-    icon: '✈️',
-    title: 'Remittance Calculator',
-    desc: 'Estimate PKR received from overseas remittances after exchange and fees.',
-    tag: 'Forex',
-  },
-  {
-    href: '/tools/property-stamp-duty-calculator/',
-    icon: '🏠',
-    title: 'Property Stamp Duty',
-    desc: 'Calculate stamp duty, CVT, and registration charges on property purchases.',
-    tag: 'Property',
-  },
-  {
-    href: '/tools/electricity-bill-calculator/',
-    icon: '⚡',
-    title: 'Electricity Bill Calculator',
-    desc: 'Estimate monthly electricity bill with NEPRA tariff slabs and surcharges.',
-    tag: 'Utilities',
+    popular: false,
+    gradient: 'from-slate-500 to-gray-600',
   },
   {
     href: '/tools/document-converter/',
     icon: '📄',
     title: 'Document Converter',
-    desc: 'Convert PDF, Word, and image documents online — no upload required.',
+    desc: 'Convert PDF, Word, and image files online — no upload to any server required.',
     tag: 'Utility',
+    popular: false,
+    gradient: 'from-stone-500 to-gray-600',
   },
 ];
 
 const tagColors: Record<string, string> = {
+  Tax: 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300',
   Forex: 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
   Commodities: 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300',
-  'Islamic Finance': 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  'Islamic Finance': 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300',
   Loans: 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-300',
   Investment: 'bg-purple-50 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
   Economy: 'bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
@@ -101,47 +135,142 @@ const tagColors: Record<string, string> = {
   Utilities: 'bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300',
   Utility: 'bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300',
 };
+
+// Get unique tags for filter
+const allTags = [...new Set(tools.map(t => t.tag))];
 ---
 
 <MainLayout
   title="Free Financial Calculators for Pakistan — HisaabKar.pk"
-  description="12 free calculators for Pakistani finance: currency converter, gold price, zakat, loan EMI, electricity bill, salary slip, and more. Powered by live SBP and PBS data."
+  description="13 free calculators for Pakistani finance: FBR income tax, gold price, zakat, loan EMI, electricity bill, salary slip generator & more. Powered by live SBP, FBR & PBS data."
 >
-  <section class="max-w-5xl mx-auto px-4 py-10">
-    <header class="mb-8">
-      <nav class="text-xs text-gray-500 mb-4">
-        <a href="/" class="hover:text-green-700">Home</a>
-        <span class="mx-1">/</span>
-        <span>Tools</span>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-green-700 via-green-800 to-emerald-900 text-white py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <nav class="text-xs text-green-300/70 mb-5 flex items-center gap-1">
+        <a href="/" class="hover:text-green-200 transition">Home</a>
+        <span>/</span>
+        <span class="text-green-200">Tools</span>
       </nav>
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-3">Financial Calculators</h1>
-      <p class="text-lg text-gray-600 dark:text-gray-400">
-        Free, browser-based tools for everyday Pakistani financial decisions.
-        Live SBP rates, NEPRA tariffs, and PBS inflation data built-in.
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">Free Financial Calculators</h1>
+      <p class="text-green-100 text-base max-w-xl mb-6">
+        {tools.length} browser-based tools for everyday Pakistani financial decisions. Live data from SBP, FBR, PBS & NEPRA. No signup, no cost.
       </p>
-      <p class="text-sm text-gray-400 dark:text-gray-500 mt-2">{tools.length} tools available · No signup required</p>
-    </header>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {tools.map((tool) => {
-        const tagColor = tagColors[tool.tag] ?? 'bg-gray-100 text-gray-600';
-        return (
-          <a
-            href={tool.href}
-            class="group flex flex-col gap-3 p-5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 hover:shadow-md hover:border-green-300 dark:hover:border-green-600 transition"
-          >
-            <div class="flex items-start justify-between">
-              <span class="text-3xl">{tool.icon}</span>
-              <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${tagColor}`}>{tool.tag}</span>
-            </div>
-            <div>
-              <h2 class="font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition">{tool.title}</h2>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{tool.desc}</p>
-            </div>
-            <span class="mt-auto text-sm font-medium text-green-700 dark:text-green-400 group-hover:underline">Open calculator →</span>
-          </a>
-        );
-      })}
+      <div class="flex flex-wrap gap-3 text-sm">
+        <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-green-100">✅ No signup</span>
+        <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-green-100">🔒 100% private</span>
+        <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-green-100">📡 Live data</span>
+        <span class="bg-white/10 border border-white/20 px-3 py-1 rounded-full text-green-100">🎓 Expert verified</span>
+      </div>
     </div>
   </section>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+
+    <!-- Category filter -->
+    <div class="flex gap-2 flex-wrap mb-8" id="tag-filter">
+      <button data-tag="all" class="tag-btn active text-xs font-semibold px-3 py-1.5 rounded-full border transition-all bg-green-600 text-white border-green-600">All Tools</button>
+      {allTags.map(tag => (
+        <button data-tag={tag} class="tag-btn text-xs font-semibold px-3 py-1.5 rounded-full border transition-all bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-green-400 hover:text-green-700">
+          {tag}
+        </button>
+      ))}
+    </div>
+
+    <!-- Popular section -->
+    <div class="mb-8" id="popular-section">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">🔥 Most Popular</span>
+        <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {tools.filter(t => t.popular).map(tool => {
+          const tagColor = tagColors[tool.tag] ?? 'bg-gray-100 text-gray-600';
+          return (
+            <a
+              href={tool.href}
+              class={`group tool-card relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300`}
+              data-tag={tool.tag}
+            >
+              <div class={`h-20 bg-gradient-to-br ${tool.gradient} flex items-center justify-center`}>
+                <span class="text-4xl">{tool.icon}</span>
+              </div>
+              <div class="p-4">
+                <span class={`text-xs font-semibold px-2 py-0.5 rounded-full ${tagColor}`}>{tool.tag}</span>
+                <h2 class="text-sm font-bold text-gray-900 dark:text-white mt-2 mb-1 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                  {tool.title}
+                </h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">{tool.desc}</p>
+                <p class="text-xs font-semibold text-green-600 dark:text-green-400 mt-3">Open calculator →</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- All tools grid -->
+    <div>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="inline-block bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">All Tools</span>
+        <div class="flex-1 h-px bg-gray-200 dark:bg-gray-700"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="tools-grid">
+        {tools.map((tool) => {
+          const tagColor = tagColors[tool.tag] ?? 'bg-gray-100 text-gray-600';
+          return (
+            <a
+              href={tool.href}
+              class="group tool-card flex items-start gap-4 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/40 hover:shadow-md hover:border-green-300 dark:hover:border-green-600 transition"
+              data-tag={tool.tag}
+            >
+              <div class={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center shrink-0 text-2xl`}>
+                {tool.icon}
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <span class={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${tagColor}`}>{tool.tag}</span>
+                  {tool.popular && <span class="text-[10px] font-bold text-orange-500">🔥</span>}
+                </div>
+                <h2 class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400 transition leading-snug">{tool.title}</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed line-clamp-2">{tool.desc}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const filterBtns = document.querySelectorAll<HTMLButtonElement>('.tag-btn');
+    const toolCards = document.querySelectorAll<HTMLElement>('.tool-card');
+    const popularSection = document.getElementById('popular-section');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag ?? 'all';
+
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-green-600', 'text-white', 'border-green-600');
+          b.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-600', 'border-gray-200');
+        });
+        btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-600', 'border-gray-200');
+        btn.classList.add('bg-green-600', 'text-white', 'border-green-600');
+
+        // Hide popular section when filtering
+        if (popularSection) {
+          popularSection.style.display = tag === 'all' ? '' : 'none';
+        }
+
+        toolCards.forEach(card => {
+          if (tag === 'all' || card.dataset.tag === tag) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
 </MainLayout>

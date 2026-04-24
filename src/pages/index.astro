@@ -7,13 +7,18 @@ import Icon from '../components/ui/Icon.astro';
 import ScrollReveal from '../components/ui/ScrollReveal.astro';
 import { getCollection } from 'astro:content';
 
-// Latest real blog posts
+// Latest real blog posts — exclude auto-generated price-update micro-posts
 const allPosts = await getCollection('blog');
 const latestPosts = allPosts
+  .filter(p =>
+    !p.id.startsWith('24k-') &&
+    !p.id.startsWith('usd-pkr-rate-today') &&
+    !p.id.startsWith('petrol-price-pakistan-today')
+  )
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
 
-// Financial tools — 8 core tools, no EOBI / Electricity / Zakat / National Savings
+// Financial tools — 8 core tools with popularity signals
 const financialTools = [
   {
     href: '/#tax-calculator',
@@ -23,15 +28,17 @@ const financialTools = [
     tag: 'Tax',
     gradient: 'from-green-500 to-emerald-600',
     tagColor: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400',
+    popular: true,
   },
   {
     href: '/tools/salary-slip-generator',
     emoji: '📋',
-    title: 'Create Salary Slip PDF',
-    desc: 'Generate a professional salary slip with auto FBR tax deduction. Download as PDF.',
+    title: 'Salary Slip Generator',
+    desc: 'Generate a professional salary slip with auto FBR tax deduction. Download as PDF instantly.',
     tag: 'Tax',
     gradient: 'from-teal-500 to-green-600',
     tagColor: 'bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-400',
+    popular: true,
   },
   {
     href: '/tools/property-stamp-duty-calculator',
@@ -41,6 +48,7 @@ const financialTools = [
     tag: 'Property',
     gradient: 'from-orange-500 to-amber-600',
     tagColor: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400',
+    popular: false,
   },
   {
     href: '/tools/gold-price-calculator-pakistan',
@@ -50,6 +58,7 @@ const financialTools = [
     tag: 'Markets',
     gradient: 'from-yellow-500 to-amber-500',
     tagColor: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400',
+    popular: true,
   },
   {
     href: '/tools/currency-converter',
@@ -59,6 +68,7 @@ const financialTools = [
     tag: 'Markets',
     gradient: 'from-blue-500 to-cyan-600',
     tagColor: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400',
+    popular: false,
   },
   {
     href: '/tools/pakistan-inflation-calculator',
@@ -68,6 +78,7 @@ const financialTools = [
     tag: 'Markets',
     gradient: 'from-red-500 to-rose-600',
     tagColor: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400',
+    popular: false,
   },
   {
     href: '/tools/loan-emi-calculator',
@@ -77,6 +88,7 @@ const financialTools = [
     tag: 'Finance',
     gradient: 'from-purple-500 to-indigo-600',
     tagColor: 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-400',
+    popular: false,
   },
   {
     href: '/tools/remittance-calculator',
@@ -86,6 +98,7 @@ const financialTools = [
     tag: 'Finance',
     gradient: 'from-violet-500 to-purple-600',
     tagColor: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400',
+    popular: false,
   },
 ];
 
@@ -104,7 +117,7 @@ const categoryEmoji: Record<string, string> = {
 };
 ---
 
-<MainLayout title="HisaabKar.pk — Pakistan Finance & Utility Hub" description="Free Pakistani finance tools: tax calculator, gold rate, electricity bill, zakat, currency converter, salary slip and more. Real-time economic data.">
+<MainLayout title="HisaabKar.pk — Free Tax, Gold & Finance Calculators Pakistan" description="Pakistan's free finance calculators: FBR income tax, live gold rates, currency converter, salary slip PDF & more. No signup. Data from SBP, FBR & PBS.">
 
   <!-- ═══ HERO ═══ -->
   <section class="bg-gradient-to-br from-green-600 via-green-700 to-emerald-800 text-white py-16 md:py-20">
@@ -113,14 +126,14 @@ const categoryEmoji: Record<string, string> = {
         <!-- Left: copy -->
         <div>
           <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full mb-5 text-sm text-green-100 font-medium">
-            🇵🇰 Pakistan's Free Finance Hub
+            🇵🇰 Free Forever · No Signup · 15+ Tools
           </div>
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-            Pakistan's Free<br/>
-            <span class="text-green-200">Finance Hub</span>
+            Free Finance Tools<br/>
+            <span class="text-green-200">Built for Pakistan</span>
           </h1>
           <p class="text-lg text-green-100 mb-8 max-w-lg leading-relaxed">
-            Pakistan's free finance hub — taxes, gold rates, bills, currency & AI-powered economic insights, all in one place.
+            FBR income tax, live gold rates, currency converter, salary slip generator, and AI-powered economic insights — all free, no signup needed.
           </p>
           <div class="flex flex-wrap gap-3">
             <a href="#tax-calculator" class="inline-flex items-center gap-2 bg-white text-green-700 font-semibold py-3 px-6 rounded-xl hover:bg-green-50 transition-all hover:scale-105 shadow-lg">
@@ -215,6 +228,93 @@ const categoryEmoji: Record<string, string> = {
           </div>
         </div>
       </div>
+      <!-- Mobile: condensed indicators strip -->
+      <div class="lg:hidden mt-8 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
+        <div class="flex gap-3 w-max">
+          <div class="flex items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-3 py-2.5 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-sky-400 shrink-0"></span>
+            <div>
+              <p class="text-[10px] text-white/60 uppercase tracking-wide">USD/PKR</p>
+              <p id="mob-usd" class="text-sm font-bold text-sky-300 leading-none">—</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-3 py-2.5 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0"></span>
+            <div>
+              <p class="text-[10px] text-white/60 uppercase tracking-wide">Gold/Tola</p>
+              <p id="mob-gold" class="text-sm font-bold text-amber-300 leading-none">—</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-3 py-2.5 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-orange-400 shrink-0"></span>
+            <div>
+              <p class="text-[10px] text-white/60 uppercase tracking-wide">Petrol</p>
+              <p id="mob-petrol" class="text-sm font-bold text-orange-300 leading-none">—</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-3 py-2.5 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0"></span>
+            <div>
+              <p class="text-[10px] text-white/60 uppercase tracking-wide">Inflation</p>
+              <p id="mob-cpi" class="text-sm font-bold text-rose-300 leading-none">—</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 bg-white/10 border border-white/15 rounded-xl px-3 py-2.5 shrink-0">
+            <span class="w-1.5 h-1.5 rounded-full bg-violet-400 shrink-0"></span>
+            <div>
+              <p class="text-[10px] text-white/60 uppercase tracking-wide">SBP Rate</p>
+              <p id="mob-policy" class="text-sm font-bold text-violet-300 leading-none">—</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TRUST BAR ═══ -->
+  <section class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 py-4 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-center gap-6 md:gap-12">
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🔧</span>
+          <div>
+            <p class="text-base font-bold text-gray-900 dark:text-white leading-none">15+</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Free Tools</p>
+          </div>
+        </div>
+        <div class="w-px h-8 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">✅</span>
+          <div>
+            <p class="text-base font-bold text-gray-900 dark:text-white leading-none">Zero</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Signup Required</p>
+          </div>
+        </div>
+        <div class="w-px h-8 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">📡</span>
+          <div>
+            <p class="text-base font-bold text-gray-900 dark:text-white leading-none">4 Live</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Data Sources</p>
+          </div>
+        </div>
+        <div class="w-px h-8 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🎓</span>
+          <div>
+            <p class="text-base font-bold text-gray-900 dark:text-white leading-none">M.Phil</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Economics Verified</p>
+          </div>
+        </div>
+        <div class="w-px h-8 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="flex items-center gap-2.5">
+          <span class="text-2xl">🔒</span>
+          <div>
+            <p class="text-base font-bold text-gray-900 dark:text-white leading-none">100%</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Browser-Based</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -229,8 +329,11 @@ const categoryEmoji: Record<string, string> = {
         {financialTools.map((tool) => (
           <a
             href={tool.href}
-            class="group bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            class="group relative bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
           >
+            {tool.popular && (
+              <span class="absolute top-2.5 right-2.5 z-10 bg-orange-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wide shadow-sm">🔥 Popular</span>
+            )}
             <!-- Gradient icon area -->
             <div class={`h-24 bg-gradient-to-br ${tool.gradient} flex items-center justify-center`}>
               <span class="text-4xl">{tool.emoji}</span>
@@ -381,6 +484,40 @@ const categoryEmoji: Record<string, string> = {
     </div>
   </ScrollReveal>
 
+  <!-- ═══ WHY HISAABKAR? ═══ -->
+  <ScrollReveal animation="fade-in-up" delay={220} class="py-14 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10">
+        <span class="inline-block bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">Why HisaabKar?</span>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Built Different. Built for Pakistanis.</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 max-w-lg mx-auto">We don't just show numbers — we explain them, verify them, and make them actionable.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="rounded-2xl p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 text-center hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-blue-100 dark:bg-blue-800/50 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">🔒</span>
+          </div>
+          <h3 class="font-bold text-blue-700 dark:text-blue-300 text-base mb-2">100% Private</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">All calculations happen in your browser. Your financial data never reaches any server — no accounts, no tracking of inputs.</p>
+        </div>
+        <div class="rounded-2xl p-6 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800 text-center hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-green-100 dark:bg-green-800/50 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">🏛️</span>
+          </div>
+          <h3 class="font-bold text-green-700 dark:text-green-300 text-base mb-2">Official Data Only</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Live feeds from SBP, FBR, PBS, and PMEX — the same authoritative sources used by banks and government agencies.</p>
+        </div>
+        <div class="rounded-2xl p-6 bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800 text-center hover:shadow-lg transition-shadow">
+          <div class="w-14 h-14 bg-purple-100 dark:bg-purple-800/50 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span class="text-3xl">🎓</span>
+          </div>
+          <h3 class="font-bold text-purple-700 dark:text-purple-300 text-base mb-2">Expert Verified</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">All tax logic, slabs, and financial formulas reviewed by an M.Phil Economics, ACCA-certified professional with 10+ years in public-sector audit.</p>
+        </div>
+      </div>
+    </div>
+  </ScrollReveal>
+
   <!-- ═══ GOLD & SILVER RATES — no double heading ═══ -->
   <ScrollReveal animation="fade-in-up" delay={250} id="market-data" class="py-12 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -434,8 +571,9 @@ const categoryEmoji: Record<string, string> = {
         <Icon name="envelope" size={16} class="text-green-200" />
         <span class="text-sm font-medium text-green-100">Every Monday Morning</span>
       </div>
-      <h2 class="text-3xl md:text-4xl font-bold mb-3">Weekly Economic Digest</h2>
-      <p class="text-green-100 mb-8 text-lg">AI-powered summary of Pakistan's economy — exchange rates, inflation, policy updates. Free, no spam.</p>
+      <h2 class="text-3xl md:text-4xl font-bold mb-3">Stay Ahead of Pakistan's Economy</h2>
+      <p class="text-green-100 mb-2 text-lg">Exchange rate moves, inflation data, FBR/SBP policy updates — curated by AI, verified by economists.</p>
+      <p class="text-green-200/70 mb-8 text-sm">Free. No spam. Unsubscribe anytime.</p>
       <form id="hero-newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
         <input
           type="email"
@@ -600,6 +738,22 @@ const categoryEmoji: Record<string, string> = {
 
         // Run entrance animation regardless of fetch outcome
         runEntrance();
+
+        // Sync mobile indicator strip after count-up finishes (~1.2s)
+        setTimeout(() => {
+          const pairs: [string, string][] = [
+            ['ind-usd', 'mob-usd'],
+            ['ind-gold', 'mob-gold'],
+            ['ind-petrol', 'mob-petrol'],
+            ['ind-cpi', 'mob-cpi'],
+            ['ind-policy', 'mob-policy'],
+          ];
+          pairs.forEach(([deskId, mobId]) => {
+            const desk = document.getElementById(deskId);
+            const mob = document.getElementById(mobId);
+            if (desk && mob) mob.textContent = desk.textContent;
+          });
+        }, 1200);
       }
 
       // ── Trigger on intersection ──────────────────────────────────────────────
@@ -612,7 +766,12 @@ const categoryEmoji: Record<string, string> = {
       }, { threshold: 0.2 });
 
       const list = document.getElementById('indicators-list');
-      if (list) observer.observe(list);
+      if (list && window.matchMedia('(min-width: 1024px)').matches) {
+        observer.observe(list);
+      } else {
+        // Mobile: desktop panel is display:none so IntersectionObserver never fires — load directly
+        loadIndicators();
+      }
     })();
   </script>
 

@@ -327,65 +327,82 @@ const schemaDataWithDefaults = {
     <footer class="bg-gray-900 dark:bg-gray-950 text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- Disclaimer -->
-          <div class="md:col-span-2">
-            <h3 class="text-lg font-semibold mb-4">Important Disclaimer</h3>
-            <p class="text-gray-400 text-sm leading-relaxed">
-              <strong>NOT FINANCIAL ADVICE:</strong> All information provided on HisaabKar.pk is for educational purposes only.
-              Data is based on publicly available sources and may not be real-time. Tax calculations are estimates based on
-              published FBR slabs and may not reflect your actual tax liability. Always consult a qualified tax professional,
-              financial advisor, or relevant government authorities before making financial decisions.
+          <!-- Brand + About -->
+          <div>
+            <div class="flex items-center gap-2 mb-3">
+              <div class="w-7 h-7 bg-gradient-to-br from-green-600 to-emerald-700 rounded-md flex items-center justify-center">
+                <span class="text-white font-bold text-xs">HK</span>
+              </div>
+              <span class="font-bold text-white text-base">HisaabKar.pk</span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">
+              Pakistan's free finance toolkit — FBR tax calculators, live gold & currency rates, salary slips, and AI-powered economic insights. All tools run in your browser, no signup needed.
             </p>
-            <p class="text-gray-400 text-sm leading-relaxed mt-3">
-              <strong>E-E-A-T COMPLIANCE:</strong> This site follows Google's Experience, Expertise, Authoritativeness, and Trustworthiness guidelines.
-              All content is reviewed by certified economics professionals. See our <a href="/about" class="text-green-400 hover:underline">About</a> page for author credentials.
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-gray-800 border border-gray-700 text-gray-400 px-2.5 py-1 rounded-full">🏛️ SBP · FBR · PBS · PMEX</span>
+              <span class="text-xs bg-gray-800 border border-gray-700 text-gray-400 px-2.5 py-1 rounded-full">🎓 M.Phil Economics Verified</span>
+            </div>
+            <p class="text-gray-600 text-xs leading-relaxed mt-4">
+              For educational purposes only. Tax calculations are estimates — always verify with a qualified professional. <a href="/about" class="text-green-500 hover:underline">Learn more →</a>
             </p>
           </div>
 
           <!-- Quick Links -->
           <div>
-            <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul class="space-y-2 text-sm text-gray-400">
-              <li><a href="/" class="hover:text-green-400 transition">Home</a></li>
+            <h3 class="text-sm font-semibold mb-3 text-gray-300 uppercase tracking-wider">Tools</h3>
+            <ul class="space-y-1.5 text-sm text-gray-400 mb-5">
+              <li><a href="/#tax-calculator" class="hover:text-green-400 transition">📊 Income Tax Calculator</a></li>
+              <li><a href="/tools/salary-slip-generator" class="hover:text-green-400 transition">📋 Salary Slip Generator</a></li>
+              <li><a href="/tools/gold-price-calculator-pakistan" class="hover:text-green-400 transition">🪙 Gold Price Calculator</a></li>
+              <li><a href="/tools/currency-converter" class="hover:text-green-400 transition">💱 Currency Converter</a></li>
+              <li><a href="/tools/loan-emi-calculator" class="hover:text-green-400 transition">🏦 Loan & EMI Calculator</a></li>
+            </ul>
+            <h3 class="text-sm font-semibold mb-3 text-gray-300 uppercase tracking-wider">Pages</h3>
+            <ul class="space-y-1.5 text-sm text-gray-400">
               <li><a href="/blog" class="hover:text-green-400 transition">Blog</a></li>
               <li><a href="/guides" class="hover:text-green-400 transition">Finance Guides</a></li>
-              <li><a href="/utilities" class="hover:text-green-400 transition">Online Utilities</a></li>
+              <li><a href="/rates/" class="hover:text-green-400 transition">Live Rates</a></li>
               <li><a href="/about" class="hover:text-green-400 transition">About & Credentials</a></li>
-              <li><a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="hover:text-green-400 transition">FBR Official</a></li>
-              <li><a href="https://www.sbp.org.pk" target="_blank" rel="noopener noreferrer" class="hover:text-green-400 transition">State Bank of Pakistan</a></li>
+              <li><a href="/privacy-policy" class="hover:text-green-400 transition">Privacy Policy</a></li>
             </ul>
+          </div>
 
-            <!-- T087: Newsletter signup -->
-            <div class="mt-6">
-              <h4 class="text-sm font-semibold mb-2 text-gray-300">Weekly Economic Digest</h4>
-              <form id="newsletter-form" class="flex gap-2">
-                <input
-                  type="email"
-                  id="newsletter-email"
-                  placeholder="your@email.com"
-                  required
-                  class="flex-1 bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-green-500"
-                />
-                <button
-                  type="submit"
-                  class="bg-green-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-green-700 transition-colors whitespace-nowrap"
-                >
-                  Subscribe
-                </button>
-              </form>
-              <p id="newsletter-msg" class="mt-1 text-xs text-green-400 hidden"></p>
+          <!-- Newsletter -->
+          <div>
+            <h3 class="text-sm font-semibold mb-1 text-gray-300 uppercase tracking-wider">Weekly Digest</h3>
+            <p class="text-gray-500 text-xs mb-3">Exchange rates, inflation & policy updates every Monday. Free.</p>
+            <form id="newsletter-form" class="space-y-2">
+              <input
+                type="email"
+                id="newsletter-email"
+                placeholder="your@email.com"
+                required
+                class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+              />
+              <button
+                type="submit"
+                class="w-full bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              >
+                Subscribe Free →
+              </button>
+            </form>
+            <p id="newsletter-msg" class="mt-1 text-xs text-green-400 hidden"></p>
+            <div class="mt-5 pt-4 border-t border-gray-800">
+              <p class="text-xs text-gray-600">Powered by <span class="text-green-500">Cloudflare</span></p>
+              <p class="text-xs text-gray-600 mt-1">Data: <span class="text-green-500">SBP · PBS · FBR · PMEX</span></p>
             </div>
           </div>
         </div>
 
         <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-3">
           <p class="text-gray-500 text-sm">
-            &copy; <span id="footer-year">2026</span> HisaabKar.pk. All rights reserved.
+            &copy; <span id="footer-year">2026</span> HisaabKar.pk — For educational purposes only. Not financial advice.
           </p>
           <div class="flex flex-wrap gap-4 text-xs text-gray-500">
             <a href="/privacy-policy" class="hover:text-green-400 transition">Privacy Policy</a>
             <a href="/about" class="hover:text-green-400 transition">About</a>
-            <span>Powered by <span class="text-green-500">Cloudflare</span> • Data from <span class="text-green-500">SBP • PBS • FBR</span></span>
+            <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="hover:text-green-400 transition">FBR</a>
+            <a href="https://www.sbp.org.pk" target="_blank" rel="noopener noreferrer" class="hover:text-green-400 transition">SBP</a>
           </div>
         </div>
       </div>
@@ -393,7 +410,7 @@ const schemaDataWithDefaults = {
 
     <!-- Mobile FAB: All Tools button (visible on mobile/tablet only) -->
     <a
-      href="/utilities"
+      href="/tools"
       id="tools-fab"
       class="md:hidden fixed bottom-6 right-5 z-50 flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-5 rounded-full shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
       aria-label="All Tools"
