@@ -108,9 +108,9 @@ export async function scrapeCPI(db: D1Database): Promise<CPIRecord | null> {
     console.warn('[PBS Scraper] CPI fetch failed:', err);
   }
 
-  // Fallback: store known value so system always has CPI data
+  // Fallback: store known value so system always has CPI data (April 2026 PBS: 10.9% YoY)
   if (!record) {
-    record = { month, index: 310.5, yoy_change: 7.0, mom_change: 0.5, source: 'pbs_fallback' };
+    record = { month, index: 320.0, yoy_change: 10.9, mom_change: 3.9, source: 'pbs_fallback' };
   }
 
   await db.prepare(

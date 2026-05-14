@@ -153,7 +153,7 @@ export async function scrapePolicyRates(db: D1Database): Promise<PolicyRate[]> {
   } catch (err) {
     console.warn('[SBP Scraper] Policy rate fetch failed:', err);
     // Insert known fallback value so downstream code always has something
-    all.push({ key: 'policy_rate', rate: 10.5, date: today, source: 'sbp_fallback' });
+    all.push({ key: 'policy_rate', rate: 11.5, date: today, source: 'sbp_fallback' });
   }
 
   // Fetch KIBOR

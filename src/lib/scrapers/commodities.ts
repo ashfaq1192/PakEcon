@@ -62,11 +62,44 @@ export async function scrapeOGRA(db: D1Database): Promise<CommodityPrice[]> {
     return [];
   }
 
-  // OGRA.org.pk is behind Cloudflare bot management and blocks CF Workers IPs (returns 403).
-  // Until a proxy or official API is available, this scraper is a no-op.
-  // Petrol prices change fortnightly; manually seed D1 when needed via wrangler d1 execute.
-  console.log('[OGRA Scraper] Skipping — OGRA blocks Cloudflare Worker IPs (403)');
-  return [];
+  // OGRA.org.pk blocks Cloudflare Worker IPs (403). Use pakistanpetrolprices.com instead —
+  // it publishes official OGRA rates immediately after each fortnightly revision.
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 8000);
+    const res = await fetch('https://pakistanpetrolprices.com/', {
+      signal: ctrl.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        Accept: 'text/html',
+      },
+    });
+    clearTimeout(tid);
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const html = await res.text();
+
+    // Page format: "Petrol MS 92 Rs. 414.78" — extract the price
+    const match = html.match(/Petrol[^<]{0,30}Ms?\s*92[^<]{0,50}Rs\.\s*([\d,]+(?:\.\d+)?)/i)
+      || html.match(/Petrol[^<]{0,50}Rs\.\s*([\d,]+(?:\.\d+)?)/i);
+
+    if (!match) throw new Error('Price pattern not found in HTML');
+    const price = parseFloat(match[1].replace(/,/g, ''));
+    if (isNaN(price) || price < 100 || price > 1000) throw new Error(`Implausible price: ${price}`);
+
+    const row: CommodityPrice = { commodity: 'petrol', city: 'national', price, unit: 'liter', date: today, source: 'pakistanpetrolprices' };
+    await db.prepare(
+      `INSERT INTO commodity_prices (commodity, city, price, unit, date, source)
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT(commodity, city, date) DO UPDATE SET price = excluded.price, source = excluded.source`
+    ).bind(row.commodity, row.city, row.price, row.unit, row.date, row.source).run();
+
+    console.log(`[OGRA Scraper] Petrol PKR ${price}/litre via pakistanpetrolprices.com`);
+    return [row];
+  } catch (err) {
+    console.warn('[OGRA Scraper] Failed to fetch petrol price:', err);
+    return [];
+  }
 }
 
 // ─── Gold/Silver Prices (T023) ────────────────────────────────────────────────

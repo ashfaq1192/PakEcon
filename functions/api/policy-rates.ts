@@ -50,13 +50,13 @@ export async function onRequestGet(context: { env: Env }): Promise<Response> {
 
     // Fallback: use hardcoded values if D1 has nothing yet
     if (!policyRates['policy_rate']) {
-      policyRates['policy_rate'] = { rate: 10.5, date: '2026-03-01', source: 'hardcoded' };
+      policyRates['policy_rate'] = { rate: 11.5, date: '2026-05-01', source: 'hardcoded' };
     }
     if (!policyRates['kibor_6m']) {
-      policyRates['kibor_6m'] = { rate: 11.01, date: '2026-03-01', source: 'hardcoded' };
+      policyRates['kibor_6m'] = { rate: 12.20, date: '2026-05-01', source: 'hardcoded' };
     }
     if (!policyRates['kibor_3m']) {
-      policyRates['kibor_3m'] = { rate: 11.22, date: '2026-03-01', source: 'hardcoded' };
+      policyRates['kibor_3m'] = { rate: 12.01, date: '2026-05-01', source: 'hardcoded' };
     }
 
     // ── PBS CPI ────────────────────────────────────────────────────────────────
@@ -65,7 +65,7 @@ export async function onRequestGet(context: { env: Env }): Promise<Response> {
        FROM cpi_data ORDER BY month DESC LIMIT 1`
     ).first<CPIRow>().catch(() => null);
 
-    const cpi = cpiRow ?? { month: '2026-02', index_value: 310.5, yoy_change: 7.0, mom_change: 0.5, source: 'hardcoded' };
+    const cpi = cpiRow ?? { month: '2026-04', index_value: 320.0, yoy_change: 10.9, mom_change: 3.9, source: 'hardcoded' };
 
     // ── CDNS National Savings Rates ────────────────────────────────────────────
     const cdnsResult = await env.DB.prepare(
