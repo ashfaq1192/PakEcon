@@ -261,53 +261,10 @@ export async function analystAgent(state: {
     }
   }
 
-  // ── Commodities ──
-  for (const prices of [scrapedData.commodities.gold, scrapedData.commodities.petrol]) {
-    for (const price of prices) {
-      const key = `${price.commodity}-${price.city}`;
-      const previous = historicalData?.commodityHistory.get(key)?.[0]?.price;
-      if (!previous) continue;
-      const delta = calculateDelta(price.price, previous);
-      if (Math.abs(delta) <= SIGNIFICANT_CHANGE_THRESHOLD) continue;
-
-      const direction = delta > 0 ? 'increased' : 'decreased';
-      const label = price.commodity.replace(/_/g, ' ');
-      const title = `${label} Price ${direction} ${Math.abs(delta).toFixed(2)}% in Pakistan`;
-      const dataPrompt = buildDataPrompt({
-        title,
-        indicators: ['commodity', price.commodity],
-        data: [
-          { key: `${label} (today)`, value: price.price, unit: `PKR/${price.unit}` },
-          { key: `${label} (previous)`, value: previous, unit: `PKR/${price.unit}` },
-          { key: 'Change', value: Math.abs(delta), unit: '%' },
-        ],
-      });
-
-      try {
-        const source = price.commodity.includes('gold') || price.commodity.includes('silver')
-          ? 'https://www.brecorder.com' : 'https://www.ogra.org.pk';
-        const { content, generatedBy } = await generateContent(
-          dataPrompt, [price.price, previous], env, workflowId, env.DB
-        );
-        insights.push({
-          title,
-          content,
-          summary: `${label} ${direction} by ${Math.abs(delta).toFixed(2)}% — ${price.city}`,
-          delta,
-          indicators: ['commodity', price.commodity, price.city],
-          citations: [{ source: 'PBS/OGRA/Business Recorder', url: source }],
-          category: 'market_insight',
-          generated_by: generatedBy,
-          date: new Date().toISOString(),
-          slug: `${price.commodity.replace(/_/g, '-')}-price-update-${new Date().toISOString().split('T')[0]}`,
-          source,
-          published: false,
-        });
-      } catch (err) {
-        agentLog.push({ agent: 'analyst', action: `skipped ${price.commodity}`, timestamp: new Date().toISOString(), error: String(err) });
-      }
-    }
-  }
+  // ── Commodities: rates go to D1 via scraper (feeds /api/gold-price, /api/commodities)
+  // Blog posts are NOT generated for gold/silver/petrol price ticks — they produce
+  // near-identical low-value content. Significant moves are covered by the daily
+  // news roundup (newsWriter) when they appear in RSS feeds.
 
   agentLog.push({
     agent: 'analyst',

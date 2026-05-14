@@ -7,9 +7,13 @@ import MainLayout from '../../../layouts/MainLayout.astro';
 export async function getStaticPaths() {
   const POSTS_PER_PAGE = 20;
   const allPosts = await getCollection('blog');
-  const posts = allPosts.sort((a, b) =>
-    b.data.pubDate.getTime() - a.data.pubDate.getTime()
-  );
+  const posts = allPosts
+    .filter(p =>
+      !p.id.startsWith('24k-') &&
+      !p.id.startsWith('usd-pkr-rate-today') &&
+      !p.id.startsWith('petrol-price-pakistan-today')
+    )
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
   const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
 
   return Array.from({ length: totalPages - 1 }, (_, i) => {
