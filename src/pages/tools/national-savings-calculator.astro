@@ -7,25 +7,73 @@ import NationalSavingsCalculator from '../../components/tools/NationalSavingsCal
 const title = 'National Savings Calculator Pakistan 2026 — Behbood, RIC, DSC Profit';
 const description =
   'Calculate monthly and annual profit for National Savings certificates (Behbood, Regular Income, Defense, Special). Includes withholding tax for filers and non-filers.';
+const pageUrl = 'https://hisaabkar.pk/tools/national-savings-calculator';
 ---
 
 <MainLayout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': 'WebApplication',
     name: title,
     description,
-    url: 'https://hisaabkar.pk/tools/national-savings-calculator',
+    url: pageUrl,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, Android, iOS',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'PKR' },
+    featureList: 'Behbood, Regular Income, Defense Savings, Special Savings certificates, Filer and non-filer WHT, CDNS verified rates, Monthly and annual profit',
     inLanguage: 'en-PK',
-    publisher: {
-      '@type': 'Organization',
-      name: 'HisaabKar.pk',
-      url: 'https://hisaabkar.pk',
-    },
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://hisaabkar.pk/tools' },
+      { '@type': 'ListItem', position: 3, name: 'National Savings Calculator', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What are the current National Savings rates in Pakistan 2026?',
+        acceptedAnswer: { '@type': 'Answer', text: 'As of 2026, CDNS National Savings rates: Behbood Savings Certificates — 13.68% per annum (monthly profit); Regular Income Certificates (RIC) — 13.56% per annum (monthly profit); Defense Savings Certificates (DSC) — 13.24% per annum (on maturity); Special Savings Certificates (SSC) — 13.44% per annum (bi-annual profit). These rates are set by CDNS and change with the SBP policy rate. Verify the latest at savings.gov.pk.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the withholding tax on National Savings profit?',
+        acceptedAnswer: { '@type': 'Answer', text: 'WHT on National Savings profit under FBR 2025-26: Active tax filers (on ATL) → 15% deducted at source. Non-filers → 30% deducted at source. This means a non-filer receives effectively half the profit of a filer on the same investment. Becoming a tax filer is free at iris.fbr.gov.pk and takes 15-30 minutes — it immediately halves your WHT on savings.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can overseas Pakistanis invest in National Savings from abroad?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Yes. The Naya Pakistan Certificate (NPC) — part of the Roshan Digital Account initiative — allows overseas Pakistanis to invest in Pakistan savings certificates in USD or PKR from abroad. As of 2026, the USD-denominated NPC offers approximately 8.25% annual return in US dollars. This is significantly higher than US savings accounts or most international fixed deposits. Open an RDA at any partner bank (HBL, MCB, UBL, Meezan) to invest.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is Behbood Savings Certificate and who can invest?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Behbood Savings Certificates (BSC) are designed for widows, senior citizens (60+), and disabled persons. They offer monthly profit at the highest rate among all CDNS schemes (13.68% in 2026). Maximum investment per individual: PKR 5 million. Minimum: PKR 500. Available at all CDNS offices and Pakistan Post offices. Profit is paid on the 1st of each month directly to your bank account.' },
+      },
+    ],
   })} />
 
   <div class="max-w-3xl mx-auto px-4 py-10">
+
     <div class="mb-8">
+      <!-- Breadcrumb -->
+      <nav class="text-xs text-gray-500 mb-4">
+        <a href="/" class="hover:text-green-700">Home</a>
+        <span class="mx-1">/</span>
+        <a href="/tools" class="hover:text-green-700">Tools</a>
+        <span class="mx-1">/</span>
+        <span>National Savings Calculator</span>
+      </nav>
+
       <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
       <p class="text-green-600 dark:text-green-400 font-medium text-lg mb-3" dir="rtl" lang="ur">
         قومی بچت پر منافع حساب کریں
@@ -63,17 +111,28 @@ const description =
         one of the most popular savings instruments for the Pakistani middle class and retirees
         because the profit is guaranteed by the Government of Pakistan.
       </p>
+
       <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Filer vs Non-Filer WHT</h3>
-      <p>
-        Under FBR 2025-26 rules, Withholding Tax (WHT) on National Savings profit is:
-      </p>
+      <p>Under FBR 2025-26 rules, Withholding Tax (WHT) on National Savings profit is:</p>
       <ul class="list-disc pl-5 space-y-1 text-sm">
         <li><strong>Active Filer (ATL registered):</strong> 15% deducted at source</li>
         <li><strong>Non-Filer:</strong> 30% deducted at source</li>
       </ul>
-      <p class="text-sm">
-        Registering as a filer at <a href="https://iris.fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="text-green-600 underline">iris.fbr.gov.pk</a> is free and can save you thousands of rupees every year on your savings profit.
-      </p>
+      <p class="text-sm">Registering as a filer at <a href="https://iris.fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="text-green-600 underline">iris.fbr.gov.pk</a> is free and can save you thousands of rupees every year on your savings profit.</p>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">Frequently Asked Questions</h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What are current CDNS rates in 2026?</h3>
+      <p>Behbood: 13.68%/year (monthly profit) | RIC: 13.56%/year (monthly) | DSC: 13.24%/year (on maturity) | SSC: 13.44%/year (bi-annual). Rates change with SBP policy rate — verify at savings.gov.pk.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is WHT on National Savings?</h3>
+      <p>Filers → 15% | Non-filers → 30%. Double the tax for not filing. Become a filer free at iris.fbr.gov.pk to immediately halve your WHT.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Can overseas Pakistanis invest in National Savings?</h3>
+      <p>Yes — via Naya Pakistan Certificates (NPC) through a Roshan Digital Account. USD-denominated NPC currently offers ~8.25% annual return in USD. Available at HBL, MCB, UBL, Meezan Bank online.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is Behbood Savings Certificate?</h3>
+      <p>Highest-rate CDNS scheme (13.68%), exclusively for widows, seniors 60+, and disabled persons. Monthly profit, max PKR 5 million per person. Available at CDNS offices and Pakistan Post.</p>
     </div>
   </div>
 </MainLayout>

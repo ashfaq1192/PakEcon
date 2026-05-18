@@ -7,22 +7,79 @@ import PropertyStampDuty from '../../components/tools/PropertyStampDuty';
 const title = 'Pakistan Property Stamp Duty Calculator 2026 — By Province';
 const description =
   'Calculate property transfer costs in Pakistan including stamp duty, Capital Value Tax (CVT), and registration fees for all provinces and ICT. Includes filer vs non-filer rates.';
+const pageUrl = 'https://hisaabkar.pk/tools/property-stamp-duty-calculator';
 ---
 
 <MainLayout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': 'WebApplication',
     name: title,
     description,
-    url: 'https://hisaabkar.pk/tools/property-stamp-duty-calculator',
+    url: pageUrl,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, Android, iOS',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'PKR' },
+    featureList: 'All provinces (Punjab, Sindh, KPK, Balochistan, ICT), Filer vs non-filer rates, Stamp duty, CVT, Registration fees, Overseas Pakistani rates',
     inLanguage: 'en-PK',
     publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
   })} />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://hisaabkar.pk/tools' },
+      { '@type': 'ListItem', position: 3, name: 'Stamp Duty Calculator', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is stamp duty on property in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Stamp duty is a provincial tax levied on property transfer documents (sale deeds, gift deeds, etc.). It is calculated as a percentage of the property\'s declared value (DC rate or market value, whichever is higher). In Punjab, stamp duty is typically 2% of the property value. Sindh charges 2-3%. KPK and Balochistan rates differ. This is separate from Capital Value Tax (CVT) and registration fees.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is Capital Value Tax (CVT) on property in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'CVT (Capital Value Tax) is a federal tax under Section 236K charged to the buyer at the time of property purchase. For tax filers, CVT is 1% of the higher of DC rate or declared value. For non-filers, CVT is 2% (double the filer rate). This significantly incentivises registering as a tax filer before buying property, as you save 1% on potentially millions of rupees.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the filer vs non-filer property tax difference in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Non-filers pay significantly higher taxes on property transactions: CVT is 2% vs 1% for filers; Withholding tax on sellers (Section 236C) is 3% for non-filers vs 1.5% for filers. On a PKR 10 million property: a non-filer buyer pays PKR 200,000 in CVT vs PKR 100,000 for a filer — a PKR 100,000 saving just from being on the Active Taxpayer List (ATL). Become a filer free at iris.fbr.gov.pk.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can overseas Pakistanis buy property in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Yes. Overseas Pakistanis can buy property in Pakistan with a NICOP (National Identity Card for Overseas Pakistanis). They typically appoint a Power of Attorney (family member or lawyer) to sign documents locally. The 2024 Overseas Pakistanis Protection Act established a Special Court for overseas buyer disputes. Overseas Pakistanis can also finance through SBP\'s Roshan Apna Ghar scheme using their Roshan Digital Account.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What are all the costs when buying property in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Total property purchase costs in Pakistan typically include: Stamp duty (2–3% of value, provincial); CVT at 1% for filers, 2% for non-filers (federal); Registration fee (0.5–1%); Agent/broker commission (1–2%); Legal fees; NOC charges (if applicable in societies); Mutation fee at local office. Total transfer costs can be 5–8% above the property price. Use our calculator to estimate the exact breakdown for your province.' },
+      },
+    ],
+  })} />
+
   <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
-    <p class="text-gray-600 mb-6 text-sm">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/tools" class="hover:text-green-700">Tools</a>
+      <span class="mx-1">/</span>
+      <span>Stamp Duty Calculator</span>
+    </nav>
+
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
       Estimate stamp duty, CVT, and registration fees for property transfers across Pakistan.
       Active tax filers pay lower CVT rates per FBR regulations.
     </p>
@@ -30,11 +87,28 @@ const description =
     <PropertyStampDuty client:load />
 
     <div class="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
-      <strong>Disclaimer (COMP-104):</strong> Stamp duty and CVT rates are based on publicly
+      <strong>Disclaimer:</strong> Stamp duty and CVT rates are based on publicly
       available provincial legislation as of {new Date().getFullYear()}. Actual transfer costs
       may vary based on DC valuation tables (which may differ from market value), additional
       surcharges, legal fees, and NOC charges. Filer status must be verified at the FBR Active
       Taxpayer List (ATL). Consult a property lawyer or DC office for definitive figures.
+    </div>
+
+    <!-- FAQ / SEO content -->
+    <div class="mt-12 prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">Frequently Asked Questions</h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is stamp duty on property in Pakistan?</h3>
+      <p>A provincial tax on property transfer documents, calculated as % of declared/DC value. Punjab: ~2%; Sindh: 2–3%. Paid at the time of deed registration.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is CVT and who pays it?</h3>
+      <p>Capital Value Tax under Section 236K is paid by the buyer: 1% for filers, 2% for non-filers. On a PKR 10M property, a non-filer pays PKR 100,000 extra vs a filer — purely for not being on the ATL.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What are total property buying costs in Pakistan?</h3>
+      <p>Stamp duty (2–3%) + CVT (1–2%) + registration fee (0.5–1%) + broker (1–2%) + legal fees + NOC charges = typically 5–8% above purchase price. Use our calculator for your province's exact breakdown.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Can overseas Pakistanis buy property in Pakistan?</h3>
+      <p>Yes, with NICOP and a Power of Attorney for local signing. The 2024 Overseas Pakistanis Protection Act provides a Special Court for buyer disputes. Finance through Roshan Apna Ghar using a Roshan Digital Account.</p>
     </div>
   </div>
 </MainLayout>

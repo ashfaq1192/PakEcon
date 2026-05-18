@@ -7,22 +7,74 @@ import InflationCalculator from '../../components/tools/InflationCalculator';
 const title = 'Pakistan Inflation Impact Calculator — Purchasing Power 2015–2026';
 const description =
   'Calculate how inflation has eroded purchasing power in Pakistan from 2015 to 2026 using PBS Consumer Price Index data. Includes year-on-year inflation bar chart.';
+const pageUrl = 'https://hisaabkar.pk/tools/pakistan-inflation-calculator';
 ---
 
 <MainLayout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': 'WebApplication',
     name: title,
     description,
-    url: 'https://hisaabkar.pk/tools/inflation-calculator',
+    url: pageUrl,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, Android, iOS',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'PKR' },
+    featureList: 'PBS CPI data 2015-2026, Year-on-year inflation chart, Purchasing power erosion calculator, Official government data source',
     inLanguage: 'en-PK',
     publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
   })} />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://hisaabkar.pk/tools' },
+      { '@type': 'ListItem', position: 3, name: 'Inflation Calculator', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is Pakistan\'s inflation rate in 2026?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Pakistan\'s CPI inflation has significantly declined from its peak of 38% in May 2023 to approximately 0.3-0.7% YoY in early 2026, the lowest in years. This steep decline reflects the impact of the IMF stabilisation program, tight monetary policy (policy rate held at 22% through 2023-24), improved supply chains, and base effect. However, cumulative inflation since 2020 remains very high, meaning prices are still far above pre-crisis levels.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What does the PBS CPI measure in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The Pakistan Bureau of Statistics (PBS) Consumer Price Index measures the average change in prices paid by urban consumers for a basket of goods and services. The basket includes food and beverages (weighted most heavily at ~35%), housing, clothing, healthcare, transportation, education, and recreation. The base year is 2015-16. A CPI reading of 200 means prices have doubled since the base year.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'How has inflation affected purchasing power in Pakistan since 2015?',
+        acceptedAnswer: { '@type': 'Answer', text: 'From 2015 to 2026, cumulative inflation in Pakistan has eroded roughly 60-70% of the PKR\'s purchasing power. PKR 100 in 2015 is worth approximately PKR 35-40 in real terms in 2026. This was driven by persistent fiscal deficits, currency depreciations, energy price reforms, and the 2022-23 balance-of-payments crisis. Use the calculator above to see the impact on any specific amount.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Which investments beat inflation in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Historically, gold and real estate have broadly kept pace with PKR inflation. National Savings certificates (Behbood at 13.68%, RIC at 13.56% in 2026) currently offer returns well above current inflation of under 1%, making them attractive in real terms. Equities (PSX-100) have also outperformed inflation over long periods. Use the National Savings Calculator and Gold Calculator on HisaabKar.pk to compare.' },
+      },
+    ],
+  })} />
+
   <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
-    <p class="text-gray-600 mb-6 text-sm">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/tools" class="hover:text-green-700">Tools</a>
+      <span class="mx-1">/</span>
+      <span>Inflation Calculator</span>
+    </nav>
+
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
       Enter an amount to see how much it would be worth in today's rupees after accounting for inflation.
       Data from Pakistan Bureau of Statistics (PBS) Consumer Price Index.
     </p>
@@ -34,6 +86,23 @@ const description =
       Individual purchasing power may differ based on consumption basket, region, and income group.
       2026 figure is an estimate based on latest available monthly data.
       Source: <a href="https://www.pbs.gov.pk" target="_blank" rel="noopener noreferrer" class="underline">Pakistan Bureau of Statistics</a>.
+    </div>
+
+    <!-- FAQ / SEO content -->
+    <div class="mt-12 prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">Frequently Asked Questions</h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is Pakistan's inflation rate in 2026?</h3>
+      <p>CPI inflation has fallen to approximately 0.3–0.7% YoY in early 2026 — the lowest in years — down from a peak of 38% in May 2023. Cumulative price levels since 2020 remain very high despite the low current rate.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What does PBS CPI measure?</h3>
+      <p>The Consumer Price Index tracks price changes for an urban household's basket of goods: food (~35% weight), housing, clothing, healthcare, transport, and education. Base year is 2015-16. CPI of 200 means prices doubled since 2015.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">How much has inflation eroded PKR purchasing power since 2015?</h3>
+      <p>Approximately 60–70% of purchasing power lost. PKR 100 in 2015 buys what PKR 35–40 buys in 2026. This reflects successive depreciations, energy price reforms, and the 2022–23 balance-of-payments crisis.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Which investments beat inflation in Pakistan?</h3>
+      <p>Gold and real estate have broadly tracked PKR inflation. National Savings certificates (Behbood: 13.68%, RIC: 13.56% in 2026) offer returns far above current ~1% inflation, making them exceptionally attractive in real terms right now.</p>
     </div>
   </div>
 </MainLayout>

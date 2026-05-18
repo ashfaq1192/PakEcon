@@ -79,6 +79,7 @@ const faqSchema = JSON.stringify({
             <span class="text-xl text-gray-400 animate-pulse">Loading…</span>
           </p>
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">PKR / tola (11.66g)</p>
+          <p id="gold-tola-usd" class="text-xs text-yellow-700 dark:text-yellow-400 mt-1 font-medium">—</p>
         </div>
         <div>
           <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">24K Gold — Per Gram</p>
@@ -86,6 +87,7 @@ const faqSchema = JSON.stringify({
             <span class="text-xl text-gray-400 animate-pulse">—</span>
           </p>
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">PKR / gram</p>
+          <p id="gold-gram-usd" class="text-xs text-yellow-700 dark:text-yellow-400 mt-1 font-medium">—</p>
         </div>
       </div>
       <div class="mt-4 pt-4 border-t border-yellow-100 dark:border-yellow-800/30 flex items-center justify-between text-sm">
@@ -114,6 +116,23 @@ const faqSchema = JSON.stringify({
           if (gramPrice) document.getElementById('gold-gram')!.textContent = fmt(gramPrice);
           if (date) document.getElementById('gold-date')!.textContent =
             'As of ' + new Date(date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
+
+          // Fetch USD rate to show USD equivalent for diaspora
+          try {
+            const rateRes = await fetch('/api/exchange-rates');
+            const rateData = await rateRes.json() as any;
+            const usdPkr: number = rateData.rates?.USD || rateData.USD || 278;
+            if (tolaPrice) {
+              const tolaUsd = (tolaPrice / usdPkr).toFixed(0);
+              const el = document.getElementById('gold-tola-usd');
+              if (el) el.textContent = `≈ $${Number(tolaUsd).toLocaleString()} USD`;
+            }
+            if (gramPrice) {
+              const gramUsd = (gramPrice / usdPkr).toFixed(2);
+              const el = document.getElementById('gold-gram-usd');
+              if (el) el.textContent = `≈ $${gramUsd} USD`;
+            }
+          } catch { /* non-blocking */ }
         } catch { /* non-blocking */ }
       }
       loadGoldRate();

@@ -10,6 +10,7 @@ interface Props {
   image?: string;
   type?: 'Article' | 'Organization' | 'WebPage';
   schemaData?: any;
+  hreflang?: 'en-PK' | 'en-US' | 'en-GB' | 'en';
 }
 
 const {
@@ -17,8 +18,12 @@ const {
   description = 'Real-time Pakistani economic data, tax calculation tools, and financial insights for the digital age.',
   image = '/og-image.png',
   type = 'WebPage',
-  schemaData = {}
+  schemaData = {},
+  hreflang = 'en-PK',
 } = Astro.props;
+
+// Determine if this is a US-targeted page
+const isUSPage = Astro.url.pathname.startsWith('/us/');
 
 const url = new URL(Astro.url.pathname, Astro.site);
 const fullURL = url.href;
@@ -58,6 +63,20 @@ const schemaDataWithDefaults = {
 
     <!-- Canonical URL -->
     <link rel="canonical" href={fullURL} />
+
+    <!-- hreflang: geo-targeting signals for US diaspora vs Pakistan content -->
+    {isUSPage ? (
+      <>
+        <link rel="alternate" hreflang="en-US" href={fullURL} />
+        <link rel="alternate" hreflang="x-default" href={fullURL} />
+      </>
+    ) : (
+      <>
+        <link rel="alternate" hreflang="en-PK" href={fullURL} />
+        <link rel="alternate" hreflang="en-US" href={`https://hisaabkar.pk/us/send-money-to-pakistan-from-usa`} />
+        <link rel="alternate" hreflang="x-default" href={fullURL} />
+      </>
+    )}
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

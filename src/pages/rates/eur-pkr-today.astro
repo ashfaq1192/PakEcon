@@ -1,0 +1,166 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'EUR to PKR Today — Euro to Pakistani Rupee Rate 2026';
+const description = 'Live EUR to PKR exchange rate today. Euro to Pakistani Rupee from SBP interbank. Updated daily. For Pakistani diaspora in Europe (UK, Germany, Italy, Romania) sending money home.';
+const pageUrl = 'https://hisaabkar.pk/rates/eur-pkr-today';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  dateModified: new Date().toISOString().split('T')[0],
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  inLanguage: 'en',
+  isAccessibleForFree: true,
+  keywords: 'EUR to PKR today, euro to Pakistani rupee, euro rate Pakistan, 1 EUR to PKR, European Pakistani diaspora exchange rate',
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the EUR to PKR rate today?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The live EUR (Euro) to PKR rate is shown in the widget above, sourced from SBP interbank data. The EUR is a floating currency. At EUR/USD of approximately 1.08 and USD/PKR of 278, EUR/PKR is approximately 300. The rate changes daily with both EUR/USD movements and USD/PKR fluctuations.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do Pakistanis in Europe send money to Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'For Pakistani communities in Europe (Germany, Italy, Spain, France, Romania, Greece, etc.): (1) Wise — best rate across all European corridors; (2) ACE Money Transfer — covers Pakistan well; (3) WorldRemit — mobile wallet delivery; (4) Remitly — US-focused but expanding European corridors; (5) Bank SEPA transfer to Pakistani bank — cheapest for large amounts if you have a EUR bank account. Romanian Pakistanis specifically: RON/PKR is also available in HisaabKar.pk\'s currency converter.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much is €1000 in Pakistani Rupees?',
+      acceptedAnswer: { '@type': 'Answer', text: '€1,000 at EUR/PKR of approximately 300 = PKR 300,000. Use the live rate above for the exact current amount. The conversion table shows common amounts.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a Pakistani community in Romania?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes — Pakistan has a notable community in Romania, primarily students and IT professionals. Romania uses RON (Romanian Leu), not EUR (Romania is not in the Eurozone as of 2026). HisaabKar.pk\'s currency converter and remittance calculator include RON specifically for this community. Many Romanian Pakistanis also use EUR for some transactions as RON is pegged near EUR.' },
+    },
+  ],
+});
+---
+
+<MainLayout {title} {description} type="Article">
+  <script type="application/ld+json" set:html={schema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Rates', item: 'https://hisaabkar.pk/rates' },
+      { '@type': 'ListItem', position: 3, name: 'EUR to PKR Today', item: pageUrl },
+    ],
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/rates" class="hover:text-green-700">Rates</a>
+      <span class="mx-1">/</span>
+      <span>EUR to PKR Today</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8 text-sm">
+      SBP interbank rate · Updated daily · Euro is a floating currency
+    </p>
+
+    <div class="border border-indigo-200 dark:border-indigo-800/40 rounded-2xl p-6 bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-900/10 dark:to-gray-900 mb-10">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">1 Euro (EUR) =</p>
+          <p id="eur-rate" class="text-5xl font-bold text-gray-900 dark:text-white">
+            <span class="text-2xl text-gray-400 animate-pulse">Loading…</span>
+          </p>
+          <p class="text-lg text-gray-500 dark:text-gray-400 mt-2">Pakistani Rupee (PKR)</p>
+        </div>
+        <div class="text-4xl">🇪🇺→🇵🇰</div>
+      </div>
+      <div class="mt-4 pt-4 border-t border-indigo-100 dark:border-indigo-800/30 flex justify-between text-xs text-gray-400">
+        <span id="eur-date">—</span>
+        <span>Source: State Bank of Pakistan</span>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        try {
+          const res = await fetch('/api/exchange-rates');
+          const data = await res.json() as any;
+          const eurPkr: number = data.rates?.EUR || data.EUR || 300;
+          const el = document.getElementById('eur-rate');
+          if (el) el.textContent = `PKR ${eurPkr.toFixed(2)}`;
+          const dateEl = document.getElementById('eur-date');
+          if (dateEl) dateEl.textContent = 'As of ' + new Date().toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
+        } catch { /* non-blocking */ }
+      })();
+    </script>
+
+    <div class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">EUR Amount</th>
+            <th class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">PKR Equivalent (approx.)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {[100, 500, 1000, 2500, 5000, 10000].map(eur => (
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+              <td class="px-4 py-3 text-gray-800 dark:text-gray-200">€{eur.toLocaleString()}</td>
+              <td class="px-4 py-3 text-right text-gray-600 dark:text-gray-400 font-mono" id={`eur-${eur}`}>—</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <script>
+        (async () => {
+          try {
+            const res = await fetch('/api/exchange-rates');
+            const data = await res.json() as any;
+            const eurPkr: number = data.rates?.EUR || data.EUR || 300;
+            [100, 500, 1000, 2500, 5000, 10000].forEach(eur => {
+              const el = document.getElementById(`eur-${eur}`);
+              if (el) el.textContent = `PKR ${(eur * eurPkr).toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+            });
+          } catch { /* non-blocking */ }
+        })();
+      </script>
+    </div>
+
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+      <h2>EUR to PKR — Pakistani Diaspora Across Europe</h2>
+      <p>Europe hosts a significant Pakistani community across Germany, Italy, Spain, France, Greece, and Eastern Europe. Germany alone has over 150,000 Pakistanis. The Euro corridor is growing in importance as European work opportunities expand for Pakistani workers and students.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <h3>What is the EUR to PKR rate today?</h3>
+      <p>Shown live above. EUR is a floating currency — rate changes with both EUR/USD and USD/PKR movements. Approximately PKR 295–310 per EUR in 2026.</p>
+      <h3>How do Pakistani expats in Europe send money home?</h3>
+      <p>Wise (best for all European corridors), ACE Money Transfer, WorldRemit. For Romania specifically: use the RON option in our currency converter and remittance calculator.</p>
+      <h3>Is there a Pakistani community in Romania?</h3>
+      <p>Yes — notable Pakistani student and IT community. Romania uses RON (not EUR). HisaabKar.pk's tools include RON specifically for Romanian Pakistanis.</p>
+    </div>
+
+    <div class="mt-10 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Related Rates & Tools</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/rates/gbp-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">🇬🇧 GBP to PKR Today</a>
+        <a href="/rates/usd-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💵 USD to PKR Today</a>
+        <a href="/tools/remittance-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💸 Remittance Calculator</a>
+        <a href="/tools/currency-converter/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💱 Currency Converter</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

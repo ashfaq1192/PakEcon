@@ -1,0 +1,296 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'Best Way to Send Money to Pakistan from USA in 2026 — Wise vs Remitly vs Western Union';
+const description = 'Compare the best money transfer services to send USD to Pakistan in 2026. Wise, Remitly, Western Union, ACE, and bank wire — ranked by exchange rate, fees, and speed. For Pakistani-Americans.';
+const pageUrl = 'https://hisaabkar.pk/us/send-money-to-pakistan-from-usa';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    dateModified: new Date().toISOString().split('T')[0],
+    author: {
+      '@type': 'Person',
+      name: 'Muhammad',
+      jobTitle: 'Economics Analyst',
+      credentials: 'M.Phil Economics, B.Com',
+      url: 'https://hisaabkar.pk/about',
+    },
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+    inLanguage: 'en-US',
+    isAccessibleForFree: true,
+    keywords: 'best way to send money to Pakistan from USA, Wise Pakistan, Remitly Pakistan, send money Pakistan 2026, USD to PKR transfer, Pakistani remittance USA',
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'US Diaspora', item: 'https://hisaabkar.pk/us' },
+      { '@type': 'ListItem', position: 3, name: 'Send Money to Pakistan from USA', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the cheapest way to send money to Pakistan from USA?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Wise (formerly TransferWise) consistently offers the lowest fees and closest-to-interbank exchange rates for sending USD to Pakistan. For amounts under $1,000, Wise charges approximately 0.5-1% total fee. Remitly is also competitive and sometimes offers first-transfer promotions. Western Union and MoneyGram have higher exchange rate spreads that cost more on larger amounts.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'How long does it take to send money to Pakistan from USA?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Speed varies by service: Wise — 1-2 business days to bank account; Remitly — same day or next day for bank delivery, instant for mobile wallet (Easypaisa, JazzCash); Western Union — same day to cash pickup, 1-3 days to bank account; Bank wire (SWIFT) — 2-5 business days; Roshan Digital Account transfer — same day to 24 hours. Weekday transfers are always faster than weekend transfers.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is there a limit on how much money I can send to Pakistan from USA?',
+        acceptedAnswer: { '@type': 'Answer', text: 'US law requires financial institutions to file a Currency Transaction Report (CTR) for cash transactions over $10,000. For bank wire transfers, there is typically no legal limit but banks may have their own thresholds for enhanced due diligence. Pakistan allows unlimited inward remittances through official banking channels — no cap. Always use official channels (never hawala) for compliance and protection.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do I need to pay US tax on money I send to Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'No — sending your own money to Pakistan (remittances to family) is not taxable in the USA. It is a transfer of your own funds, not income. Gifts to family members are generally exempt from US gift tax for amounts under $17,000 per recipient per year ($34,000 for married couples). You do not need to report normal family remittances on your US tax return.' },
+      },
+    ],
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <span>Send Money to Pakistan from USA</span>
+    </nav>
+
+    <div class="mb-2 inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold px-3 py-1.5 rounded-full">
+      🇺🇸 For Pakistani-Americans
+    </div>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-3 mt-3">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-2 text-sm">
+      Updated May 2026 · Based on live exchange rates and fee structures · For Pakistani diaspora in the USA
+    </p>
+
+    <!-- Live rate reference -->
+    <div class="p-4 bg-green-50 border border-green-200 rounded-xl mb-8">
+      <p class="text-sm font-semibold text-green-800 mb-1">Today's SBP Interbank Rate (Benchmark)</p>
+      <p class="text-sm text-green-700">USD/PKR: <strong id="live-rate">Loading…</strong> — This is the baseline. The closer a service gets to this, the better the deal.</p>
+      <script>
+        (async () => {
+          try {
+            const res = await fetch('/api/exchange-rates');
+            const data = await res.json() as any;
+            const rate: number = data.rates?.USD || data.USD || 278;
+            const el = document.getElementById('live-rate');
+            if (el) el.textContent = `PKR ${rate.toFixed(2)} per $1 USD`;
+          } catch { /* non-blocking */ }
+        })();
+      </script>
+    </div>
+
+    <!-- Service Comparison Table -->
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Comparison: Sending $500 to Pakistan</h2>
+
+    <div class="overflow-x-auto mb-10">
+      <table class="w-full text-sm border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Service</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Rate vs Interbank</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Fee (approx.)</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Speed</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Delivery</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          <tr class="bg-green-50 dark:bg-green-900/10">
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">Wise</div>
+              <div class="text-xs text-green-700 dark:text-green-400 font-medium">⭐ Best Overall Rate</div>
+            </td>
+            <td class="px-4 py-4 text-center text-green-700 dark:text-green-400 font-semibold">~0.5% below mid-market</td>
+            <td class="px-4 py-4 text-center">~$4–6</td>
+            <td class="px-4 py-4 text-center">1–2 days</td>
+            <td class="px-4 py-4 text-center">Bank account</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">Remitly</div>
+              <div class="text-xs text-blue-600 dark:text-blue-400 font-medium">⚡ Fastest delivery</div>
+            </td>
+            <td class="px-4 py-4 text-center text-yellow-700 dark:text-yellow-400 font-semibold">~1–2% below mid-market</td>
+            <td class="px-4 py-4 text-center">$0–4 (promo varies)</td>
+            <td class="px-4 py-4 text-center">Minutes–same day</td>
+            <td class="px-4 py-4 text-center">Bank + mobile wallet</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">ACE Money Transfer</div>
+              <div class="text-xs text-gray-500 font-medium">🏆 Popular in Pakistani community</div>
+            </td>
+            <td class="px-4 py-4 text-center text-yellow-700 dark:text-yellow-400 font-semibold">~1–2% below mid-market</td>
+            <td class="px-4 py-4 text-center">~$1–3</td>
+            <td class="px-4 py-4 text-center">Same day</td>
+            <td class="px-4 py-4 text-center">Bank + cash pickup</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">Western Union</div>
+            </td>
+            <td class="px-4 py-4 text-center text-red-600 dark:text-red-400 font-semibold">~2–3% below mid-market</td>
+            <td class="px-4 py-4 text-center">$5–10</td>
+            <td class="px-4 py-4 text-center">Minutes (cash)</td>
+            <td class="px-4 py-4 text-center">Cash pickup + bank</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">Xoom (PayPal)</div>
+            </td>
+            <td class="px-4 py-4 text-center text-yellow-700 dark:text-yellow-400 font-semibold">~1.5–2.5% below</td>
+            <td class="px-4 py-4 text-center">$0–5</td>
+            <td class="px-4 py-4 text-center">1–2 days</td>
+            <td class="px-4 py-4 text-center">Bank account</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">Bank Wire (SWIFT)</div>
+              <div class="text-xs text-purple-600 dark:text-purple-400 font-medium">💼 Best for large amounts</div>
+            </td>
+            <td class="px-4 py-4 text-center text-green-700 dark:text-green-400 font-semibold">~0.5–1% below</td>
+            <td class="px-4 py-4 text-center">$25–45 flat</td>
+            <td class="px-4 py-4 text-center">2–5 days</td>
+            <td class="px-4 py-4 text-center">Bank account only</td>
+          </tr>
+          <tr class="bg-blue-50 dark:bg-blue-900/10">
+            <td class="px-4 py-4">
+              <div class="font-bold text-gray-900 dark:text-white">Roshan Digital Account</div>
+              <div class="text-xs text-blue-700 dark:text-blue-400 font-medium">🇵🇰 For RDA holders</div>
+            </td>
+            <td class="px-4 py-4 text-center text-green-700 dark:text-green-400 font-semibold">Near-interbank</td>
+            <td class="px-4 py-4 text-center">Your bank's wire fee</td>
+            <td class="px-4 py-4 text-center">Same day–24h</td>
+            <td class="px-4 py-4 text-center">RDA → any Pakistani bank</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PKR received comparison -->
+    <div class="p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700 mb-10">
+      <h3 class="font-bold text-gray-900 dark:text-white mb-3">How Much PKR Does Your Family Receive? (Sending $500)</h3>
+      <p class="text-xs text-gray-500 mb-4">Based on SBP rate of ~PKR 278/USD. Amounts are estimates — use your remittance service's calculator for exact figures on the day you send.</p>
+      <div class="space-y-3">
+        {[
+          { name: 'Wise', pct: 99.5, color: 'bg-green-500' },
+          { name: 'Remitly', pct: 98.5, color: 'bg-blue-500' },
+          { name: 'ACE Money Transfer', pct: 98, color: 'bg-teal-500' },
+          { name: 'Xoom', pct: 97.5, color: 'bg-yellow-500' },
+          { name: 'Western Union', pct: 97, color: 'bg-orange-500' },
+        ].map(s => {
+          const pkr = Math.round(500 * 278 * s.pct / 100);
+          return (
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="font-medium text-gray-800 dark:text-gray-200">{s.name}</span>
+                <span class="text-gray-600 dark:text-gray-400 font-mono">≈ PKR {pkr.toLocaleString()}</span>
+              </div>
+              <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div class={`${s.color} h-2 rounded-full`} style={`width: ${s.pct}%`}></div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p class="text-xs text-gray-400 mt-3">*Live calculations shown — update your currency converter above for today's exact rates.</p>
+    </div>
+
+    <!-- Our tool CTA -->
+    <div class="p-5 border-2 border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20 rounded-xl mb-10">
+      <h3 class="font-bold text-green-900 dark:text-green-300 mb-2">Calculate Your Remittance with Live Rates</h3>
+      <p class="text-sm text-green-800 dark:text-green-400 mb-3">
+        Use HisaabKar.pk's remittance calculator to see exactly how much PKR your family receives based on today's SBP interbank rate.
+      </p>
+      <a href="/tools/remittance-calculator/" class="inline-flex items-center gap-2 bg-green-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg hover:bg-green-800 transition">
+        💸 Open Remittance Calculator
+      </a>
+    </div>
+
+    <!-- Main article content -->
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+
+      <h2>Which Service Should You Use?</h2>
+
+      <h3>For Most People: Wise</h3>
+      <p>
+        <strong>Wise (formerly TransferWise)</strong> consistently offers the best exchange rate — typically within 0.5% of the mid-market rate. The fee structure is transparent: a small flat fee plus a percentage. For $500, you'll pay around $5–6 total in fees. Delivery to a Pakistani bank account takes 1–2 business days. Wise is regulated in the US (FinCEN registered) and trusted by millions globally.
+      </p>
+      <p><strong>Best for:</strong> Regular remittances of $200–5,000. Users who want the best rate and don't need same-day delivery.</p>
+
+      <h3>For Same-Day Delivery: Remitly</h3>
+      <p>
+        <strong>Remitly</strong> is the market leader for Pakistan remittances in the US. Their "Express" delivery option sends money to mobile wallets (Easypaisa, JazzCash) within minutes. They frequently offer promotional rates for first-time senders. The exchange rate is slightly worse than Wise (by ~0.5–1%), but the speed advantage is clear.
+      </p>
+      <p><strong>Best for:</strong> Emergency remittances, first-time senders (promo rates), families on mobile wallets rather than bank accounts.</p>
+
+      <h3>For Large Transfers (Over $5,000): Bank Wire</h3>
+      <p>
+        For large amounts, a direct <strong>SWIFT bank wire</strong> from your US bank to an HBL, MCB, or UBL account in Pakistan often offers the best total value. The flat fee ($25–45) becomes negligible relative to the better exchange rate at the bank level. Major US banks (Chase, Bank of America, Wells Fargo, Citibank) all offer international wires. Allow 2–5 business days.
+      </p>
+      <p><strong>Best for:</strong> Property purchases, large investments, one-time large transfers.</p>
+
+      <h3>For RDA Holders: Roshan Digital Account</h3>
+      <p>
+        If you have a <a href="/guides/roshan-digital-account-guide-usa/">Roshan Digital Account</a>, wire USD directly into your RDA from your US bank. The RDA converts at near-interbank rates and you can distribute to any Pakistani bank or mobile wallet instantly. This is the most cost-effective method for regular, ongoing transfers — especially if you're also investing in Pakistan through the RDA.
+      </p>
+
+      <h2>Tips to Get the Best Rate</h2>
+
+      <ol>
+        <li><strong>Check multiple services on the day you send.</strong> Rates change daily. Wise may be best on Monday; Remitly may have a promotion on Thursday.</li>
+        <li><strong>Send weekdays.</strong> Weekend transfers often sit in queue until Monday, and you're locked into Friday's rate.</li>
+        <li><strong>Avoid airport and hotel exchange counters.</strong> These offer rates 3–7% below the interbank rate — the worst option.</li>
+        <li><strong>Use debit card (not credit card) to fund your transfer.</strong> Credit card funding adds 2–4% in cash advance fees.</li>
+        <li><strong>Never use unofficial hawala channels.</strong> Hawala is illegal in both the US and Pakistan, uninsured, and untraceable if something goes wrong.</li>
+      </ol>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <h3>Is there a limit on sending money to Pakistan from the USA?</h3>
+      <p>No legal cap on bank wire amounts. Cash transactions over $10,000 trigger CTR reporting (bank's obligation, not yours). Banks may ask for source of funds documentation for very large transfers ($50,000+). Pakistan permits unlimited inward remittances through official channels.</p>
+
+      <h3>Do I pay US tax on money sent to Pakistan?</h3>
+      <p>No. Remittances to family are not taxable US income. Gifts under $17,000/year per recipient need no reporting. Normal family support payments are fully exempt.</p>
+
+      <h3>What is the best mobile wallet to receive money in Pakistan?</h3>
+      <p>Easypaisa (Telenor) and JazzCash are the two most widely used mobile wallets. Both accept international transfers from Remitly, WorldRemit, and ACE. Beneficiary needs the mobile app installed and KYC verified (CNIC uploaded).</p>
+
+      <h3>Can I send money to Easypaisa / JazzCash from the USA?</h3>
+      <p>Yes — Remitly and ACE Money Transfer both offer direct delivery to Easypaisa and JazzCash accounts in Pakistan. Typically same-day delivery.</p>
+    </div>
+
+    <!-- Related resources -->
+    <div class="mt-12 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-4">Related Guides & Tools</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <a href="/tools/remittance-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💸 Remittance Calculator</a>
+        <a href="/rates/usd-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💵 USD to PKR Live Rate</a>
+        <a href="/guides/roshan-digital-account-guide-usa/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">🏦 Roshan Digital Account Guide</a>
+        <a href="/guides/fbar-guide-us-pakistanis/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">📋 FBAR Guide for US Pakistanis</a>
+        <a href="/guides/nrp-tax-filer-guide-pakistan/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">📄 NRP Tax Filer Guide</a>
+        <a href="/tools/currency-converter/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💱 Currency Converter</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

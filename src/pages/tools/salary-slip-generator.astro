@@ -7,30 +7,100 @@ import SalarySlipGenerator from '../../components/tools/SalarySlipGenerator';
 const title = 'Free Salary Slip Generator Pakistan 2026 — Download PDF';
 const description =
   'Generate professional salary slips for Pakistan with automatic FBR 2026 income tax calculation and PDF download. Supports custom earnings, deductions, and template saving.';
+const pageUrl = 'https://hisaabkar.pk/tools/salary-slip-generator';
 ---
 
 <MainLayout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': 'WebApplication',
     name: title,
     description,
-    url: 'https://hisaabkar.pk/tools/salary-slip-generator',
+    url: pageUrl,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, Android, iOS',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'PKR' },
+    featureList: 'FBR 2026 income tax auto-calculation, PDF download, Custom earnings and deductions, Freelancer Digital Nation Act credits, No upload — 100% private',
     inLanguage: 'en-PK',
-    publisher: {
-      '@type': 'Organization',
-      name: 'HisaabKar.pk',
-      url: 'https://hisaabkar.pk',
-    },
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://hisaabkar.pk/tools' },
+      { '@type': 'ListItem', position: 3, name: 'Salary Slip Generator', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What are the FBR income tax slabs for salaried employees in Pakistan 2025-26?',
+        acceptedAnswer: { '@type': 'Answer', text: 'FBR salaried tax slabs for FY 2025-26: Annual income up to PKR 600,000 → 0% tax; PKR 600,001–1,200,000 → 5% on amount above PKR 600,000; PKR 1,200,001–2,200,000 → PKR 30,000 + 15% above PKR 1.2M; PKR 2,200,001–3,200,000 → PKR 180,000 + 25% above PKR 2.2M; PKR 3,200,001–4,100,000 → PKR 430,000 + 30% above PKR 3.2M; above PKR 4,100,000 → PKR 700,000 + 35% above PKR 4.1M.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the tax-free salary limit in Pakistan 2026?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Salaried employees earning up to PKR 600,000 per year (PKR 50,000 per month) pay zero income tax in Pakistan for FY 2025-26. Above this threshold, progressive tax rates apply. Freelancers and IT professionals registered under the Digital Nation Act may receive additional tax credits.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What does a salary slip include in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'A standard Pakistani salary slip includes: Employee name, designation, department, CNIC; Gross salary breakdown (basic salary, house rent allowance, medical allowance, conveyance, utilities); Deductions (income tax advance, EOBI contribution at 1% of minimum wage, SESSI/PESSI where applicable, provident fund, loan deductions); Net salary payable. HisaabKar.pk\'s generator creates all of this and downloads as a professional PDF.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'How is income tax deducted from salary in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Employers deduct income tax advance (also called Advance Tax or Section 149 tax) from monthly salary. The annual tax liability is divided by 12 and deducted each month. At year-end, the employee files a return and either claims a refund (if over-deducted) or pays the balance. This monthly deduction appears on the salary slip as "Income Tax Advance" or "WHT Salary".' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do freelancers and IT professionals pay less tax in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Yes. Under the Digital Nation Act and FBR incentives, registered freelancers and IT/software professionals with foreign exchange earnings may be eligible for reduced tax rates (1% on export earnings in some categories) and additional tax credits. The salary slip generator includes a Digital Nation Act credit toggle for eligible freelancers. Verify your eligibility at iris.fbr.gov.pk.' },
+      },
+    ],
   })} />
 
   <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
-    <p class="text-gray-600 mb-6 text-sm">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/tools" class="hover:text-green-700">Tools</a>
+      <span class="mx-1">/</span>
+      <span>Salary Slip Generator</span>
+    </nav>
+
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
       Create and download professional salary slips in PDF format. Income Tax Advance is
       auto-calculated from FBR 2026 slabs. All data stays in your browser — nothing is uploaded.
     </p>
 
     <SalarySlipGenerator client:load />
+
+    <!-- FAQ / SEO content -->
+    <div class="mt-12 prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">Frequently Asked Questions</h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What are FBR income tax slabs for 2025-26?</h3>
+      <p>Up to PKR 600K/year → 0% | PKR 600K–1.2M → 5% above threshold | PKR 1.2M–2.2M → PKR 30K + 15% | PKR 2.2M–3.2M → PKR 180K + 25% | PKR 3.2M–4.1M → PKR 430K + 30% | Above PKR 4.1M → PKR 700K + 35%.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is the tax-free salary in Pakistan 2026?</h3>
+      <p>PKR 50,000/month (PKR 600,000/year). Salaries at or below this threshold attract zero income tax under FBR 2025-26 slabs.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What does a salary slip include?</h3>
+      <p>Employee CNIC and designation; gross salary (basic + HRA + medical + conveyance); deductions (income tax advance, EOBI, PF, loan); net pay. The generator creates a professional PDF with all components auto-calculated.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Do freelancers pay less tax?</h3>
+      <p>Yes — registered IT/freelancers under the Digital Nation Act can claim tax credits on foreign exchange earnings. Toggle the freelancer option in the calculator for an adjusted estimate. Verify eligibility at iris.fbr.gov.pk.</p>
+    </div>
   </div>
 </MainLayout>

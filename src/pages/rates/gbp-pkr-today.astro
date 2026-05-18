@@ -1,0 +1,166 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'GBP to PKR Today — British Pound to Pakistani Rupee Rate 2026';
+const description = 'Live GBP to PKR exchange rate today. British Pound to Pakistani Rupee from SBP interbank. Updated daily. Essential for Pakistani diaspora in the UK sending money home.';
+const pageUrl = 'https://hisaabkar.pk/rates/gbp-pkr-today';
+
+const schema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  dateModified: new Date().toISOString().split('T')[0],
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  inLanguage: 'en-GB',
+  isAccessibleForFree: true,
+  keywords: 'GBP to PKR today, British pound to Pakistani rupee, pound rate in Pakistan, 1 GBP to PKR, pound sterling Pakistan',
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the GBP to PKR rate today?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The live GBP (British Pound Sterling) to PKR exchange rate is shown in the widget above, sourced from SBP interbank data. Unlike SAR or AED, the GBP is a floating currency — its rate against PKR fluctuates independently based on both UK and Pakistan economic conditions. At GBP/USD of approximately 1.27 and USD/PKR of 278, GBP/PKR is approximately 353.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the best way to send GBP to Pakistan from the UK?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Top options for sending GBP to Pakistan from the UK in 2026: (1) Wise — consistently best exchange rate, 0.4-1% fee, fast bank delivery; (2) ACE Money Transfer — popular in UK Pakistani community, competitive rates; (3) WorldRemit — good for mobile wallet delivery (Easypaisa, JazzCash); (4) Lloyds/Barclays/HSBC international wire — for large amounts over £5,000; (5) Western Union — widely available but higher spread. Always compare on the day of transfer.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much is £500 in PKR?',
+      acceptedAnswer: { '@type': 'Answer', text: '£500 at GBP/PKR of approximately 353 = PKR 176,500. Use the live conversion table above for the exact current amount, as rates change daily.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do I pay UK tax on money sent to Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'In the UK, sending money abroad (remittances) is generally not subject to UK tax as it is considered a transfer of your own funds, not income. However, if you send large gifts above the annual exemption (£3,000/year per recipient for inheritance tax purposes), it could have inheritance tax implications if you die within 7 years of the gift. Ordinary family remittances are not taxed. Consult a UK tax advisor for large or complex transfers.' },
+    },
+  ],
+});
+---
+
+<MainLayout {title} {description} type="Article">
+  <script type="application/ld+json" set:html={schema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Rates', item: 'https://hisaabkar.pk/rates' },
+      { '@type': 'ListItem', position: 3, name: 'GBP to PKR Today', item: pageUrl },
+    ],
+  })} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/rates" class="hover:text-green-700">Rates</a>
+      <span class="mx-1">/</span>
+      <span>GBP to PKR Today</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8 text-sm">
+      SBP interbank rate · Updated daily · GBP is a floating currency (not pegged to USD)
+    </p>
+
+    <div class="border border-blue-200 dark:border-blue-800/40 rounded-2xl p-6 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/10 dark:to-gray-900 mb-10">
+      <div class="flex items-start justify-between">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">1 British Pound (GBP) =</p>
+          <p id="gbp-rate" class="text-5xl font-bold text-gray-900 dark:text-white">
+            <span class="text-2xl text-gray-400 animate-pulse">Loading…</span>
+          </p>
+          <p class="text-lg text-gray-500 dark:text-gray-400 mt-2">Pakistani Rupee (PKR)</p>
+        </div>
+        <div class="text-4xl">🇬🇧→🇵🇰</div>
+      </div>
+      <div class="mt-4 pt-4 border-t border-blue-100 dark:border-blue-800/30 flex justify-between text-xs text-gray-400">
+        <span id="gbp-date">—</span>
+        <span>Source: State Bank of Pakistan</span>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        try {
+          const res = await fetch('/api/exchange-rates');
+          const data = await res.json() as any;
+          const gbpPkr: number = data.rates?.GBP || data.GBP || 353;
+          const el = document.getElementById('gbp-rate');
+          if (el) el.textContent = `PKR ${gbpPkr.toFixed(2)}`;
+          const dateEl = document.getElementById('gbp-date');
+          if (dateEl) dateEl.textContent = 'As of ' + new Date().toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
+        } catch { /* non-blocking */ }
+      })();
+    </script>
+
+    <div class="mb-10 overflow-x-auto">
+      <table class="w-full text-sm border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">GBP Amount</th>
+            <th class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">PKR Equivalent (approx.)</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {[100, 500, 1000, 2500, 5000, 10000].map(gbp => (
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
+              <td class="px-4 py-3 text-gray-800 dark:text-gray-200">£{gbp.toLocaleString()}</td>
+              <td class="px-4 py-3 text-right text-gray-600 dark:text-gray-400 font-mono" id={`gbp-${gbp}`}>—</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <script>
+        (async () => {
+          try {
+            const res = await fetch('/api/exchange-rates');
+            const data = await res.json() as any;
+            const gbpPkr: number = data.rates?.GBP || data.GBP || 353;
+            [100, 500, 1000, 2500, 5000, 10000].forEach(gbp => {
+              const el = document.getElementById(`gbp-${gbp}`);
+              if (el) el.textContent = `PKR ${(gbp * gbpPkr).toLocaleString('en-PK', { maximumFractionDigits: 0 })}`;
+            });
+          } catch { /* non-blocking */ }
+        })();
+      </script>
+    </div>
+
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+      <h2>GBP to PKR — UK's Pakistani Community</h2>
+      <p>The UK is home to over <strong>1.3 million Pakistanis</strong> — the largest Pakistani community outside Pakistan and the Middle East. Cities like Birmingham, Bradford, Manchester, Leeds, and London have large Pakistani communities. The UK–Pakistan remittance corridor sends over $4 billion annually to Pakistan.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <h3>What is the GBP to PKR rate today?</h3>
+      <p>Shown live above from SBP data. Unlike AED/SAR (USD-pegged), GBP floats freely — it changes based on both UK economic conditions and USD/PKR movements.</p>
+      <h3>Best way to send £ to Pakistan from UK?</h3>
+      <p>Wise (best rate, ~0.5% fee), ACE Money Transfer (popular UK-Pakistan corridor), WorldRemit (mobile wallet delivery). For over £5,000 — compare bank wire to Wise.</p>
+      <h3>Do I pay UK tax on remittances to Pakistan?</h3>
+      <p>No — sending your own money abroad is not taxable in the UK. Large gifts (over £3,000/year) may have inheritance tax implications if you die within 7 years. Normal family support remittances are fully tax-free in the UK.</p>
+    </div>
+
+    <div class="mt-10 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Related Rates & Tools</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/rates/usd-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💵 USD to PKR Today</a>
+        <a href="/rates/sar-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">🇸🇦 SAR to PKR Today</a>
+        <a href="/rates/aed-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">🇦🇪 AED to PKR Today</a>
+        <a href="/tools/remittance-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💸 Remittance Calculator</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

@@ -4,8 +4,8 @@ import MainLayout from '../../layouts/MainLayout.astro';
 ---
 
 <MainLayout
-  title="Pakistan Live Rates — USD/PKR, Gold, Petrol | HisaabKar.pk"
-  description="Live exchange rates, gold prices, and commodity rates for Pakistan. USD to PKR today, 24K gold rate per tola and gram, petrol prices. Updated daily from SBP and PMEX."
+  title="Pakistan Live Rates — USD/PKR, Gold, SAR, AED, GBP, EUR | HisaabKar.pk"
+  description="Live exchange rates, gold prices, and commodity rates for Pakistan. USD, SAR, AED, GBP, EUR to PKR today. 24K gold rate per tola and gram. Updated daily from SBP and PMEX."
 >
   <div class="max-w-4xl mx-auto px-4 py-10">
     <header class="mb-10">
@@ -16,17 +16,66 @@ import MainLayout from '../../layouts/MainLayout.astro';
       </p>
     </header>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <a href="/rates/usd-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
-        <div class="text-3xl mb-3">💵</div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">USD to PKR Today</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Live SBP interbank dollar rate, open market comparison, remittance guide</p>
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Exchange Rates</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+      <a href="/rates/usd-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">💵</div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">USD to PKR Today</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">SBP interbank · Open market · Remittance guide</p>
       </a>
 
-      <a href="/rates/gold-rate-pakistan-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-6 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-yellow-300 transition">
-        <div class="text-3xl mb-3">🥇</div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">Gold Rate in Pakistan Today</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">24K gold price per tola and gram in PKR, zakat nisab, investment guide</p>
+      <a href="/rates/sar-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">🇸🇦</div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">SAR to PKR Today</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Saudi Riyal · Pegged to USD at 3.75 · For KSA workers</p>
+      </a>
+
+      <a href="/rates/aed-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">🇦🇪</div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">AED to PKR Today</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">UAE Dirham · Pegged to USD at 3.6725 · For UAE workers</p>
+      </a>
+
+      <a href="/rates/gbp-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">🇬🇧</div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">GBP to PKR Today</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">British Pound · Floating currency · For UK Pakistani diaspora</p>
+      </a>
+
+      <a href="/rates/eur-pkr-today/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">🇪🇺</div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">EUR to PKR Today</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Euro · For Pakistani diaspora in Europe</p>
+      </a>
+
+      <a href="/rates/gold-rate-pakistan-today/" class="group border border-yellow-200 dark:border-yellow-800/40 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-yellow-300 transition">
+        <div class="text-2xl mb-2">🥇</div>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-green-700 dark:group-hover:text-green-400">Gold Rate in Pakistan Today</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">24K PMEX benchmark · Per tola & gram · USD equivalent</p>
+      </a>
+    </div>
+
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Tools & Calculators</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <a href="/tools/currency-converter/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">💱</div>
+        <h2 class="text-base font-bold text-gray-900 dark:text-white group-hover:text-green-700">Full Currency Converter</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">USD, EUR, GBP, AED, SAR, CAD, AUD, CNY, JPY, RON — 30-day chart</p>
+      </a>
+      <a href="/tools/remittance-calculator/" class="group border border-gray-200 dark:border-gray-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-green-300 transition">
+        <div class="text-2xl mb-2">💸</div>
+        <h2 class="text-base font-bold text-gray-900 dark:text-white group-hover:text-green-700">Remittance Calculator</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">How much PKR your family receives — all corridors</p>
+      </a>
+      <a href="/us/send-money-to-pakistan-from-usa/" class="group border border-blue-200 dark:border-blue-700 rounded-xl p-5 bg-blue-50 dark:bg-blue-900/20 hover:shadow-md hover:border-blue-300 transition">
+        <div class="text-2xl mb-2">🇺🇸</div>
+        <h2 class="text-base font-bold text-gray-900 dark:text-white group-hover:text-blue-700">Send Money from USA to Pakistan</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Wise vs Remitly vs Western Union — full comparison</p>
+      </a>
+      <a href="/tools/gold-price-calculator-pakistan/" class="group border border-yellow-200 dark:border-yellow-700 rounded-xl p-5 bg-white dark:bg-gray-800/50 hover:shadow-md hover:border-yellow-300 transition">
+        <div class="text-2xl mb-2">🪙</div>
+        <h2 class="text-base font-bold text-gray-900 dark:text-white group-hover:text-yellow-700">Gold Investment Calculator</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Portfolio value in PKR and USD, scenario analysis</p>
       </a>
     </div>
   </div>

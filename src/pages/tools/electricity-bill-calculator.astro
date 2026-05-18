@@ -7,26 +7,79 @@ import ElectricityBillCalculator from '../../components/tools/ElectricityBillCal
 const title = 'Pakistan Electricity Bill Calculator 2026 — All DISCOs (NEPRA)';
 const description =
   'Calculate your electricity bill for all 9 DISCOs (LESCO, HESCO, MEPCO, PESCO, QESCO, IESCO, GEPCO, SEPCO, K-Electric) using NEPRA notified tariffs for FY 2025-26.';
+const pageUrl = 'https://hisaabkar.pk/tools/electricity-bill-calculator';
 ---
 
 <MainLayout title={title} description={description}>
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    '@type': 'WebApplication',
     name: title,
     description,
-    url: 'https://hisaabkar.pk/tools/electricity-bill-calculator',
+    url: pageUrl,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web, Android, iOS',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'PKR' },
+    featureList: 'All 9 DISCOs, NEPRA FY2025-26 tariffs, Protected consumer slabs, FC surcharge, GST, Offline PWA',
     inLanguage: 'en-PK',
-    publisher: {
-      '@type': 'Organization',
-      name: 'HisaabKar.pk',
-      url: 'https://hisaabkar.pk',
-    },
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://hisaabkar.pk/tools' },
+      { '@type': 'ListItem', position: 3, name: 'Electricity Bill Calculator', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How is the electricity bill calculated in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'NEPRA calculates electricity bills using a slab-based tariff. Your total units consumed (kWh) determine which slab applies. Each slab has a per-unit rate; once you exceed a slab, all units are re-billed at the higher rate. To this, DISCOs add FC surcharge, GST (17%), income tax on electricity, and TV licence fee. Protected consumers (up to 100 units/month) pay a lower fixed slab.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Which DISCO covers my area in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'LESCO covers Lahore city; MEPCO covers central Punjab (Multan, Faisalabad, Bahawalpur); FESCO covers Faisalabad region; GEPCO covers Gujranwala; IESCO covers Islamabad and Rawalpindi; PESCO covers KPK; HESCO covers Hyderabad and interior Sindh; QESCO covers Quetta and Balochistan; K-Electric covers Karachi. Select your DISCO in the calculator above.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What are the NEPRA electricity tariff slabs for 2025-26?',
+        acceptedAnswer: { '@type': 'Answer', text: 'NEPRA notified tariffs for FY 2025-26 vary by DISCO and consumer type. For residential consumers: 0-100 units (protected): PKR 7.74/unit; 0-200 units: PKR 30.65/unit; 201-300: PKR 35.14/unit; 301-700: PKR 39.45/unit; above 700: PKR 43.94/unit. Commercial and industrial rates differ. Select your DISCO and consumer type above for your specific rate.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'How can I reduce my electricity bill in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Key strategies to reduce electricity bills in Pakistan: (1) Stay below 200 units/month — crossing into higher slabs increases the rate for all units; (2) Use energy-efficient ACs (5-star rated inverter ACs use 40-60% less power); (3) Shift heavy appliances to off-peak hours; (4) Install LED lights (use 80% less energy than incandescent); (5) Consider rooftop solar — net metering allows you to sell excess back to the DISCO.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the FC surcharge on electricity bills in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The Fuel Cost (FC) Adjustment surcharge is a variable monthly charge that DISCOs add to electricity bills to recover the difference between the approved fuel cost and actual fuel cost for power generation. It varies month to month and is approved by NEPRA. It appears as a separate line item on your bill and can significantly increase the total, especially when global fuel prices rise.' },
+      },
+    ],
   })} />
 
   <div class="max-w-3xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold text-gray-900 mb-2">{title}</h1>
-    <p class="text-gray-600 mb-6 text-sm">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/tools" class="hover:text-green-700">Tools</a>
+      <span class="mx-1">/</span>
+      <span>Electricity Bill Calculator</span>
+    </nav>
+
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm">
       Select your DISCO, consumer type, and enter your monthly units to estimate your electricity bill
       using NEPRA notified tariff schedule for FY 2025-26.
     </p>
@@ -39,6 +92,34 @@ const description =
       income tax on electricity bills, TV licence fee, meter rent, and surcharges not reflected
       here. Tariff rates are subject to change; verify with your DISCO for billing disputes.
       HisaabKar.pk is an independent information service and is not affiliated with NEPRA or any DISCO.
+    </div>
+
+    <!-- SEO / FAQ content -->
+    <div class="mt-12 prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">How to Use This Calculator</h2>
+      <ol class="list-decimal pl-5 space-y-1 text-sm">
+        <li>Select your <strong>DISCO</strong> (distribution company) from the dropdown — e.g. LESCO for Lahore, K-Electric for Karachi.</li>
+        <li>Choose your <strong>consumer type</strong> — residential, commercial, or agricultural.</li>
+        <li>Enter your <strong>monthly units consumed</strong> from your meter reading.</li>
+        <li>The calculator applies NEPRA FY 2025-26 tariff slabs, FC surcharge, GST, and other charges automatically.</li>
+      </ol>
+
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mt-8 mb-3">Frequently Asked Questions</h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">How is the electricity bill calculated in Pakistan?</h3>
+      <p>NEPRA uses a slab-based tariff. Your units determine which slab applies. DISCOs then add FC surcharge, 17% GST, income tax on electricity, and a TV licence fee. Protected consumers (up to 100 units/month) pay a subsidised fixed rate.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Which DISCO covers my area?</h3>
+      <p>LESCO → Lahore | MEPCO → Multan/central Punjab | FESCO → Faisalabad | GEPCO → Gujranwala | IESCO → Islamabad/Rawalpindi | PESCO → KPK | HESCO → Hyderabad | QESCO → Quetta/Balochistan | K-Electric → Karachi.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What are NEPRA tariff slabs for 2025-26?</h3>
+      <p>Residential slabs (approx.): 0–100 units (protected) PKR 7.74/unit; 0–200 units PKR 30.65/unit; 201–300 units PKR 35.14/unit; 301–700 units PKR 39.45/unit; above 700 units PKR 43.94/unit. Commercial and industrial rates differ by DISCO.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">How can I reduce my electricity bill?</h3>
+      <p>Stay below 200 units/month (higher slabs re-bill all units at the higher rate). Use inverter ACs (40–60% more efficient). Switch all lighting to LED. Run heavy appliances (washing machine, iron) in the morning or evening. Consider net-metered rooftop solar.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is the FC surcharge?</h3>
+      <p>The Fuel Cost Adjustment (FC) is a variable monthly charge NEPRA approves to compensate DISCOs for fluctuating fuel prices. It appears as a separate line on your bill and varies month to month.</p>
     </div>
   </div>
 </MainLayout>
