@@ -29,6 +29,8 @@ const url = new URL(Astro.url.pathname, Astro.site);
 const fullURL = url.href;
 
 const schemaDataWithDefaults = {
+  title,
+  description,
   ...schemaData,
   url: fullURL
 };
