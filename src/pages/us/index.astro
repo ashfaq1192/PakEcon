@@ -1,0 +1,121 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import ScrollReveal from '../../components/ui/ScrollReveal.astro';
+import Icon from '../../components/ui/Icon.astro';
+
+const title = 'Pakistani-Americans — Finance Hub for the US Diaspora';
+const description = 'Resources for the 600,000+ Pakistani-Americans: remittance guides, NRP investment options, FBAR/FATCA compliance, and tools for sending money home to Pakistan.';
+const pageUrl = 'https://hisaabkar.pk/us/';
+
+const resources = [
+  {
+    href: '/us/send-money-to-pakistan-from-usa',
+    icon: '💸',
+    title: 'Send Money to Pakistan from USA',
+    desc: 'Complete guide with best USD/PKR rates and transfer tips.',
+    tag: 'Remittance',
+    tagColor: 'bg-blue-100 text-blue-700',
+  },
+  {
+    href: '/us/remittance-providers-comparison',
+    icon: '⚖️',
+    title: 'Compare Remittance Providers',
+    desc: 'Wise vs Remitly vs Western Union vs Ria — full comparison.',
+    tag: 'Comparison',
+    tagColor: 'bg-green-100 text-green-700',
+  },
+  {
+    href: '/us/invest-in-pakistan-from-usa',
+    icon: '📈',
+    title: 'Invest in Pakistan from USA',
+    desc: 'Roshan Digital Account, NSS, PSX, mutual funds — NRP guide.',
+    tag: 'Investment',
+    tagColor: 'bg-purple-100 text-purple-700',
+  },
+  {
+    href: '/guides/fbar-guide-us-pakistanis',
+    icon: '🏛️',
+    title: 'FBAR Guide for Pakistani-Americans',
+    desc: 'Foreign bank account reporting requirements — who must file and when.',
+    tag: 'Compliance',
+    tagColor: 'bg-red-100 text-red-700',
+  },
+];
+
+const quickStats = [
+  { label: 'Pakistani-Americans', value: '600K+', sub: 'in the USA' },
+  { label: 'Remittances to Pakistan', value: '$4.2B', sub: 'from USA in FY2025' },
+  { label: 'Median Household Income', value: '$108K', sub: 'Pakistani-American families' },
+  { label: 'USD savings rate (RDA)', value: '6–7%', sub: 'Roshan Digital Account' },
+];
+---
+
+<MainLayout title={title} description={description} hreflang="en-US">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'For Pakistani-Americans', item: pageUrl },
+    ],
+  })} />
+
+  <!-- Hero -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-blue-700 to-indigo-800 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <span class="text-lg">🇺🇸 🇵🇰</span>
+        <span class="text-sm font-medium text-blue-100 uppercase tracking-wider">Pakistani-American Diaspora</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Finance Hub for<br />Pakistani-Americans</h1>
+      <p class="text-lg text-blue-100 max-w-2xl mx-auto">
+        Send money home at the best rates, invest in Pakistan from the US, and stay compliant with FBAR and FATCA. All in one place.
+      </p>
+    </div>
+  </ScrollReveal>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Quick stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      {quickStats.map(s => (
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 text-center">
+          <p class="text-2xl font-bold text-blue-700 dark:text-blue-400">{s.value}</p>
+          <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-1">{s.label}</p>
+          <p class="text-xs text-gray-500 mt-0.5">{s.sub}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Resources grid -->
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Resources for Pakistani-Americans</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      {resources.map(r => (
+        <a href={r.href} class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all group">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl">{r.icon}</div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <h3 class="font-bold text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">{r.title}</h3>
+              </div>
+              <span class={`text-xs px-2 py-0.5 rounded font-medium ${r.tagColor}`}>{r.tag}</span>
+              <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">{r.desc}</p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Live rates strip -->
+    <div class="p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+      <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Live Rates</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/rates/usd-pkr-today" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">USD/PKR Rate →</a>
+        <a href="/tools/remittance-calculator" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Remittance Calculator →</a>
+        <a href="/tools/currency-converter" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Currency Converter →</a>
+        <a href="/rates/gold-rate-pakistan-today" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">Gold Rate in Pakistan →</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

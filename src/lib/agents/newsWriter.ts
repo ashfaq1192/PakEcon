@@ -76,7 +76,7 @@ SEO HEADLINE RULES (the ## at the top — this becomes the page title in Google)
 - Max 55 characters so month-year can be appended by the system
 
 CONTENT SEO RULES:
-1. Use these keywords naturally throughout: "Pakistan economy today", "Pakistan economic news", "PKR exchange rate", "inflation Pakistan", "SBP policy", "business news Pakistan"
+1. Use these keywords naturally — each at most ONCE per article: "Pakistan economy", "PKR exchange rate", "inflation in Pakistan", "SBP policy rate". Do NOT repeat any keyword phrase more than once.
 2. Embed ALL provided tool links naturally in the "What This Means for Pakistanis" section
 3. Reference real institutions by name: SBP, FBR, OGRA, NEPRA, PBS, PSX, IMF
 4. Never invent specific numbers not mentioned in the source stories
@@ -87,7 +87,7 @@ CONTENT SEO RULES:
 const EMBEDDED_TOOL_LINKS = [
   '[Currency Converter](https://hisaabkar.pk/tools/currency-converter/)',
   '[Pakistan Inflation Calculator](https://hisaabkar.pk/tools/pakistan-inflation-calculator/)',
-  '[Income Tax Calculator](https://hisaabkar.pk/tools/salary-slip-generator/)',
+  '[Income Tax Calculator](https://hisaabkar.pk/#tax-calculator)',
   '[Gold Price Calculator](https://hisaabkar.pk/tools/gold-price-calculator-pakistan/)',
   '[Loan EMI Calculator](https://hisaabkar.pk/tools/loan-emi-calculator/)',
 ];
@@ -164,8 +164,7 @@ Your headline must name the specific event from this story. It must be under 55 
 ## Tool Links to embed naturally in "What This Means for Pakistanis":
 - ${toolLinksText}
 
-## Target SEO keywords (use naturally, don't stuff):
-Pakistan economy today, Pakistan economic news ${new Date().getFullYear()}, Pakistan economy latest, business news Pakistan, PKR exchange rate today, inflation Pakistan, SBP news, Pakistan finance news
+## SEO note: Use each keyword phrase AT MOST ONCE. Variety matters more than repetition.
 
 Write the full article now (1400–1600 words):`;
 }
@@ -297,7 +296,7 @@ export async function newsWriterAgent(state: {
     const raw = titleMatch[1].replace(/^Pakistan Economy Today:\s*/i, '').trim();
     // Append "— Pakistan Economy {Month Year}" for freshness and keyword anchor
     // Trim raw to 40 chars max so the suffix fits within 70 total
-    const hook = raw.length > 40 ? raw.slice(0, 38).replace(/\s\S+$/, '') + '…' : raw;
+    const hook = raw.length > 40 ? raw.slice(0, 40).replace(/\s\S+$/, '') : raw;
     articleTitle = `${hook} — Pakistan Economy ${monthYear}`;
   } else {
     // Fallback: derive from top story title
@@ -311,9 +310,17 @@ export async function newsWriterAgent(state: {
   // Build citations from source stories
   const citations = stories.map(s => ({ source: s.source, url: s.url }));
 
-  // Summary for meta description (first 160 chars of meaningful content)
-  const summaryMatch = content.replace(/^#{1,3}.+$/mg, '').replace(/^\s*-\s/mg, '').trim();
-  const summary = summaryMatch.slice(0, 157).replace(/\s\S+$/, '') + '...';
+  // Summary for meta description — use first prose paragraph from main story (skip Key Takeaways bullets)
+  const bodyWithoutTakeaways = content.replace(/### Key Takeaways[\s\S]*?(?=\n## )/m, '');
+  const summaryMatch = bodyWithoutTakeaways
+    .replace(/^#{1,3}.+$/mg, '')             // remove headings
+    .replace(/^\s*[*-]\s*/mg, '')            // remove bullet markers
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // strip markdown links → plain text
+    .replace(/\s+/g, ' ')                    // collapse all whitespace
+    .trim();
+  const summary = summaryMatch.length > 157
+    ? summaryMatch.slice(0, 154).replace(/\s\S+$/, '') + '...'
+    : summaryMatch;
 
   const insight: MarketInsight = {
     title: articleTitle,

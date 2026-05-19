@@ -1,0 +1,148 @@
+---
+export const prerender = true;
+
+import MainLayout from '../layouts/MainLayout.astro';
+import ScrollReveal from '../components/ui/ScrollReveal.astro';
+
+const title = 'Terms of Service — HisaabKar.pk';
+const description = 'Terms of service for HisaabKar.pk. By using our financial tools and content, you agree to these terms.';
+const pageUrl = 'https://hisaabkar.pk/terms';
+const lastUpdated = 'May 19, 2026';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: pageUrl,
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  })} />
+
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-gray-700 to-gray-900 text-white py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold mb-2">Terms of Service</h1>
+      <p class="text-gray-400 text-sm">Last updated: {lastUpdated}</p>
+    </div>
+  </ScrollReveal>
+
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <nav class="text-xs text-gray-500 mb-8">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <span>Terms of Service</span>
+    </nav>
+
+    <div class="prose prose-gray dark:prose-invert max-w-none space-y-8 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">1. Acceptance of Terms</h2>
+        <p>
+          By accessing or using HisaabKar.pk ("the Site," "we," "us," or "our"), including our financial calculators, rate pages, blog, and guides, you agree to be bound by these Terms of Service. If you do not agree, please discontinue use of the Site immediately.
+        </p>
+        <p>
+          These terms apply to all visitors, users, and others who access or use HisaabKar.pk. We may update these terms at any time; continued use after changes constitutes acceptance.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">2. Educational Purpose — Not Financial Advice</h2>
+        <p>
+          <strong>HisaabKar.pk provides information and tools for educational purposes only. Nothing on this site constitutes financial, tax, legal, or investment advice.</strong>
+        </p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Tax calculations are estimates based on publicly available FBR slab rates. Actual liability may differ based on individual circumstances, exemptions, or FBR amendments.</li>
+          <li>Gold, currency, and commodity rates are sourced from third-party APIs (SBP, PMEX, open market data) and may be delayed or inaccurate. Always verify with official sources before transacting.</li>
+          <li>Electricity bill estimates are based on NEPRA notified tariff schedules and may not reflect every DISCO-specific surcharge or amendment.</li>
+          <li>Zakat calculations are informational only. Consult a qualified Islamic scholar for your personal obligation.</li>
+        </ul>
+        <p class="mt-3">
+          Always verify important financial decisions with a qualified chartered accountant, tax consultant, or financial advisor before acting on any information from this Site.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">3. Accuracy of Data</h2>
+        <p>
+          We strive for accuracy but make no warranty, express or implied, regarding:
+        </p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>The completeness, timeliness, or correctness of any data displayed</li>
+          <li>The suitability of any tool or calculator for your specific situation</li>
+          <li>Uninterrupted availability of the Site or any feature</li>
+        </ul>
+        <p class="mt-3">
+          Data sources include: State Bank of Pakistan (SBP), Federal Board of Revenue (FBR), Pakistan Bureau of Statistics (PBS), Pakistan Mercantile Exchange (PMEX), Oil Companies Advisory Council (OCAC), and NEPRA. We update data as frequently as our systems allow but cannot guarantee real-time accuracy.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">4. Permitted Use</h2>
+        <p>You may use HisaabKar.pk for personal, non-commercial informational purposes. You agree not to:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Scrape, crawl, or systematically download data from the Site in bulk without written permission</li>
+          <li>Use automated tools to submit forms or generate artificial traffic</li>
+          <li>Reproduce or republish our editorial content (blog, guides) without attribution and a link back</li>
+          <li>Use the Site for any unlawful purpose or in a way that violates applicable Pakistani or international law</li>
+          <li>Attempt to circumvent any security measures or access restricted systems</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">5. Intellectual Property</h2>
+        <p>
+          All original content on HisaabKar.pk — including blog articles, guides, tool interfaces, and design — is owned by or licensed to HisaabKar.pk. Underlying government data (FBR, SBP, PBS) is in the public domain.
+        </p>
+        <p class="mt-2">
+          You are permitted to quote up to 150 words from any article with a visible attribution link. Full reproduction requires written consent.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">6. Privacy</h2>
+        <p>
+          Our use of your personal data (email subscriptions, contact form submissions) is governed by our <a href="/privacy-policy" class="text-green-600 hover:underline">Privacy Policy</a>, which forms part of these Terms.
+        </p>
+        <p class="mt-2">
+          Our financial calculators operate entirely client-side in your browser. We do not store or transmit the values you enter into calculators to our servers.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">7. Third-Party Links and Affiliate Relationships</h2>
+        <p>
+          HisaabKar.pk may contain links to third-party websites and may earn affiliate commissions from services we recommend (such as remittance providers or financial products). Affiliate relationships do not influence editorial coverage or calculator results.
+        </p>
+        <p class="mt-2">
+          We are not responsible for the content, privacy practices, or accuracy of any third-party site.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">8. Limitation of Liability</h2>
+        <p>
+          To the maximum extent permitted by applicable law, HisaabKar.pk and its team shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of the Site or reliance on any information presented here.
+        </p>
+        <p class="mt-2">
+          Your use of this Site is entirely at your own risk.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">9. Governing Law</h2>
+        <p>
+          These Terms shall be governed by and construed in accordance with the laws of the Islamic Republic of Pakistan. Any disputes shall be subject to the exclusive jurisdiction of the courts of Lahore, Pakistan.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">10. Contact</h2>
+        <p>
+          Questions about these Terms? <a href="/contact" class="text-green-600 hover:underline">Contact us here</a> or email us at <a href="mailto:hello@hisaabkar.pk" class="text-green-600 hover:underline">hello@hisaabkar.pk</a>.
+        </p>
+      </section>
+
+    </div>
+  </div>
+</MainLayout>

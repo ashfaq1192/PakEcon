@@ -37,6 +37,22 @@ const pageUrl = 'https://hisaabkar.pk/tools/electricity-bill-calculator';
 
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Your Electricity Bill in Pakistan',
+    description: 'Step-by-step guide to estimating your monthly electricity bill using NEPRA tariff slabs for any DISCO in Pakistan.',
+    totalTime: 'PT2M',
+    tool: [{ '@type': 'HowToTool', name: 'HisaabKar.pk Electricity Bill Calculator' }],
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'Select your DISCO', text: 'Choose your electricity distribution company from the dropdown: LESCO (Lahore), K-Electric (Karachi), MEPCO (central Punjab), PESCO (KPK), HESCO (Hyderabad), QESCO (Quetta), GEPCO (Gujranwala), FESCO (Faisalabad), IESCO (Islamabad).' },
+      { '@type': 'HowToStep', position: 2, name: 'Choose consumer type', text: 'Select Residential, Commercial, or Agricultural depending on your connection type. Residential consumers have protected slab rates for up to 100 units per month.' },
+      { '@type': 'HowToStep', position: 3, name: 'Enter monthly units consumed', text: 'Find your units (kWh) on your electricity bill — it shows the difference between current and previous meter readings. Enter this number into the calculator.' },
+      { '@type': 'HowToStep', position: 4, name: 'Review the breakdown', text: 'The calculator applies the correct NEPRA FY 2025-26 tariff slab, adds FC surcharge, GST (17%), and other applicable charges to show your total estimated bill.' },
+      { '@type': 'HowToStep', position: 5, name: 'Compare with your actual bill', text: 'Your actual bill may differ slightly due to meter rent, TV licence fee, income tax on electricity, or DISCO-specific adjustments. The calculator gives a close estimate for planning purposes.' },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {

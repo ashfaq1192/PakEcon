@@ -1,0 +1,240 @@
+---
+export const prerender = true;
+
+import MainLayout from '../layouts/MainLayout.astro';
+import Icon from '../components/ui/Icon.astro';
+import ScrollReveal from '../components/ui/ScrollReveal.astro';
+
+const title = 'Contact HisaabKar.pk — Get in Touch';
+const description = 'Contact the HisaabKar.pk team for questions about our financial tools, data accuracy, advertising, or partnership opportunities.';
+const pageUrl = 'https://hisaabkar.pk/contact';
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: title,
+    description,
+    url: pageUrl,
+    publisher: {
+      '@type': 'Organization',
+      name: 'HisaabKar.pk',
+      url: 'https://hisaabkar.pk',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: 'hello@hisaabkar.pk',
+        contactType: 'customer support',
+        areaServed: 'PK',
+        availableLanguage: 'English',
+      },
+    },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Contact', item: pageUrl },
+    ],
+  })} />
+
+  <!-- Hero -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <Icon name="send" size={16} class="text-green-200" />
+        <span class="text-sm font-medium text-green-100 uppercase tracking-wider">Get in Touch</span>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
+      <p class="text-lg text-green-100 max-w-xl mx-auto">
+        Have a question about our tools, spotted a data error, or want to partner with us? We read every message.
+      </p>
+    </div>
+  </ScrollReveal>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-10">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <span>Contact</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+      <!-- Contact Info -->
+      <div class="lg:col-span-2 space-y-8">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">How can we help?</h2>
+          <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+            HisaabKar.pk is built by a small team of economists and developers committed to making Pakistani financial data free and accessible. We reply within 24 hours on weekdays.
+          </p>
+        </div>
+
+        <!-- Contact topics -->
+        <div class="space-y-4">
+          {[
+            { icon: 'chartBar', title: 'Data Corrections', desc: 'Spotted an incorrect rate or calculation? Let us know the source.' },
+            { icon: 'lightbulb', title: 'Feature Requests', desc: 'Need a specific calculator or data point? We prioritize user requests.' },
+            { icon: 'creditCard', title: 'Advertising & Partnerships', desc: 'Sponsored content, banner ads, and affiliate partnerships available.' },
+            { icon: 'documentText', title: 'Press & Media', desc: 'Journalists and researchers can request data or interviews.' },
+          ].map(item => (
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <Icon name={item.icon} size={16} class="text-green-700 dark:text-green-400" />
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-800 dark:text-gray-200">{item.title}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Response time -->
+        <div class="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl text-sm">
+          <p class="font-semibold text-green-800 dark:text-green-300 mb-1">Response time</p>
+          <p class="text-green-700 dark:text-green-400 text-xs">Typically within 24 hours on weekdays. Data corrections are prioritised.</p>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="lg:col-span-3">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Send a Message</h2>
+
+          <form id="contact-form" class="space-y-5" novalidate>
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                minlength="2"
+                placeholder="Muhammad Ahmed"
+                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              />
+            </div>
+
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="you@example.com"
+                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              />
+            </div>
+
+            <div>
+              <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Subject</label>
+              <select
+                id="subject"
+                name="subject"
+                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              >
+                <option value="general">General Inquiry</option>
+                <option value="data">Data Correction</option>
+                <option value="feature">Feature Request</option>
+                <option value="advertising">Advertising & Partnerships</option>
+                <option value="press">Press & Media</option>
+                <option value="bug">Bug Report</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                minlength="10"
+                maxlength="2000"
+                rows="5"
+                placeholder="Please describe your question or feedback in detail..."
+                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition resize-none"
+              ></textarea>
+              <p class="text-xs text-gray-400 mt-1 text-right"><span id="char-count">0</span>/2000</p>
+            </div>
+
+            <!-- Status message -->
+            <div id="form-status" class="hidden rounded-lg px-4 py-3 text-sm font-medium"></div>
+
+            <button
+              type="submit"
+              id="submit-btn"
+              class="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+            >
+              <span id="btn-text">Send Message</span>
+              <svg id="btn-spinner" class="hidden animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const statusEl = document.getElementById('form-status');
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+  const btnText = document.getElementById('btn-text');
+  const btnSpinner = document.getElementById('btn-spinner');
+  const msgEl = document.getElementById('message') as HTMLTextAreaElement;
+  const charCount = document.getElementById('char-count');
+
+  msgEl?.addEventListener('input', () => {
+    if (charCount) charCount.textContent = String(msgEl.value.length);
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = (document.getElementById('name') as HTMLInputElement)?.value.trim();
+    const email = (document.getElementById('email') as HTMLInputElement)?.value.trim();
+    const subject = (document.getElementById('subject') as HTMLSelectElement)?.value;
+    const message = msgEl?.value.trim();
+    const fullMessage = subject !== 'general' ? `[${subject.toUpperCase()}] ${message}` : message;
+
+    submitBtn.disabled = true;
+    if (btnText) btnText.textContent = 'Sending…';
+    btnSpinner?.classList.remove('hidden');
+    if (statusEl) statusEl.classList.add('hidden');
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message: fullMessage }),
+      });
+      const data = await res.json() as { message?: string; error?: string };
+
+      if (statusEl) {
+        statusEl.textContent = data.message || data.error || '';
+        statusEl.className = res.ok
+          ? 'rounded-lg px-4 py-3 text-sm font-medium bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-700'
+          : 'rounded-lg px-4 py-3 text-sm font-medium bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-700';
+        statusEl.classList.remove('hidden');
+      }
+      if (res.ok) form.reset();
+      if (charCount) charCount.textContent = '0';
+    } catch {
+      if (statusEl) {
+        statusEl.textContent = 'Network error. Please try again.';
+        statusEl.className = 'rounded-lg px-4 py-3 text-sm font-medium bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-700';
+        statusEl.classList.remove('hidden');
+      }
+    } finally {
+      submitBtn.disabled = false;
+      if (btnText) btnText.textContent = 'Send Message';
+      btnSpinner?.classList.add('hidden');
+    }
+  });
+</script>

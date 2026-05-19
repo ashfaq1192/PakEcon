@@ -37,6 +37,23 @@ const pageUrl = 'https://hisaabkar.pk/tools/zakat-calculator';
 
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Zakat in Pakistan 2026',
+    description: 'Step-by-step guide to calculating your annual Zakat obligation using live gold and silver nisab rates in Pakistan.',
+    totalTime: 'PT5M',
+    tool: [{ '@type': 'HowToTool', name: 'HisaabKar.pk Zakat Calculator' }],
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'Choose your Nisab basis', text: 'Select Gold Nisab (87.48g of 24K gold) or Silver Nisab (612.36g of silver). Most Pakistani Hanafi scholars recommend the Silver Nisab as it is lower and includes more Muslims in the obligation.' },
+      { '@type': 'HowToStep', position: 2, name: 'Enter your cash and bank balances', text: 'Add all cash at hand, savings account balances, and fixed deposits that you have held for one complete lunar year (hawl). Do not include money borrowed or owed.' },
+      { '@type': 'HowToStep', position: 3, name: 'Enter your gold and silver holdings', text: 'Enter the weight in grams or tolas of all gold and silver jewellery, coins, or bars held for one year. The calculator uses live PMEX rates to value these automatically.' },
+      { '@type': 'HowToStep', position: 4, name: 'Add business assets and receivables', text: 'Include business inventory at current market value, trade receivables you expect to collect, and investments in stocks or mutual funds at today\'s market value.' },
+      { '@type': 'HowToStep', position: 5, name: 'Deduct liabilities', text: 'Subtract any short-term debts due within the year — outstanding loans, unpaid invoices, or other financial obligations.' },
+      { '@type': 'HowToStep', position: 6, name: 'Review your Zakat amount', text: 'If your net zakatable wealth exceeds the Nisab and has been held for one lunar year, Zakat is 2.5% of the total. The calculator displays the exact amount in PKR.' },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {

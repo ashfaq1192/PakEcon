@@ -95,7 +95,22 @@ const breadcrumbSchemaJson = JSON.stringify(breadcrumbSchema);
 
     <ShareButtons title={entry.data.title} url={pageUrl} />
 
-    <footer class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-500">
+    <!-- Author bio (E-E-A-T signal) -->
+    <div class="mt-10 p-5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl flex items-start gap-4">
+      <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-700 rounded-full flex items-center justify-center shrink-0">
+        <span class="text-white font-bold text-sm">HK</span>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-gray-900 dark:text-white">HisaabKar Editorial Team</p>
+        <p class="text-xs text-green-700 dark:text-green-400 mb-1">M.Phil Economics · Verified Financial Content</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          This guide is researched and maintained by economists with formal training in Pakistani public finance and macroeconomics. All data is sourced from official government publications (FBR, SBP, PBS, PMEX).
+          <a href="/about" class="text-green-700 dark:text-green-400 hover:underline">Learn about our credentials →</a>
+        </p>
+      </div>
+    </div>
+
+    <footer class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-500">
       <p class="italic">
         Information provided is for educational purposes only and based on publicly available data. Not financial or legal advice. Verify current figures at official sources (FBR, SBP, PBS).
       </p>

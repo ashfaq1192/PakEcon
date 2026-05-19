@@ -37,6 +37,23 @@ const pageUrl = 'https://hisaabkar.pk/tools/loan-emi-calculator';
 
   <script type="application/ld+json" set:html={JSON.stringify({
     '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'How to Calculate Loan EMI in Pakistan',
+    description: 'Step-by-step guide to calculating monthly loan EMI for home, car, personal, or business loans in Pakistan — both conventional and Islamic Murabaha.',
+    totalTime: 'PT3M',
+    tool: [{ '@type': 'HowToTool', name: 'HisaabKar.pk Loan EMI Calculator' }],
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'Select loan type', text: 'Choose between Home Loan, Car Loan, Personal Loan, or Business Loan. Each type has typical rate ranges displayed for guidance.' },
+      { '@type': 'HowToStep', position: 2, name: 'Choose financing mode', text: 'Select Conventional (interest-based) or Islamic/Murabaha (profit-based). Islamic mode uses a fixed profit margin — suitable for Shariah-compliant financing from Meezan Bank, Dubai Islamic Bank, or other Islamic banks in Pakistan.' },
+      { '@type': 'HowToStep', position: 3, name: 'Enter loan amount', text: 'Enter the principal amount you want to borrow in Pakistani Rupees (PKR). For home loans, this is typically the property price minus your down payment.' },
+      { '@type': 'HowToStep', position: 4, name: 'Enter interest/profit rate and tenure', text: 'Enter the annual interest or profit rate offered by your bank. Current home loan rates in Pakistan are approximately 13-16% per annum. Enter the repayment period in years.' },
+      { '@type': 'HowToStep', position: 5, name: 'Review EMI and amortization schedule', text: 'The calculator shows your monthly EMI, total amount payable, total interest/profit paid, and a month-by-month amortization table showing how each payment splits between principal and interest.' },
+      { '@type': 'HowToStep', position: 6, name: 'Simulate prepayments', text: 'Use the prepayment section to see how making extra lump-sum payments reduces your outstanding principal, shortens your tenure, and saves on total interest cost.' },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {

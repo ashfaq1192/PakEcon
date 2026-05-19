@@ -1,0 +1,224 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import ScrollReveal from '../../components/ui/ScrollReveal.astro';
+import Icon from '../../components/ui/Icon.astro';
+
+const title = 'How to Invest in Pakistan from the USA — NRP Guide 2026';
+const description = 'Complete guide for Pakistani-Americans (NRPs) to invest in Pakistan — Roshan Digital Account, Naya Pakistan Certificates, PSX stocks, mutual funds, and real estate. Tax implications explained.';
+const pageUrl = 'https://hisaabkar.pk/us/invest-in-pakistan-from-usa';
+
+const investmentOptions = [
+  {
+    title: 'Roshan Digital Account (RDA)',
+    icon: '🏦',
+    returnRange: '6–7% p.a. (USD) / 11–13% p.a. (PKR)',
+    risk: 'Low',
+    riskColor: 'text-green-600',
+    minInvestment: 'No minimum',
+    liquidity: 'High',
+    desc: 'Official SBP scheme for Non-Resident Pakistanis. Open a Pakistani bank account entirely online from the USA. Invest in Naya Pakistan Certificates, NSS, T-Bills, and equity from abroad.',
+    highlights: ['Open from anywhere in the world — 100% digital', 'USD savings account at 6-7% p.a. — much higher than US savings rates', 'PKR savings at 11-13% p.a. (take currency risk)', 'Invest in Naya Pakistan Certificates (NPCs) — government-backed, tax-free profit', 'Repatriate funds at any time without SBP permission'],
+    url: 'https://sbp.org.pk/RDAC/',
+    urlLabel: 'Open via SBP partner banks →',
+  },
+  {
+    title: 'Naya Pakistan Certificates (NPCs)',
+    icon: '📜',
+    returnRange: '6.5% p.a. (USD) / 13%+ p.a. (PKR)',
+    risk: 'Low',
+    riskColor: 'text-green-600',
+    minInvestment: '$500 or PKR equivalent',
+    liquidity: 'Medium (3/5 year maturity, early exit available)',
+    desc: 'Sovereign-backed government certificates exclusively for NRPs. Available in USD and PKR denominations with competitive profit rates and full tax exemption on profit.',
+    highlights: ['Government of Pakistan guaranteed', 'Tax-free profit for NRP certificate holders', 'Available in 3-month, 6-month, 1-year, 3-year, and 5-year tenors', 'Access via Roshan Digital Account at HBL, MCB, UBL, Meezan Bank, ABL, Al Habib Bank'],
+    url: 'https://sbp.org.pk/RDAC/',
+    urlLabel: 'Learn more at SBP.org.pk →',
+  },
+  {
+    title: 'Pakistan Stock Exchange (PSX)',
+    icon: '📈',
+    returnRange: '15–40% p.a. (PKR) historically — high volatility',
+    risk: 'High',
+    riskColor: 'text-red-600',
+    minInvestment: 'PKR 5,000 (~$18)',
+    liquidity: 'High (T+2 settlement)',
+    desc: 'PSX has been one of the world\'s best-performing markets over 20 years (CAGR ~15% in USD terms). NRPs can invest via Roshan Investor Portfolio Securities (RIPS) account linked to their RDA.',
+    highlights: ['KSE-100 index up 40%+ in FY2025', 'Access via RIPS (Roshan Investor Portfolio Securities)', 'Dividends repatriable without SBP permission', 'Need a CDC account (Central Depository Company) + brokerage account', 'Top sectors: Banking, Fertilizer, Cement, Energy, Tech'],
+    url: 'https://psx.com.pk',
+    urlLabel: 'PSX Official Site →',
+  },
+  {
+    title: 'National Savings Certificates (NSS)',
+    icon: '🏛️',
+    returnRange: '13–15% p.a. (PKR)',
+    risk: 'Very Low',
+    riskColor: 'text-green-600',
+    minInvestment: 'PKR 10,000 (~$36)',
+    liquidity: 'Medium (3-year to 10-year tenors)',
+    desc: 'Government-backed savings instruments from the National Savings Organisation (NSO). Among the highest safe returns in Pakistan. Accessible to NRPs via Roshan Digital Account.',
+    highlights: ['Returns backed by Government of Pakistan', 'Regular Savings Certificates: 13.5% p.a.', 'Bahbood Certificates (for senior citizens): 15%+ p.a.', 'Premium Prize Bonds discontinued — Savings Certificates now preferred', 'Profit paid quarterly or annually'],
+    url: 'https://www.savings.gov.pk',
+    urlLabel: 'National Savings →',
+  },
+  {
+    title: 'Mutual Funds (Unit Trusts)',
+    icon: '📊',
+    returnRange: '12–25% p.a. (PKR) — varies by fund type',
+    risk: 'Medium',
+    riskColor: 'text-yellow-600',
+    minInvestment: 'PKR 5,000 (~$18)',
+    liquidity: 'High (T+2 redemption)',
+    desc: 'SECP-regulated mutual funds managed by professional asset managers. NRPs can invest via online portals of major AMCs (Asset Management Companies).',
+    highlights: ['Income funds (like money market): 13-16% p.a. — low risk', 'Equity funds: 20-40% p.a. potential — higher risk', 'Islamic funds available for Shariah-compliant investing', 'Major AMCs: Meezan Investment, UBL Fund Managers, Alfalah GHP, NAFA Funds'],
+    url: null,
+    urlLabel: null,
+  },
+  {
+    title: 'Real Estate (DHA/Bahria/Other)',
+    icon: '🏠',
+    returnRange: '10–20% capital appreciation (varies by location)',
+    risk: 'Medium-High',
+    riskColor: 'text-orange-600',
+    minInvestment: 'PKR 5M+ ($18,000+)',
+    liquidity: 'Low (illiquid asset)',
+    desc: 'Real estate is a traditional NRP investment. Defence Housing Authority (DHA) and Bahria Town files have been popular. Note: increased FBR oversight and 3% filer/non-filer differences apply.',
+    highlights: ['FBR 236C withholding tax: 3% for filers, 6% for non-filers on purchase', 'Rental income taxable in Pakistan (15% for non-residents)', 'No FBR permission needed for NRPs to purchase property', 'Capital gains tax on property held <3 years', 'Use a trusted local lawyer and verify with DHA/authority directly'],
+    url: null,
+    urlLabel: null,
+  },
+];
+---
+
+<MainLayout title={title} description={description} hreflang="en-US">
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: pageUrl,
+    datePublished: '2026-05-19',
+    dateModified: '2026-05-19',
+    author: { '@type': 'Person', name: 'HisaabKar Editorial Team', url: 'https://hisaabkar.pk/about' },
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+    inLanguage: 'en-US',
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'For Pakistani-Americans', item: 'https://hisaabkar.pk/us/' },
+      { '@type': 'ListItem', position: 3, name: 'Invest in Pakistan from USA', item: pageUrl },
+    ],
+  })} />
+
+  <!-- Hero -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-emerald-700 to-green-800 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
+        <span class="text-lg">🇺🇸 → 🇵🇰</span>
+        <span class="text-sm font-medium text-green-100 uppercase tracking-wider">NRP Investment Guide</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">{title}</h1>
+      <p class="text-lg text-green-100 max-w-2xl mx-auto">
+        PKR savings accounts earning 13%, government-guaranteed certificates, and a stock market that returned 40% in FY2025. Here's how to access them from the US.
+      </p>
+    </div>
+  </ScrollReveal>
+
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <nav class="text-xs text-gray-500 mb-8">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/us/" class="hover:text-green-700">For Pakistani-Americans</a>
+      <span class="mx-1">/</span>
+      <span>Invest in Pakistan from USA</span>
+    </nav>
+
+    <!-- Getting started callout -->
+    <div class="mb-10 p-5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-2xl">
+      <p class="text-sm font-bold text-green-800 dark:text-green-300 mb-2">Start here: Roshan Digital Account</p>
+      <p class="text-sm text-green-700 dark:text-green-400">
+        For most Pakistani-Americans, the <strong>Roshan Digital Account (RDA)</strong> is the best starting point. Open it online in under 30 minutes from the US. It unlocks government certificates, NSS, mutual funds, and PSX — all repatriable without SBP permission.
+      </p>
+    </div>
+
+    <!-- Investment options -->
+    <div class="space-y-8">
+      {investmentOptions.map(opt => (
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+          <div class="flex items-start gap-4 mb-4">
+            <div class="text-3xl shrink-0">{opt.icon}</div>
+            <div class="flex-1">
+              <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{opt.title}</h2>
+              <div class="flex flex-wrap gap-3 text-xs">
+                <span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2.5 py-1 rounded-full">
+                  Return: {opt.returnRange}
+                </span>
+                <span class={`font-semibold ${opt.riskColor} bg-gray-100 dark:bg-gray-700 px-2.5 py-1 rounded-full`}>
+                  Risk: {opt.risk}
+                </span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2.5 py-1 rounded-full">
+                  Min: {opt.minInvestment}
+                </span>
+                <span class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2.5 py-1 rounded-full">
+                  Liquidity: {opt.liquidity}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">{opt.desc}</p>
+
+          <ul class="space-y-1.5 mb-4">
+            {opt.highlights.map(h => (
+              <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <span class="text-green-500 mt-0.5 shrink-0">→</span>
+                {h}
+              </li>
+            ))}
+          </ul>
+
+          {opt.url && (
+            <a
+              href={opt.url}
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              class="inline-flex items-center gap-1 text-sm text-green-600 dark:text-green-400 hover:underline font-medium"
+            >
+              {opt.urlLabel}
+            </a>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- US tax implications -->
+    <div class="mt-12 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-2xl p-6">
+      <h2 class="text-lg font-bold text-amber-900 dark:text-amber-200 mb-4">US Tax Implications for NRP Investors</h2>
+      <div class="space-y-3 text-sm text-amber-800 dark:text-amber-300">
+        <p><strong>Foreign interest income:</strong> All profit from Pakistani savings accounts, NSS, and NPCs is taxable in the USA as ordinary income. Report on Schedule B (Form 1040).</p>
+        <p><strong>FBAR (FinCEN 114):</strong> If your Pakistani bank accounts exceed $10,000 at any point in the year, you must file FBAR by October 15. Penalties for non-compliance are severe ($10,000+/year).</p>
+        <p><strong>FATCA (Form 8938):</strong> If foreign financial assets exceed $50,000 (single filers) or $100,000 (married filing jointly), file Form 8938 with your tax return.</p>
+        <p><strong>Capital gains on PSX stocks:</strong> Gains are taxable in Pakistan (CGT) and in the USA. Pakistan-US tax treaty may allow credit for taxes paid in Pakistan. Consult a US CPA with international tax experience.</p>
+        <p><strong>Real estate rental income:</strong> Taxable in both Pakistan (15% for non-residents) and USA. Pakistan taxes may be credited against US liability under the tax treaty.</p>
+      </div>
+      <p class="text-xs text-amber-600 dark:text-amber-400 mt-4 italic">This is general information only. Consult a US-licensed CPA or tax attorney before making investment decisions.</p>
+    </div>
+
+    <!-- Internal links -->
+    <div class="mt-10 p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+      <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Related Tools & Guides</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/tools/remittance-calculator" class="text-sm text-green-600 dark:text-green-400 hover:underline">Remittance Calculator →</a>
+        <a href="/rates/usd-pkr-today" class="text-sm text-green-600 dark:text-green-400 hover:underline">Live USD/PKR Rate →</a>
+        <a href="/us/remittance-providers-comparison" class="text-sm text-green-600 dark:text-green-400 hover:underline">Compare Remittance Providers →</a>
+        <a href="/guides/fbar-guide-us-pakistanis" class="text-sm text-green-600 dark:text-green-400 hover:underline">FBAR Guide →</a>
+        <a href="/tools/gold-price-calculator-pakistan" class="text-sm text-green-600 dark:text-green-400 hover:underline">Gold Price Calculator →</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

@@ -1,0 +1,315 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import ScrollReveal from '../../components/ui/ScrollReveal.astro';
+import Icon from '../../components/ui/Icon.astro';
+
+const title = 'FBR Income Tax Slabs Pakistan 2025-26 — Salaried & Business Rates';
+const description = 'Complete FBR income tax slabs for Pakistan FY 2025-26. Salaried individuals, business income, freelancers, and AOPs. Historical comparison from 2022-23. Updated per Finance Act 2025.';
+const pageUrl = 'https://hisaabkar.pk/rates/fbr-income-tax-slabs-pakistan-2026';
+
+const salariedSlabs2026 = [
+  { min: 0, max: 600000, rate: '0%', tax: 'Nil' },
+  { min: 600001, max: 1200000, rate: '5%', tax: 'On income exceeding Rs. 600,000' },
+  { min: 1200001, max: 2200000, rate: '15%', tax: 'Rs. 30,000 + 15% on excess over Rs. 1,200,000' },
+  { min: 2200001, max: 3200000, rate: '25%', tax: 'Rs. 180,000 + 25% on excess over Rs. 2,200,000' },
+  { min: 3200001, max: 4100000, rate: '30%', tax: 'Rs. 430,000 + 30% on excess over Rs. 3,200,000' },
+  { min: 4100001, max: null, rate: '35%', tax: 'Rs. 700,000 + 35% on excess over Rs. 4,100,000' },
+];
+
+const businessSlabs2026 = [
+  { min: 0, max: 600000, rate: '0%', tax: 'Nil' },
+  { min: 600001, max: 1200000, rate: '15%', tax: '15% on income exceeding Rs. 600,000' },
+  { min: 1200001, max: 1600000, rate: '20%', tax: 'Rs. 90,000 + 20% on excess over Rs. 1,200,000' },
+  { min: 1600001, max: 3200000, rate: '30%', tax: 'Rs. 170,000 + 30% on excess over Rs. 1,600,000' },
+  { min: 3200001, max: 5600000, rate: '40%', tax: 'Rs. 650,000 + 40% on excess over Rs. 3,200,000' },
+  { min: 5600001, max: null, rate: '45%', tax: 'Rs. 1,610,000 + 45% on excess over Rs. 5,600,000' },
+];
+
+const historicalThreshold = [
+  { year: '2022-23', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2022' },
+  { year: '2023-24', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2023' },
+  { year: '2024-25', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2024 — 10% super tax on incomes >Rs. 150M' },
+  { year: '2025-26', exempt: 600000, topRate: '35% (salaried) / 45% (business)', note: 'Finance Act 2025 — Digital Nation Act credits added' },
+];
+
+function formatPKR(n: number) {
+  if (n >= 1000000) return `Rs. ${(n / 1000000).toFixed(n % 1000000 === 0 ? 0 : 1)}M`;
+  if (n >= 1000) return `Rs. ${(n / 1000).toFixed(0)}K`;
+  return `Rs. ${n}`;
+}
+---
+
+<MainLayout title={title} description={description}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    url: pageUrl,
+    datePublished: '2026-05-19',
+    dateModified: '2026-05-19',
+    author: { '@type': 'Person', name: 'HisaabKar Editorial Team', url: 'https://hisaabkar.pk/about' },
+    publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+    about: { '@type': 'Thing', name: 'Pakistan Income Tax' },
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+      { '@type': 'ListItem', position: 2, name: 'Rates', item: 'https://hisaabkar.pk/rates/' },
+      { '@type': 'ListItem', position: 3, name: 'FBR Income Tax Slabs 2025-26', item: pageUrl },
+    ],
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is the income tax exemption limit in Pakistan for 2025-26?',
+        acceptedAnswer: { '@type': 'Answer', text: 'For FY 2025-26, income up to Rs. 600,000 per year (Rs. 50,000 per month) is exempt from income tax for both salaried individuals and business income earners in Pakistan.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the maximum income tax rate in Pakistan for salaried persons?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The maximum income tax rate for salaried individuals in Pakistan for FY 2025-26 is 35% on income above Rs. 4,100,000 (Rs. 341,667/month). This is progressive — you only pay 35% on the portion above that threshold.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the difference between salaried and business income tax rates in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Salaried individuals pay a maximum 35% tax rate on income above Rs. 4.1M/year. Business income (self-employment, freelancers, proprietorships) faces higher rates — up to 45% on income above Rs. 5.6M/year. The salaried tax schedule is generally more favorable.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'How do freelancers pay taxes in Pakistan?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Freelancers registered under the Digital Nation Act 2024 can avail a 0.25% Final Tax Regime on exports of IT services/freelance income received in foreign currency. Otherwise, freelancers are taxed under the business income schedule (up to 45%). Register with FBR and open an SBP-approved account (PayPal alternative or bank wire). File annual income tax return by September 30.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the super tax in Pakistan 2025-26?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The super tax (introduced in Finance Act 2022) is an additional tax on high-income individuals and companies: 1% on income Rs. 100M-150M, 2% on Rs. 150M-200M, 3% on Rs. 200M-250M, 4% on Rs. 250M+. Banking companies pay a higher super tax rate.' },
+      },
+    ],
+  })} />
+
+  <!-- Hero -->
+  <ScrollReveal animation="fade-in" class="bg-gradient-to-br from-green-700 to-emerald-800 text-white py-14">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-5">
+        <Icon name="percent" size={16} class="text-green-200" />
+        <span class="text-sm font-medium text-green-100 uppercase tracking-wider">FBR Tax Reference</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold mb-3">{title}</h1>
+      <p class="text-green-100 text-base max-w-2xl">
+        Official tax slabs per Finance Act 2025 (FY July 2025 – June 2026). Use our <a href="/#tax-calculator" class="underline hover:text-white">Tax Calculator</a> to compute your exact liability.
+      </p>
+    </div>
+  </ScrollReveal>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <nav class="text-xs text-gray-500 mb-8">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/rates/" class="hover:text-green-700">Rates</a>
+      <span class="mx-1">/</span>
+      <span>FBR Income Tax Slabs 2025-26</span>
+    </nav>
+
+    <!-- Quick summary banner -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      {[
+        { label: 'Tax-Free Limit', value: 'Rs. 600K/yr', sub: 'Rs. 50K/month' },
+        { label: 'Salaried Max Rate', value: '35%', sub: 'On income > Rs. 4.1M' },
+        { label: 'Business Max Rate', value: '45%', sub: 'On income > Rs. 5.6M' },
+        { label: 'Freelancer Rate', value: '0.25%', sub: 'IT exports (Digital Nation Act)' },
+      ].map(s => (
+        <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-center">
+          <p class="text-xl font-bold text-green-700 dark:text-green-400">{s.value}</p>
+          <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-1">{s.label}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{s.sub}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Salaried slabs -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Salaried Individuals — Tax Slabs FY 2025-26</h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Applicable to employees receiving salary income (Section 149 withholding applies). Source: Finance Act 2025, First Schedule, Part I.</p>
+      <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+        <table class="w-full text-sm">
+          <thead class="bg-green-50 dark:bg-green-900/30">
+            <tr>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Annual Income (PKR)</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Monthly Equivalent</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Rate</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Tax Payable</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            {salariedSlabs2026.map((slab, i) => (
+              <tr class={i % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'}>
+                <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                  {formatPKR(slab.min)} – {slab.max ? formatPKR(slab.max) : 'Above'}
+                </td>
+                <td class="px-4 py-3 text-gray-600 dark:text-gray-400">
+                  {formatPKR(Math.round(slab.min / 12))} – {slab.max ? formatPKR(Math.round(slab.max / 12)) : '+'}
+                </td>
+                <td class="px-4 py-3">
+                  <span class={`font-bold ${slab.rate === '0%' ? 'text-green-600' : slab.rate === '35%' ? 'text-red-600' : 'text-gray-800 dark:text-gray-200'}`}>
+                    {slab.rate}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-gray-600 dark:text-gray-400 text-xs">{slab.tax}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Business slabs -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Business / Self-Employment Income — Tax Slabs FY 2025-26</h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Applies to sole proprietors, freelancers (non-IT), partnerships, and individuals with business income. Also applicable to AOPs (Association of Persons).</p>
+      <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+        <table class="w-full text-sm">
+          <thead class="bg-blue-50 dark:bg-blue-900/30">
+            <tr>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Annual Income (PKR)</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Rate</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Tax Payable</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            {businessSlabs2026.map((slab, i) => (
+              <tr class={i % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'}>
+                <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">
+                  {formatPKR(slab.min)} – {slab.max ? formatPKR(slab.max) : 'Above'}
+                </td>
+                <td class="px-4 py-3">
+                  <span class={`font-bold ${slab.rate === '0%' ? 'text-green-600' : parseInt(slab.rate) >= 40 ? 'text-red-600' : 'text-gray-800 dark:text-gray-200'}`}>
+                    {slab.rate}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-gray-600 dark:text-gray-400 text-xs">{slab.tax}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Special categories -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Special Tax Rates & Categories</h2>
+      <div class="space-y-4">
+        {[
+          {
+            title: 'IT Freelancers / IT Exporters (Digital Nation Act 2024)',
+            rate: '0.25% Final Tax on foreign currency export receipts',
+            details: 'Eligible if income is received in foreign exchange via SBP-approved channels. Registration with PSEB/FBR required. Applies to software, IT services, BPO, and freelance platform income.',
+            color: 'border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800',
+          },
+          {
+            title: 'Dividend Income',
+            rate: '15% final tax (withholding)',
+            details: 'Dividends from listed companies are subject to 15% withholding tax at source (final tax). From non-listed companies: 25%. Filer status reduces rates.',
+            color: 'border-purple-200 bg-purple-50 dark:bg-purple-900/20 dark:border-purple-800',
+          },
+          {
+            title: 'Non-Filer Penalty (Surcharge)',
+            rate: '+5% additional tax on most transactions',
+            details: 'Non-filers pay higher WHT on bank transactions, property purchases, vehicle registration, and other activities. Filing an income tax return eliminates these surcharges even if no tax is owed.',
+            color: 'border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800',
+          },
+          {
+            title: 'Super Tax (High Earners)',
+            rate: '1–4% additional on income above Rs. 100M',
+            details: '1% on Rs. 100M-150M, 2% on Rs. 150M-200M, 3% on Rs. 200M-250M, 4% on Rs. 250M+. Applies to individuals and companies. Banking sector rates are higher.',
+            color: 'border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-800',
+          },
+        ].map(cat => (
+          <div class={`p-4 rounded-xl border ${cat.color}`}>
+            <p class="font-semibold text-gray-900 dark:text-gray-100 mb-1">{cat.title}</p>
+            <p class="text-sm font-medium text-green-700 dark:text-green-400 mb-2">{cat.rate}</p>
+            <p class="text-xs text-gray-600 dark:text-gray-400">{cat.details}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Historical comparison -->
+    <section class="mb-12">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Historical Tax Threshold Comparison</h2>
+      <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Tax Year</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Exempt Limit</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Top Rate</th>
+              <th class="text-left px-4 py-3 font-semibold text-gray-700 dark:text-gray-300">Note</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+            {historicalThreshold.map((row, i) => (
+              <tr class={i % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800'}>
+                <td class="px-4 py-3 font-medium text-gray-900 dark:text-white">{row.year}</td>
+                <td class="px-4 py-3 text-gray-600 dark:text-gray-400">Rs. {(row.exempt / 1000).toFixed(0)}K</td>
+                <td class="px-4 py-3 text-gray-600 dark:text-gray-400">{row.topRate}</td>
+                <td class="px-4 py-3 text-xs text-gray-500 dark:text-gray-400">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ content -->
+    <div class="prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h2>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is the income tax exemption limit in Pakistan for 2025-26?</h3>
+      <p>Income up to <strong>Rs. 600,000 per year (Rs. 50,000/month)</strong> is completely exempt from income tax for both salaried and business income earners.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">How do freelancers pay taxes in Pakistan?</h3>
+      <p>IT freelancers registered under the Digital Nation Act 2024 pay only <strong>0.25% final tax</strong> on foreign currency income received via SBP-approved channels. Non-IT freelancers pay under the regular business income schedule (up to 45%). You must file an annual return by September 30.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What happens if I don't file an income tax return in Pakistan?</h3>
+      <p>Non-filers face higher withholding tax rates on bank transactions (extra 2%), property purchases (doubled rate), vehicle registration (higher fee), and more. Even if your income is below the taxable limit, filing a nil return removes non-filer surcharges and is strongly recommended.</p>
+
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">Is rental income taxable in Pakistan?</h3>
+      <p>Yes. Rental income is taxed at 15% for resident individuals (as a separate block). For non-residents, it's taxed at 15% withholding (final tax). The tenant is responsible for withholding and depositing 15% to FBR if the landlord is an individual.</p>
+    </div>
+
+    <!-- Disclaimer + CTA -->
+    <div class="mt-10 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-xs text-amber-800 dark:text-amber-300">
+      <strong>Disclaimer:</strong> Tax slabs are based on Finance Act 2025 as publicly notified by FBR. Always verify current rates at <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="underline">fbr.gov.pk</a> or consult a qualified Chartered Accountant before filing. This page is for reference only.
+    </div>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="/#tax-calculator" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+        Calculate My Tax →
+      </a>
+      <a href="/tools/salary-slip-generator" class="inline-flex items-center gap-2 border border-green-600 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors">
+        Generate Salary Slip →
+      </a>
+    </div>
+
+    <!-- Internal links -->
+    <div class="mt-8 p-5 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+      <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Related Tools & Pages</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/tools/salary-slip-generator" class="text-sm text-green-600 dark:text-green-400 hover:underline">Salary Slip Generator →</a>
+        <a href="/tools/zakat-calculator" class="text-sm text-green-600 dark:text-green-400 hover:underline">Zakat Calculator →</a>
+        <a href="/tools/national-savings-calculator" class="text-sm text-green-600 dark:text-green-400 hover:underline">National Savings Calculator →</a>
+        <a href="/guides/fbr-income-tax-slabs-2026" class="text-sm text-green-600 dark:text-green-400 hover:underline">FBR Tax Guide (Detailed) →</a>
+      </div>
+    </div>
+  </div>
+</MainLayout>

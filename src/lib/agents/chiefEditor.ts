@@ -29,7 +29,7 @@ const TOOL_LINKS: Record<string, string> = {
   gold:        '[Gold Price Calculator](https://hisaabkar.pk/tools/gold-price-calculator-pakistan/)',
   zakat:       '[Zakat Calculator](https://hisaabkar.pk/tools/zakat-calculator/)',
   inflation:   '[Pakistan Inflation Calculator](https://hisaabkar.pk/tools/pakistan-inflation-calculator/)',
-  tax:         '[Income Tax Calculator](https://hisaabkar.pk/tools/salary-slip-generator/)',
+  tax:         '[Income Tax Calculator](https://hisaabkar.pk/#tax-calculator)',
   loan:        '[Loan EMI Calculator](https://hisaabkar.pk/tools/loan-emi-calculator/)',
   electricity: '[Electricity Bill Calculator](https://hisaabkar.pk/tools/electricity-bill-calculator/)',
 };
