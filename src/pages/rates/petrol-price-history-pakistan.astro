@@ -1,0 +1,316 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+const title = 'Petrol Price History Pakistan 2019–2026 — OGRA Monthly Rates';
+const description = 'Complete history of petrol prices in Pakistan from 2019 to 2026. Monthly OGRA price notifications for MS-92 petrol per litre in PKR. Track how COVID, global oil prices, and PKR devaluation affected fuel costs.';
+const pageUrl = 'https://hisaabkar.pk/rates/petrol-price-history-pakistan';
+
+// OGRA notified MS-92 petrol prices (PKR per litre) — key milestones
+// Source: OGRA official notifications at ogra.org.pk
+const priceHistory = [
+  // 2019
+  { date: 'Jul 2019', price: 111.51, note: '' },
+  { date: 'Dec 2019', price: 112.69, note: '' },
+  // 2020
+  { date: 'Jan 2020', price: 112.69, note: '' },
+  { date: 'Mar 2020', price: 98.00, note: 'COVID-19 demand collapse' },
+  { date: 'Apr 2020', price: 74.52, note: 'Lowest in 5 years — oil crash' },
+  { date: 'Jun 2020', price: 79.27, note: '' },
+  { date: 'Sep 2020', price: 83.86, note: '' },
+  { date: 'Dec 2020', price: 95.25, note: '' },
+  // 2021
+  { date: 'Jan 2021', price: 99.50, note: '' },
+  { date: 'Apr 2021', price: 111.82, note: '' },
+  { date: 'Jul 2021', price: 118.09, note: 'Global recovery drives oil up' },
+  { date: 'Oct 2021', price: 127.30, note: '' },
+  { date: 'Dec 2021', price: 144.82, note: 'Global energy crisis' },
+  // 2022
+  { date: 'Feb 2022', price: 149.86, note: 'PTI govt subsidy capped price' },
+  { date: 'May 2022', price: 209.86, note: 'Subsidy removed — PDM govt' },
+  { date: 'Jun 2022', price: 233.89, note: '' },
+  { date: 'Jul 2022', price: 248.74, note: '2022 peak — Russia-Ukraine shock' },
+  { date: 'Sep 2022', price: 224.80, note: 'Global oil prices eased' },
+  { date: 'Dec 2022', price: 224.80, note: '' },
+  // 2023
+  { date: 'Feb 2023', price: 272.95, note: 'PKR devaluation + IMF pressure' },
+  { date: 'Apr 2023', price: 282.14, note: '' },
+  { date: 'Jul 2023', price: 290.45, note: '' },
+  { date: 'Sep 2023', price: 305.36, note: 'All-time high zone' },
+  { date: 'Nov 2023', price: 282.14, note: 'Reduction as oil eased' },
+  // 2024
+  { date: 'Jan 2024', price: 279.23, note: 'Declining trend begins' },
+  { date: 'Apr 2024', price: 268.95, note: '' },
+  { date: 'Jul 2024', price: 255.63, note: '' },
+  { date: 'Oct 2024', price: 230.72, note: '' },
+  { date: 'Dec 2024', price: 226.05, note: '' },
+  // 2025
+  { date: 'Feb 2025', price: 222.47, note: '' },
+  { date: 'Apr 2025', price: 216.28, note: '' },
+  { date: 'May 2026', price: null, note: 'See live widget above' },
+];
+
+// Precompute display flags in frontmatter to avoid < operator ambiguity in JSX
+type RowWithMeta = {
+  date: string; price: number | null; note: string;
+  isUp: boolean; isDown: boolean; isPeak: boolean; isLow: boolean;
+  rowClass: string; priceClass: string; arrow: string;
+};
+const rows: RowWithMeta[] = priceHistory.map((row, i) => {
+  const prev = priceHistory[i - 1];
+  const prevPrice = prev?.price ?? null;
+  const isUp = row.price !== null && prevPrice !== null && row.price > prevPrice;
+  const isDown = row.price !== null && prevPrice !== null && row.price !== prevPrice && !isUp;
+  const isPeak = row.price !== null && row.price >= 300;
+  const isLow = row.price !== null && row.price !== 0 && row.price <= 80;
+  const rowClass = isPeak
+    ? 'bg-red-50 dark:bg-red-900/10'
+    : isLow
+    ? 'bg-green-50 dark:bg-green-900/10'
+    : i % 2 !== 0 ? 'bg-gray-50/50 dark:bg-gray-800/30' : '';
+  const priceClass = isPeak
+    ? 'text-red-600 dark:text-red-400'
+    : isLow
+    ? 'text-green-700 dark:text-green-400'
+    : 'text-gray-900 dark:text-gray-100';
+  const arrow = isUp ? '▲ ' : isDown ? '▼ ' : '';
+  return { ...row, isUp, isDown, isPeak, isLow, rowClass, priceClass, arrow };
+});
+
+const faqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How often does OGRA change petrol prices in Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'OGRA reviews and announces petrol prices on a fortnightly basis — typically on the 1st and 15th of each month. The new price takes effect at midnight. The government retains the right to vary the schedule for extraordinary circumstances.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What was the highest petrol price in Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The highest petrol price in Pakistan was approximately PKR 305–330 per litre, reached in late 2023. This was driven by a combination of the global energy crisis, PKR depreciation against the USD, and IMF program conditions requiring the removal of fuel subsidies.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What was the lowest petrol price in Pakistan in recent years?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The lowest petrol price in recent history was PKR 74.52 per litre in April 2020, during the COVID-19 pandemic when global crude oil prices collapsed. Before that, petrol had not been this cheap since the early 2010s.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How is petrol price calculated in Pakistan?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Pakistan imports crude oil and refined petroleum products. The petrol price is based on: (1) Import parity price — international price of MS-92 converted at the USD/PKR exchange rate; (2) OGRA deemed duty and development surcharge; (3) General Sales Tax (GST) — currently 17%; (4) Petroleum Levy set by the government; (5) Dealer/OMC margin. OGRA recommends the price; the federal government announces it.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why did petrol price spike in May 2022?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The May 2022 spike from PKR 149.86 to PKR 209.86 happened because the incoming PDM government removed the fuel subsidy that the PTI government had implemented. The subsidy was costing the government hundreds of billions of rupees per month and was a key condition of the IMF\'s bailout package restoration. The move was painful but necessary to avoid default.' },
+    },
+  ],
+});
+
+const breadcrumbSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
+    { '@type': 'ListItem', position: 2, name: 'Rates', item: 'https://hisaabkar.pk/rates' },
+    { '@type': 'ListItem', position: 3, name: 'Petrol Price History Pakistan', item: pageUrl },
+  ],
+});
+
+const articleSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  dateModified: new Date().toISOString().split('T')[0],
+  author: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  inLanguage: 'en-PK',
+  isAccessibleForFree: true,
+  keywords: 'petrol price history Pakistan, OGRA petrol price 2023, petrol price 2024 Pakistan, petrol price chart Pakistan, fuel price Pakistan history',
+});
+---
+
+<MainLayout {title} {description}>
+  <script type="application/ld+json" set:html={articleSchema} />
+  <script type="application/ld+json" set:html={faqSchema} />
+  <script type="application/ld+json" set:html={breadcrumbSchema} />
+
+  <div class="max-w-3xl mx-auto px-4 py-10">
+
+    <!-- Breadcrumb -->
+    <nav class="text-xs text-gray-500 mb-6">
+      <a href="/" class="hover:text-green-700">Home</a>
+      <span class="mx-1">/</span>
+      <a href="/rates" class="hover:text-green-700">Rates</a>
+      <span class="mx-1">/</span>
+      <span>Petrol Price History Pakistan</span>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{title}</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8 text-sm">
+      OGRA official notifications · MS-92 petrol per litre · Source: <a href="https://www.ogra.org.pk" target="_blank" rel="noopener noreferrer" class="text-green-700 dark:text-green-400 hover:underline">ogra.org.pk</a>
+    </p>
+
+    <!-- Live current price widget -->
+    <div class="border border-orange-200 dark:border-orange-800/40 rounded-2xl p-6 bg-gradient-to-br from-orange-50 to-white dark:from-orange-900/10 dark:to-gray-900 mb-10">
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 uppercase tracking-wider font-semibold">Current Petrol Price (MS-92)</p>
+      <p id="petrol-price" class="text-4xl font-bold text-gray-900 dark:text-white mb-1">
+        <span class="text-xl text-gray-400 animate-pulse">Loading…</span>
+      </p>
+      <p class="text-sm text-gray-500 dark:text-gray-400">PKR per litre · OGRA notified</p>
+      <p id="petrol-date" class="text-xs text-gray-400 mt-2">—</p>
+      <div class="mt-4 pt-4 border-t border-orange-100 dark:border-orange-800/30 flex items-center gap-3">
+        <a href="/tools/pakistan-inflation-calculator/" class="text-orange-700 dark:text-orange-400 text-xs font-medium hover:underline">
+          📈 Inflation Calculator →
+        </a>
+        <a href="/tools/electricity-bill-calculator/" class="text-orange-700 dark:text-orange-400 text-xs font-medium hover:underline">
+          ⚡ Electricity Bill Calculator →
+        </a>
+      </div>
+    </div>
+
+    <script>
+      async function loadPetrolPrice() {
+        try {
+          const res = await fetch('/api/commodities?commodity=petrol');
+          if (!res.ok) return;
+          const data = await res.json() as any;
+          const item = data.commodities?.[0];
+          if (!item) return;
+          const el = document.getElementById('petrol-price');
+          if (el) el.textContent = `PKR ${Number(item.price).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          const dateEl = document.getElementById('petrol-date');
+          if (dateEl && item.date) {
+            dateEl.textContent = 'As of ' + new Date(item.date).toLocaleDateString('en-PK', { day: 'numeric', month: 'long', year: 'numeric' });
+          }
+        } catch { /* non-blocking */ }
+      }
+      loadPetrolPrice();
+    </script>
+
+    <!-- Price history table -->
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Petrol Price History Table</h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Key OGRA price notifications, 2019–2026. Prices shown are for MS-92 (regular) petrol.</p>
+
+    <div class="overflow-x-auto mb-10">
+      <table class="w-full text-sm border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+        <thead class="bg-gray-50 dark:bg-gray-800">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Period</th>
+            <th class="px-4 py-3 text-right font-semibold text-gray-700 dark:text-gray-300">Price (PKR/litre)</th>
+            <th class="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300 hidden sm:table-cell">Context</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+          {rows.map(row => (
+            <tr class={row.rowClass}>
+              <td class="px-4 py-3 font-medium text-gray-800 dark:text-gray-200">{row.date}</td>
+              <td class="px-4 py-3 text-right font-mono font-bold">
+                {row.price ? (
+                  <span class={row.priceClass}>{row.arrow}PKR {row.price.toFixed(2)}</span>
+                ) : (
+                  <span class="text-gray-400">—</span>
+                )}
+              </td>
+              <td class="px-4 py-3 text-xs text-gray-500 dark:text-gray-400 hidden sm:table-cell">{row.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="text-xs text-gray-400 mb-10 italic">Note: Table shows key milestones from OGRA notifications. OGRA reviews prices fortnightly — only major changes shown. Exact per-notification prices at <a href="https://www.ogra.org.pk" target="_blank" rel="noopener noreferrer" class="underline">ogra.org.pk</a>.</p>
+
+    <!-- Visual bar chart — biggest moments -->
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Price Trend — Key Milestones</h2>
+    <div class="space-y-2 mb-10">
+      {[
+        { label: 'COVID Low (Apr 2020)', price: 74.52, max: 310, color: 'bg-green-500' },
+        { label: 'Pre-Subsidy (Dec 2021)', price: 144.82, max: 310, color: 'bg-yellow-500' },
+        { label: 'PTI Subsidy (Mar 2022)', price: 149.86, max: 310, color: 'bg-blue-400' },
+        { label: 'Subsidy Removed (May 2022)', price: 209.86, max: 310, color: 'bg-orange-500' },
+        { label: '2022 Peak (Jul 2022)', price: 248.74, max: 310, color: 'bg-orange-600' },
+        { label: '2023 Peak (Sep 2023)', price: 305.36, max: 310, color: 'bg-red-600' },
+        { label: 'End 2024 (Dec 2024)', price: 226.05, max: 310, color: 'bg-blue-500' },
+      ].map(row => (
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-gray-700 dark:text-gray-300 font-medium">{row.label}</span>
+            <span class="font-mono font-bold text-gray-900 dark:text-white">PKR {row.price.toFixed(2)}</span>
+          </div>
+          <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-3">
+            <div class={`${row.color} h-3 rounded-full transition-all`} style={`width: ${(row.price / row.max * 100).toFixed(1)}%`}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Article content -->
+    <div class="prose prose-lg prose-green max-w-none dark:prose-invert">
+
+      <h2>Why Petrol Prices Keep Changing in Pakistan</h2>
+      <p>
+        Pakistan imports almost all its petroleum products. The OGRA-notified price for petrol (MS-92) is computed from the <strong>Import Parity Price (IPP)</strong> — the cost of importing refined petrol at international prices, converted at the prevailing USD/PKR rate. On top of this, the government adds:
+      </p>
+      <ul>
+        <li><strong>Petroleum Development Levy (PDL):</strong> Currently PKR 60/litre — the government's main fiscal tool on fuel.</li>
+        <li><strong>General Sales Tax (GST):</strong> 17% on petrol.</li>
+        <li><strong>Dealer/OMC margin:</strong> ~PKR 7–10/litre.</li>
+      </ul>
+      <p>
+        This means two forces drive Pakistani petrol prices: global crude oil and PKR/USD rate. When either rises, petrol gets more expensive — and both moved sharply in 2022–2023.
+      </p>
+
+      <h2>The 2022 Petrol Shock — What Happened</h2>
+      <p>
+        The most dramatic price change in recent history came in May 2022. The PTI government had been holding petrol at PKR 149.86/litre through a direct subsidy. When the PDM government came to power and restored the IMF programme, the subsidy was immediately removed. Petrol jumped from PKR 149.86 to PKR 209.86 — a <strong>40% overnight increase</strong>.
+      </p>
+      <p>
+        By July 2022, petrol hit PKR 248.74 as global energy markets were roiled by the Russia-Ukraine war. This was nearly <strong>3.3× the COVID-era low</strong> of PKR 74.52 just two years earlier.
+      </p>
+
+      <h2>2023 Peaks and the PKR Devaluation</h2>
+      <p>
+        Even as global oil prices began falling in mid-2022, Pakistani petrol prices continued rising into 2023. The reason: the PKR lost approximately 40% of its value between December 2022 and May 2023 as the SBP moved to a market-determined exchange rate under IMF conditions. By September 2023, petrol was around PKR 305/litre — the all-time high.
+      </p>
+      <p>
+        Since late 2023, a combination of lower global crude prices and a relatively stable PKR has brought petrol back toward the PKR 220–230 range by end-2024.
+      </p>
+
+      <h2>How Petrol Price Affects Inflation</h2>
+      <p>
+        Petrol is a <strong>core input in Pakistan's CPI basket</strong>. A 10% rise in petrol prices typically feeds through ~0.5–0.8 percentage points to headline inflation within 2–3 months as transport costs, electricity (furnace oil), and food distribution costs rise. Use the <a href="/tools/pakistan-inflation-calculator/">Pakistan Inflation Calculator</a> to model how purchasing power has changed over time.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+
+      <h3>How often does OGRA change petrol prices?</h3>
+      <p>OGRA reviews and announces prices fortnightly — on the 1st and 15th of each month. New prices take effect at midnight.</p>
+
+      <h3>What was the highest petrol price ever in Pakistan?</h3>
+      <p>Around PKR 305–330 per litre in late 2023 (September–October 2023), driven by PKR devaluation and persistent global energy costs.</p>
+
+      <h3>Why was petrol so cheap in April 2020?</h3>
+      <p>Global crude oil prices collapsed during COVID-19 lockdowns as demand evaporated worldwide. Brent crude fell below $20/barrel briefly. Since Pakistan's petrol price is indexed to import parity, the domestic price dropped to PKR 74.52/litre.</p>
+
+      <h3>What is Petroleum Levy in Pakistan?</h3>
+      <p>The Petroleum Development Levy (PDL) is a fixed government tax per litre of petrol. It currently stands at PKR 60/litre. It is the government's most flexible fiscal tool — raised to boost revenue and reduced occasionally to cushion consumers from price spikes.</p>
+    </div>
+
+    <!-- Related tools -->
+    <div class="mt-10 p-5 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+      <h2 class="text-base font-bold text-gray-800 dark:text-white mb-3">Related Tools & Guides</h2>
+      <div class="grid grid-cols-2 gap-3 text-sm">
+        <a href="/tools/pakistan-inflation-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">📈 Inflation Calculator</a>
+        <a href="/tools/electricity-bill-calculator/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">⚡ Electricity Bill Calculator</a>
+        <a href="/rates/usd-pkr-today/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">💵 USD to PKR Rate</a>
+        <a href="/guides/pakistan-cpi-inflation-guide/" class="flex items-center gap-2 text-green-700 dark:text-green-400 hover:underline">📊 CPI Inflation Guide</a>
+      </div>
+    </div>
+
+  </div>
+</MainLayout>

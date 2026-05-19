@@ -3,6 +3,7 @@ export const prerender = true;
 
 import { getCollection, render } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
+import ShareButtons from '../../components/ui/ShareButtons.astro';
 
 export async function getStaticPaths() {
   const guides = await getCollection('guides');
@@ -13,7 +14,8 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
+const tocHeadings = headings.filter(h => h.depth === 2);
 
 const pubDateDisplay = entry.data.pubDate.toLocaleDateString('en-PK', {
   year: 'numeric', month: 'long', day: 'numeric'
@@ -70,9 +72,28 @@ const breadcrumbSchemaJson = JSON.stringify(breadcrumbSchema);
       <p class="text-lg text-gray-600 dark:text-gray-400">{entry.data.summary}</p>
     </header>
 
+    <!-- Table of Contents -->
+    {tocHeadings.length >= 3 && (
+      <nav class="mb-8 p-5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl" aria-label="Table of contents">
+        <p class="text-xs font-bold uppercase tracking-wider text-green-700 dark:text-green-400 mb-3">In this guide</p>
+        <ol class="space-y-1.5 text-sm">
+          {tocHeadings.map((h, i) => (
+            <li>
+              <a href={`#${h.slug}`} class="flex items-start gap-2 text-green-800 dark:text-green-300 hover:text-green-600 dark:hover:text-green-400 hover:underline transition-colors">
+                <span class="text-green-400 dark:text-green-600 font-mono text-xs mt-0.5 shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                <span>{h.text}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
     <div class="guide-content">
       <Content />
     </div>
+
+    <ShareButtons title={entry.data.title} url={pageUrl} />
 
     <footer class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-500">
       <p class="italic">
