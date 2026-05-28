@@ -11,7 +11,44 @@ export default defineConfig({
     tailwind(),
     react(),
     mdx(),
-    sitemap(),
+    sitemap({
+      serialize(item) {
+        // Extract date from economy news slugs: pakistan-economy-news-YYYY-MM-DD
+        const newsMatch = item.url.match(/pakistan-economy-news-(\d{4}-\d{2}-\d{2})/);
+        if (newsMatch) {
+          item.lastmod = new Date(newsMatch[1]);
+          item.changefreq = 'monthly';
+          item.priority = 0.7;
+          return item;
+        }
+        // Blog posts and guides — moderate update frequency
+        if (item.url.includes('/blog/') || item.url.includes('/guides/')) {
+          item.lastmod = new Date('2026-05-28');
+          item.changefreq = 'weekly';
+          item.priority = 0.8;
+          return item;
+        }
+        // Live data pages (rates, tools) — change frequently
+        if (item.url.includes('/rates/') || item.url.includes('/tools/')) {
+          item.lastmod = new Date();
+          item.changefreq = 'daily';
+          item.priority = 0.9;
+          return item;
+        }
+        // Homepage
+        if (item.url === 'https://hisaabkar.pk/') {
+          item.lastmod = new Date();
+          item.changefreq = 'daily';
+          item.priority = 1.0;
+          return item;
+        }
+        // Everything else
+        item.lastmod = new Date('2026-05-28');
+        item.changefreq = 'weekly';
+        item.priority = 0.6;
+        return item;
+      },
+    }),
     AstroPWA({
       registerType: 'autoUpdate',
       manifest: {
