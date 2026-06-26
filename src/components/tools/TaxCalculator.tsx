@@ -9,27 +9,29 @@ interface TaxSlab {
 
 type TaxpayerCategory = 'salaried' | 'business' | 'company';
 
-// FBR 2025-26 Salaried individual slabs (Finance Act 2024)
+// FBR 2026-27 Salaried individual slabs (Finance Act 2026 — effective July 1, 2026)
 const SALARIED_SLABS: TaxSlab[] = [
   { min: 0, max: 600000, rate: 0 },
-  { min: 600000, max: 1200000, rate: 0.05 },
-  { min: 1200000, max: 2200000, rate: 0.15 },
-  { min: 2200000, max: 3200000, rate: 0.25 },
-  { min: 3200000, max: 4100000, rate: 0.30 },
-  { min: 4100000, max: null, rate: 0.35 },
+  { min: 600000, max: 1200000, rate: 0.01 },
+  { min: 1200000, max: 2200000, rate: 0.11 },
+  { min: 2200000, max: 3200000, rate: 0.20 },
+  { min: 3200000, max: 4100000, rate: 0.25 },
+  { min: 4100000, max: 5600000, rate: 0.29 },
+  { min: 5600000, max: 7000000, rate: 0.32 },
+  { min: 7000000, max: null, rate: 0.35 },
 ];
 
-// FBR 2025-26 Non-salaried / Business individual / AOP slabs
+// FBR 2026-27 Non-salaried / Business individual / AOP slabs (unchanged from FY 2025-26)
 const BUSINESS_SLABS: TaxSlab[] = [
   { min: 0, max: 600000, rate: 0 },
   { min: 600000, max: 1200000, rate: 0.15 },
-  { min: 1200000, max: 2400000, rate: 0.20 },
-  { min: 2400000, max: 3600000, rate: 0.30 },
-  { min: 3600000, max: 6000000, rate: 0.35 },
-  { min: 6000000, max: null, rate: 0.45 },
+  { min: 1200000, max: 1600000, rate: 0.20 },
+  { min: 1600000, max: 3200000, rate: 0.30 },
+  { min: 3200000, max: 5600000, rate: 0.40 },
+  { min: 5600000, max: null, rate: 0.45 },
 ];
 
-// Company flat rate (FBR 2025-26 — verify with current Finance Act)
+// Company flat rate (Finance Act 2026)
 const COMPANY_FLAT_RATE = 0.29; // 29% for non-banking companies
 
 interface TaxBreakdown {

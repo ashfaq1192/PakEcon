@@ -1,8 +1,10 @@
 /**
- * FBR Pakistan Tax Slabs - 2026
+ * FBR Pakistan Tax Slabs - Salaried Individuals
  *
- * Based on FBR Income Tax Ordinance 2026
- * Includes Digital Nation Act credits for freelancers/IT professionals
+ * Finance Act 2026 (Budget 2026-27) — effective July 1, 2026.
+ * Rates reduced across all brackets vs Finance Act 2025.
+ * 9% surcharge on income above PKR 10M fully abolished.
+ * Includes Digital Nation Act credits for freelancers/IT professionals.
  */
 
 export interface TaxSlab {
@@ -14,11 +16,13 @@ export interface TaxSlab {
 
 export const FBR_2026_TAX_SLABS: TaxSlab[] = [
   { min: 0, max: 600000, rate: 0 },
-  { min: 600000, max: 1200000, rate: 0.05 },
-  { min: 1200000, max: 2200000, rate: 0.15 },
-  { min: 2200000, max: 3200000, rate: 0.25 },
-  { min: 3200000, max: 4100000, rate: 0.30 },
-  { min: 4100000, max: Infinity, rate: 0.35 }
+  { min: 600000, max: 1200000, rate: 0.01 },
+  { min: 1200000, max: 2200000, rate: 0.11 },
+  { min: 2200000, max: 3200000, rate: 0.20 },
+  { min: 3200000, max: 4100000, rate: 0.25 },
+  { min: 4100000, max: 5600000, rate: 0.29 },
+  { min: 5600000, max: 7000000, rate: 0.32 },
+  { min: 7000000, max: Infinity, rate: 0.35 },
 ];
 
 export interface TaxCalculationResult {

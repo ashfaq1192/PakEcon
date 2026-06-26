@@ -5,17 +5,19 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import ScrollReveal from '../../components/ui/ScrollReveal.astro';
 import Icon from '../../components/ui/Icon.astro';
 
-const title = 'FBR Income Tax Slabs Pakistan 2025-26 — Salaried & Business Rates';
-const description = 'Complete FBR income tax slabs for Pakistan FY 2025-26. Salaried individuals, business income, freelancers, and AOPs. Historical comparison from 2022-23. Updated per Finance Act 2025.';
+const title = 'FBR Income Tax Slabs Pakistan 2026-27 — Salaried & Business Rates';
+const description = 'Complete FBR income tax slabs for Pakistan FY 2026-27. Salaried individuals, business income, freelancers, and AOPs. Updated per Finance Act 2026 — rates reduced across all brackets.';
 const pageUrl = 'https://hisaabkar.pk/rates/fbr-income-tax-slabs-pakistan-2026';
 
 const salariedSlabs2026 = [
   { min: 0, max: 600000, rate: '0%', tax: 'Nil' },
-  { min: 600001, max: 1200000, rate: '5%', tax: 'On income exceeding Rs. 600,000' },
-  { min: 1200001, max: 2200000, rate: '15%', tax: 'Rs. 30,000 + 15% on excess over Rs. 1,200,000' },
-  { min: 2200001, max: 3200000, rate: '25%', tax: 'Rs. 180,000 + 25% on excess over Rs. 2,200,000' },
-  { min: 3200001, max: 4100000, rate: '30%', tax: 'Rs. 430,000 + 30% on excess over Rs. 3,200,000' },
-  { min: 4100001, max: null, rate: '35%', tax: 'Rs. 700,000 + 35% on excess over Rs. 4,100,000' },
+  { min: 600001, max: 1200000, rate: '1%', tax: '1% on income exceeding Rs. 600,000 (max Rs. 6,000)' },
+  { min: 1200001, max: 2200000, rate: '11%', tax: 'Rs. 6,000 + 11% on excess over Rs. 1,200,000' },
+  { min: 2200001, max: 3200000, rate: '20%', tax: 'Rs. 116,000 + 20% on excess over Rs. 2,200,000' },
+  { min: 3200001, max: 4100000, rate: '25%', tax: 'Rs. 316,000 + 25% on excess over Rs. 3,200,000' },
+  { min: 4100001, max: 5600000, rate: '29%', tax: 'Rs. 541,000 + 29% on excess over Rs. 4,100,000' },
+  { min: 5600001, max: 7000000, rate: '32%', tax: 'Rs. 976,000 + 32% on excess over Rs. 5,600,000' },
+  { min: 7000001, max: null, rate: '35%', tax: 'Rs. 1,424,000 + 35% on excess over Rs. 7,000,000' },
 ];
 
 const businessSlabs2026 = [
@@ -30,8 +32,9 @@ const businessSlabs2026 = [
 const historicalThreshold = [
   { year: '2022-23', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2022' },
   { year: '2023-24', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2023' },
-  { year: '2024-25', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2024 — 10% super tax on incomes >Rs. 150M' },
+  { year: '2024-25', exempt: 600000, topRate: '35% (salaried)', note: 'Finance Act 2024 — super tax introduced' },
   { year: '2025-26', exempt: 600000, topRate: '35% (salaried) / 45% (business)', note: 'Finance Act 2025 — Digital Nation Act credits added' },
+  { year: '2026-27', exempt: 600000, topRate: '35% on income >Rs. 7M (salaried)', note: 'Finance Act 2026 — rates cut 3–6 pp; 9% surcharge abolished; 8 slabs' },
 ];
 
 function formatPKR(n: number) {
@@ -49,7 +52,7 @@ function formatPKR(n: number) {
     description,
     url: pageUrl,
     datePublished: '2026-05-19',
-    dateModified: '2026-05-19',
+    dateModified: '2026-06-17',
     author: { '@type': 'Person', name: 'HisaabKar Editorial Team', url: 'https://hisaabkar.pk/about' },
     publisher: { '@type': 'Organization', name: 'HisaabKar.pk', url: 'https://hisaabkar.pk' },
     about: { '@type': 'Thing', name: 'Pakistan Income Tax' },
@@ -61,7 +64,7 @@ function formatPKR(n: number) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hisaabkar.pk' },
       { '@type': 'ListItem', position: 2, name: 'Rates', item: 'https://hisaabkar.pk/rates/' },
-      { '@type': 'ListItem', position: 3, name: 'FBR Income Tax Slabs 2025-26', item: pageUrl },
+      { '@type': 'ListItem', position: 3, name: 'FBR Income Tax Slabs 2026-27', item: pageUrl },
     ],
   })} />
 
@@ -71,18 +74,18 @@ function formatPKR(n: number) {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'What is the income tax exemption limit in Pakistan for 2025-26?',
-        acceptedAnswer: { '@type': 'Answer', text: 'For FY 2025-26, income up to Rs. 600,000 per year (Rs. 50,000 per month) is exempt from income tax for both salaried individuals and business income earners in Pakistan.' },
+        name: 'What is the income tax exemption limit in Pakistan for 2026-27?',
+        acceptedAnswer: { '@type': 'Answer', text: 'For FY 2026-27, income up to Rs. 600,000 per year (Rs. 50,000 per month) remains exempt from income tax for both salaried individuals and business income earners in Pakistan.' },
       },
       {
         '@type': 'Question',
         name: 'What is the maximum income tax rate in Pakistan for salaried persons?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The maximum income tax rate for salaried individuals in Pakistan for FY 2025-26 is 35% on income above Rs. 4,100,000 (Rs. 341,667/month). This is progressive — you only pay 35% on the portion above that threshold.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'The maximum income tax rate for salaried individuals in Pakistan for FY 2026-27 is 35% on income above Rs. 7,000,000 (Rs. 583,333/month). Finance Act 2026 raised this threshold from Rs. 4.1M and reduced rates across all brackets.' },
       },
       {
         '@type': 'Question',
         name: 'What is the difference between salaried and business income tax rates in Pakistan?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Salaried individuals pay a maximum 35% tax rate on income above Rs. 4.1M/year. Business income (self-employment, freelancers, proprietorships) faces higher rates — up to 45% on income above Rs. 5.6M/year. The salaried tax schedule is generally more favorable.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Salaried individuals pay a maximum 35% tax rate on income above Rs. 7M/year (FY 2026-27). Business income (self-employment, freelancers, proprietorships) faces higher rates — up to 45% on income above Rs. 5.6M/year. The salaried tax schedule is generally more favorable.' },
       },
       {
         '@type': 'Question',
@@ -92,7 +95,7 @@ function formatPKR(n: number) {
       {
         '@type': 'Question',
         name: 'What is the super tax in Pakistan 2025-26?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The super tax (introduced in Finance Act 2022) is an additional tax on high-income individuals and companies: 1% on income Rs. 100M-150M, 2% on Rs. 150M-200M, 3% on Rs. 200M-250M, 4% on Rs. 250M+. Banking companies pay a higher super tax rate.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'Under Finance Act 2026 (Budget 2026-27), super tax has been significantly restructured: abolished completely for exporters; abolished for income between Rs. 150M–500M; reduced to 8% (from 10%) on income above Rs. 500M. Most individual and small business taxpayers are unaffected.' },
       },
     ],
   })} />
@@ -106,7 +109,7 @@ function formatPKR(n: number) {
       </div>
       <h1 class="text-3xl md:text-4xl font-bold mb-3">{title}</h1>
       <p class="text-green-100 text-base max-w-2xl">
-        Official tax slabs per Finance Act 2025 (FY July 2025 – June 2026). Use our <a href="/#tax-calculator" class="underline hover:text-white">Tax Calculator</a> to compute your exact liability.
+        Updated per Finance Act 2026 (FY July 2026 – June 2027). Rates cut 3–6 percentage points across all brackets. Use our <a href="/#tax-calculator" class="underline hover:text-white">Tax Calculator</a> to compute your exact liability.
       </p>
     </div>
   </ScrollReveal>
@@ -117,16 +120,16 @@ function formatPKR(n: number) {
       <span class="mx-1">/</span>
       <a href="/rates/" class="hover:text-green-700">Rates</a>
       <span class="mx-1">/</span>
-      <span>FBR Income Tax Slabs 2025-26</span>
+      <span>FBR Income Tax Slabs 2026-27</span>
     </nav>
 
     <!-- Quick summary banner -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
       {[
         { label: 'Tax-Free Limit', value: 'Rs. 600K/yr', sub: 'Rs. 50K/month' },
-        { label: 'Salaried Max Rate', value: '35%', sub: 'On income > Rs. 4.1M' },
+        { label: 'Salaried Max Rate', value: '35%', sub: 'On income > Rs. 7M (FY 2026-27)' },
         { label: 'Business Max Rate', value: '45%', sub: 'On income > Rs. 5.6M' },
-        { label: 'Freelancer Rate', value: '0.25%', sub: 'IT exports (Digital Nation Act)' },
+        { label: 'Freelancer Rate', value: '0.25%', sub: 'IT exports extended to 2030' },
       ].map(s => (
         <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-center">
           <p class="text-xl font-bold text-green-700 dark:text-green-400">{s.value}</p>
@@ -138,8 +141,8 @@ function formatPKR(n: number) {
 
     <!-- Salaried slabs -->
     <section class="mb-12">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Salaried Individuals — Tax Slabs FY 2025-26</h2>
-      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Applicable to employees receiving salary income (Section 149 withholding applies). Source: Finance Act 2025, First Schedule, Part I.</p>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Salaried Individuals — Tax Slabs FY 2026-27</h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Applicable to employees receiving salary income (Section 149 withholding applies). Source: Finance Act 2026 (Budget 2026-27), effective July 1, 2026.</p>
       <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
         <table class="w-full text-sm">
           <thead class="bg-green-50 dark:bg-green-900/30">
@@ -174,7 +177,7 @@ function formatPKR(n: number) {
 
     <!-- Business slabs -->
     <section class="mb-12">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Business / Self-Employment Income — Tax Slabs FY 2025-26</h2>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Business / Self-Employment Income — Tax Slabs FY 2026-27</h2>
       <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Applies to sole proprietors, freelancers (non-IT), partnerships, and individuals with business income. Also applicable to AOPs (Association of Persons).</p>
       <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
         <table class="w-full text-sm">
@@ -228,9 +231,9 @@ function formatPKR(n: number) {
             color: 'border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800',
           },
           {
-            title: 'Super Tax (High Earners)',
-            rate: '1–4% additional on income above Rs. 100M',
-            details: '1% on Rs. 100M-150M, 2% on Rs. 150M-200M, 3% on Rs. 200M-250M, 4% on Rs. 250M+. Applies to individuals and companies. Banking sector rates are higher.',
+            title: 'Super Tax (High Earners) — Restructured in Budget 2026-27',
+            rate: 'Abolished for Rs. 150M–500M; 8% on income above Rs. 500M',
+            details: 'Finance Act 2026 abolished super tax for income between Rs. 150M–500M and reduced the top rate to 8% (from 10%) for income above Rs. 500M. Completely abolished for exporters. Most individual and small business taxpayers are not affected.',
             color: 'border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-800',
           },
         ].map(cat => (
@@ -274,8 +277,8 @@ function formatPKR(n: number) {
     <div class="prose prose-sm max-w-none text-gray-700 dark:text-gray-300">
       <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h2>
 
-      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is the income tax exemption limit in Pakistan for 2025-26?</h3>
-      <p>Income up to <strong>Rs. 600,000 per year (Rs. 50,000/month)</strong> is completely exempt from income tax for both salaried and business income earners.</p>
+      <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">What is the income tax exemption limit in Pakistan for 2026-27?</h3>
+      <p>Income up to <strong>Rs. 600,000 per year (Rs. 50,000/month)</strong> remains completely exempt from income tax for both salaried and business income earners — unchanged from previous years.</p>
 
       <h3 class="font-semibold text-gray-800 dark:text-white mt-5 mb-2">How do freelancers pay taxes in Pakistan?</h3>
       <p>IT freelancers registered under the Digital Nation Act 2024 pay only <strong>0.25% final tax</strong> on foreign currency income received via SBP-approved channels. Non-IT freelancers pay under the regular business income schedule (up to 45%). You must file an annual return by September 30.</p>
@@ -289,7 +292,7 @@ function formatPKR(n: number) {
 
     <!-- Disclaimer + CTA -->
     <div class="mt-10 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-xl text-xs text-amber-800 dark:text-amber-300">
-      <strong>Disclaimer:</strong> Tax slabs are based on Finance Act 2025 as publicly notified by FBR. Always verify current rates at <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="underline">fbr.gov.pk</a> or consult a qualified Chartered Accountant before filing. This page is for reference only.
+      <strong>Disclaimer:</strong> Tax slabs are based on Finance Act 2026 (Budget 2026-27) as publicly notified by FBR, effective July 1, 2026. Always verify current rates at <a href="https://fbr.gov.pk" target="_blank" rel="noopener noreferrer" class="underline">fbr.gov.pk</a> or consult a qualified Chartered Accountant before filing. This page is for reference only.
     </div>
 
     <div class="mt-6 flex flex-wrap gap-3">
